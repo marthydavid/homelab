@@ -1,0 +1,17 @@
+defaultNamespace: cattle-monitoring-system
+namespace: cattle-monitoring-system
+helm:
+  releaseName: speedtest-exporter
+  chart: speedtest-exporter
+  repo: https://k8s-at-home.com/charts/
+  values:
+    env:
+      TZ: "Europe/Budapest"
+    metrics:
+      enabled: true
+      prometheusRule:
+        downloadLimit: 500000000
+        enabled: true
+        uploadLimit: 35000000
+      serviceMonitor:
+        interval: 15m

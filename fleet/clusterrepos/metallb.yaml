@@ -1,0 +1,6 @@
+apiVersion: catalog.cattle.io/v1
+kind: ClusterRepo
+metadata:
+  name: metallb
+spec:
+  url: https://metallb.github.io/metallb

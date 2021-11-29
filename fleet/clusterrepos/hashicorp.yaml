@@ -1,0 +1,6 @@
+apiVersion: catalog.cattle.io/v1
+kind: ClusterRepo
+metadata:
+  name: hashicorp
+spec:
+  url: https://helm.releases.hashicorp.com
