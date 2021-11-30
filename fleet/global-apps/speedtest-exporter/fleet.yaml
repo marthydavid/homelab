@@ -10,8 +10,8 @@ helm:
     metrics:
       enabled: true
       prometheusRule:
-        downloadLimit: 500000000
+        downloadLimit: 200000000
         enabled: true
-        uploadLimit: 35000000
+        uploadLimit: 10000000
       serviceMonitor:
         interval: 15m
