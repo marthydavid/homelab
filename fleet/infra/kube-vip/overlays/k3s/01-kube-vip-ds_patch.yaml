@@ -1,0 +1,48 @@
+spec:
+  selector:
+    matchLabels:
+      name: kube-vip-ds
+  template:
+    metadata:
+      labels:
+        name: kube-vip-ds
+    spec:
+      containers:
+      - name: kube-vip
+        args:
+        - manager
+        env:
+        - name: port
+          value: "6443"
+        - name: vip_arp
+          value: "false"
+        - name: vip_interface
+          value: "eth0"
+        - name: vip_startleader
+          value: "false"
+        - name: vip_addpeerstolb
+          value: "true"
+        - name: vip_address
+          value: "192.168.12.1"
+        - name: vip_cidr
+          value: "32"
+        - name: svc_enable
+          value: "true"
+        - name: cp_enable
+          value: "true"
+        - name: cp_namespace
+          value: "kube-system"
+        - name: bgp_enable
+          value: "true"
+        - name: bgp_source_if
+          value: eth0
+        - name: bgp_as
+          value: "65530"
+        - name: bgp_peeraddress
+          value: "192.168.10.254"
+        - name: bgp_peerpass
+          value: ""
+        - name: bgp_peeras
+          value: "65530"
+        - name: bgp_routerinterface
+          value: eth0
