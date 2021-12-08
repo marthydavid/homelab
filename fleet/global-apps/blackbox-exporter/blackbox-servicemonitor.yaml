@@ -1,0 +1,109 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rpi3-budapest
+  labels:
+    service: external
+    app: blackbox-exporter
+spec:
+  clusterIP: None
+  ports:
+    - protocol: TCP
+      name: probe
+      port: 9115
+      targetPort: 9115
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: rpi3-budapest
+  labels:
+    service: external
+    app: blackbox-exporter
+subsets:
+  - addresses:
+      - ip: 192.168.0.2
+    ports:
+      - port: 9115
+        name: probe
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: rpi3-budapest
+  labels:
+    service: external
+    app: blackbox-exporter
+spec:
+  endpoints:
+  - port: probe
+    scheme: http
+    path: "/probe"
+    params:
+      module:
+      - icmp
+      target:
+      - 192.168.1.30
+    metricRelabelings:
+      - targetLabel: instance
+        replacement: 192.168.1.30
+      - targetLabel: target
+        replacement: rpi3-budapest
+  - port: probe
+    scheme: http
+    path: "/probe"
+    params:
+      module:
+      - icmp
+      target:
+      - 192.168.0.1
+    metricRelabelings:
+      - targetLabel: instance
+        replacement: 192.168.0.1
+      - targetLabel: target
+        replacement: rpi3-budapest
+  - port: probe
+    scheme: http
+    path: "/probe"
+    params:
+      module:
+      - icmp
+      target:
+      - 192.168.0.254
+    metricRelabelings:
+      - targetLabel: instance
+        replacement: 192.168.0.254
+      - targetLabel: target
+        replacement: rpi3-budapest
+  - port: probe
+    scheme: http
+    path: "/probe"
+    params:
+      module:
+      - icmp
+      target:
+      - 192.168.10.50
+    metricRelabelings:
+      - targetLabel: instance
+        replacement: 192.168.10.50
+      - targetLabel: target
+        replacement: rpi3-budapest
+  - port: probe
+    scheme: http
+    path: "/probe"
+    params:
+      module:
+      - icmp
+      target:
+      - 1.0.0.1
+    metricRelabelings:
+      - targetLabel: instance
+        replacement: 1.0.0.1
+      - targetLabel: target
+        replacement: rpi3-budapest
+  jobLabel: rpi3-budapest
+  selector:
+    matchLabels:
+      service: external
+      app: blackbox-exporter

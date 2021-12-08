@@ -11,7 +11,7 @@ targetCustomizations:
 - name: rke2-enforcing
   clusterSelector:
     matchLabels:
-      name: rke2-enforcing
+      name: cilium
   yaml:
     overlays:
       - rke2
