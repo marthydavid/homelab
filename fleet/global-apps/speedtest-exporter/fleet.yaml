@@ -15,3 +15,5 @@ helm:
         uploadLimit: 10000000
       serviceMonitor:
         interval: 15m
+    securityContext:
+      runAsUser: 1000
