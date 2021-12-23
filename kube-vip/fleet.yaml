@@ -1,17 +1,17 @@
 defaultNamespace: kube-system
 targetCustomizations:
-- name: rpi-k3s
+- name: budapest-k3s
   clusterSelector:
     matchLabels:
       name: budapest-k3s
   yaml:
     overlays:
-      - k3s
+      - budapest-k3s
 
-- name: rke2-enforcing
+- name: rke2-sm4
   clusterSelector:
     matchLabels:
-      name: cilium
+      name: rke2-sm4
   yaml:
     overlays:
-      - rke2
+      - rke2-sm4
