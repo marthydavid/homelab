@@ -1,0 +1,40 @@
+defaultNamespace: kuberhealthy
+helm:
+  chart: kuberhealthy
+  repo: https://kuberhealthy.github.io/kuberhealthy/helm-repos
+  releaseName: kuberhealthy
+  version: "77"
+targetCustomizations:
+- name: rke2-sm4
+  helm:
+  clusterSelector:
+    matchLabels:
+      name: rke2-sm4
+    values:
+      podSecurityPolicy:
+        enabled: true
+      prometheus:
+        enabled: true
+        prometheusRule:
+          enabled: true
+        serviceMonitor:
+          enabled: true
+      check:
+        daemonset:
+          enabled: true
+        deployment:
+          enabled: true
+        dnsInternal:
+          enabled: true
+        dnsExternal:
+          enabled: true
+          extraEnvs:
+            HOSTNAME: "marthy.xyz"
+        podRestarts:
+          enabled: true
+        podStatus:
+          enabled: true
+        networkConnection:
+          enabled: true
+          extraEnvs:
+            CONNECTION_TARGET: "tcp://marthy.xyxz:443"

@@ -28,13 +28,13 @@ SM1 | [X10SLM+-LN4F](https://www.supermicro.com/en/products/motherboard/X10SLM+-
 SM2 | [X10SLM+-LN4F](https://www.supermicro.com/en/products/motherboard/X10SLM+-LN4F) | Xeon [E3-1265Lv3](https://ark.intel.com/content/www/us/en/ark/products/75463/intel-xeon-processor-e31265l-v3-8m-cache-2-50-ghz.html) | 32GB | 250GB SSD,320GB HDD | 1IPMI, 4x1Gig
 SM3 | [X10SLM+-LN4F](https://www.supermicro.com/en/products/motherboard/X10SLM+-LN4F) | Xeon [E3-1231v3](https://ark.intel.com/content/www/us/en/ark/products/80910/intel-xeon-processor-e31231-v3-8m-cache-3-40-ghz.html) | 32GB | 250GB SSD,320GB HDD | 1IPMI, 4x1Gig
 HP | [Z2G4](https://support.hp.com/us-en/product/hp-z2-tower-g4-workstation/20063240/document/c06100744) | Core [i5-9400](https://ark.intel.com/content/www/us/en/ark/products/134898/intel-core-i59400-processor-9m-cache-up-to-4-10-ghz.html) | 96GB | 2x500GB NVMe,250G SSD | 3x1Gig
-STRG | Gigabyte | Celeron | 16GB | 250GB SSD,2x1TB HDD | 2x1Gig
+STRG | Gigabyte | Celeron | 16GB | 250GB SSD,2x1TB HDD | 2x1Gig
 Remote | Gigabyte | Core [i5-4750](https://ark.intel.com/content/www/us/en/ark/products/75043/intel-core-i5-4570-processor-6m-cache-up-to-3-60-ghz.html) | 32GB | 250GB SSD,4x4TB HDD RAIDZ1 | 2x1Gig
-RPi 1|  RPi 4b 8GB | 4core ARMv8 | 8GB | 500GB SSD | 1Gig
-RPi 2|  RPi 4b 8GB | 4core ARMv8 | 8GB | 500GB SSD | 1Gig
-RPi 3|  RPi 4b 4GB | 4core ARMv8 | 4GB | 500GB SSD | 1Gig
-RPi 4|  RPi 4b 4GB | 4core ARMv8 | 4GB | 500GB SSD | 1Gig
-RPi 5|  RPi 3b+ 1GB | 4core ARMv8 | 1GB | 16GB SD | 1Gig
+RPi 1|  RPi 4b 8GB | 4core ARMv8 | 8GB | 500GB SSD | 1Gig
+RPi 2|  RPi 4b 8GB | 4core ARMv8 | 8GB | 500GB SSD | 1Gig
+RPi 3|  RPi 4b 4GB | 4core ARMv8 | 4GB | 500GB SSD | 1Gig
+RPi 4|  RPi 4b 4GB | 4core ARMv8 | 4GB | 500GB SSD | 1Gig
+RPi 5|  RPi 3b+ 1GB | 4core ARMv8 | 1GB | 16GB SD | 1Gig
 
 ## Software
 

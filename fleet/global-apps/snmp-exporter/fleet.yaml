@@ -2,7 +2,7 @@ defaultNamespace: cattle-monitoring-system
 helm:
   chart: prometheus-snmp-exporter
   repo: https://prometheus-community.github.io/helm-charts
-targetCustomization:
+targetCustomizations:
 - name: budapest-k3s-1
   helm:
     releaseName: snmp-exporter-budapest-mikrotik
