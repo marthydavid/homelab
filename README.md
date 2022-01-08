@@ -72,5 +72,5 @@ Remote | Ubuntu 20.04 | K3s cluster + Rancher
 * Sonarr
 * Prometheus-operator
 * metallb
-* fleet(WIP)
-* kube-vip(WIP)
+* fleet
+* kube-vip)

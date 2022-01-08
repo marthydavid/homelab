@@ -5,11 +5,11 @@ helm:
   releaseName: kuberhealthy
   version: "77"
 targetCustomizations:
-- name: rke2-sm4
-  helm:
+- name: rke2
   clusterSelector:
     matchLabels:
-      name: rke2-sm4
+      name: rke2
+  helm:
     values:
       podSecurityPolicy:
         enabled: true

@@ -1,0 +1,41 @@
+defaultNamespace: metallb-system
+helm:
+  releaseName: metallb
+  chart: metallb
+  repo: https://metallb.github.io/metallb
+  version: v0.11.0
+targetCustomizations:
+- name: budapest-k3s-1
+  helm:
+    values:
+      configInline:
+        address-pools:
+        - addresses:
+          - 192.168.12.2-192.168.12.10
+          avoid-buggy-ips: true
+          name: default
+          protocol: bgp
+        peers:
+        - my-asn: 65530
+          peer-address: 192.168.10.254
+          peer-asn: 65530
+  clusterSelector:
+    matchLabels:
+      name: budapest-k3s
+- name: rke2
+  helm:
+    values:
+      configInline:
+        address-pools:
+        - addresses:
+          - 192.168.12.12-192.168.12.20
+          avoid-buggy-ips: true
+          name: default
+          protocol: bgp
+        peers:
+        - my-asn: 65530
+          peer-address: 192.168.10.254
+          peer-asn: 65530
+  clusterSelector:
+    matchLabels:
+      name: rke2

@@ -23,7 +23,7 @@ spec:
         - name: vip_addpeerstolb
           value: "true"
         - name: vip_address
-          value: "192.168.12.129"
+          value: "192.168.12.11"
         - name: vip_cidr
           value: "32"
         - name: svc_enable

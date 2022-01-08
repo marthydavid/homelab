@@ -8,10 +8,10 @@ targetCustomizations:
     overlays:
       - budapest-k3s
 
-- name: rke2-sm4
+- name: rke2
   clusterSelector:
     matchLabels:
-      name: rke2-sm4
+      name: rke2
   yaml:
     overlays:
-      - rke2-sm4
+      - rke2
