@@ -1063,7 +1063,7 @@ targetCustomizations:
           failurePolicy: Fail
           patch:
             affinity: {}
-            enabled: false
+            enabled: true
             image:
               pullPolicy: IfNotPresent
               repository: rancher/mirrored-ingress-nginx-kube-webhook-certgen
@@ -1300,3 +1300,39 @@ targetCustomizations:
         component: kube-scheduler
         enabled: false
         metricsPort: 10251
+diff:
+  comparePatches:
+  - apiVersion: admissionregistration.k8s.io/v1beta1
+    kind: MutatingWebhookConfiguration
+    name: rancher-monitoring-admission
+    operations:
+    - {"op":"remove", "path":"/webhooks"}
+    jsonPointers:
+    - "/webhooks"
+  - apiVersion: admissionregistration.k8s.io/v1
+    kind: MutatingWebhookConfiguration
+    name: rancher-monitoring-admission
+    operations:
+    - {"op":"remove", "path":"/webhooks"}
+    jsonPointers:
+    - "/webhooks"
+  - apiVersion: monitoring.coreos.com/v1
+    kind: Prometheus
+    name: rancher-monitoring-prometheus
+    namespace: cattle-monitoring-system
+    operations:
+    - {"op":"remove", "path":"/spec/paused"}
+    - {"op":"remove", "path":"/spec/enableAdminAPI"}
+    - {"op":"remove", "path":"/spec/listenLocal"}
+    jsonPointers:
+    - "/spec/paused"
+    - "/spec/enableAdminAPI"
+    - "/spec/listenLocal"
+  - apiVersion: v1
+    kind: Service
+    name: rancher-monitoring-alertmanager
+    namespace: cattle-monitoring-system
+    operations:
+    - {"op":"remove", "path":"/spec/selector/app"}
+    jsonPointers:
+    - "/spec/selector/app"
