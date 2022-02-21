@@ -1,0 +1,5 @@
+defaultNamespace: kube-system
+helm:
+  chart: descheduler
+  repo: https://kubernetes-sigs.github.io/descheduler/
+  releaseName: descheduler
