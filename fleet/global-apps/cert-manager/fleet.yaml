@@ -1,4 +1,6 @@
 defaultNamespace: cert-manager
+dependsOn:
+  - name: rancher-charts-fleet-rancher-charts-01-monitoring
 helm:
   releaseName: cert-manager
   chart: cert-manager

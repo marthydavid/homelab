@@ -1,0 +1,7 @@
+prometheus:
+  serviceAccount: rancher-monitoring-prometheus
+  namespace: cattle-monitoring-system
+  podMonitor:
+    enabled: true
+  prometheusRule:
+    enabled: true

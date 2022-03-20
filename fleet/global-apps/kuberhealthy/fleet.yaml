@@ -1,4 +1,6 @@
 defaultNamespace: kuberhealthy
+dependsOn:
+  - name: rancher-charts-fleet-rancher-charts-01-monitoring
 helm:
   chart: kuberhealthy
   repo: https://kuberhealthy.github.io/kuberhealthy/helm-repos

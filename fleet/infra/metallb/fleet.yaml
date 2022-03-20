@@ -3,39 +3,27 @@ helm:
   releaseName: metallb
   chart: metallb
   repo: https://metallb.github.io/metallb
-  version: v0.11.0
+  version: v0.12.1
+  valuesFiles:
+    - global.yaml
+dependsOn:
+  - name: rancher-charts-fleet-rancher-charts-01-monitoring
 targetCustomizations:
-- name: budapest-k3s-1
-  helm:
-    values:
-      configInline:
-        address-pools:
-        - addresses:
-          - 192.168.12.2-192.168.12.10
-          avoid-buggy-ips: true
-          name: default
-          protocol: bgp
-        peers:
-        - my-asn: 65530
-          peer-address: 192.168.10.254
-          peer-asn: 65530
+- name: k3s
   clusterSelector:
     matchLabels:
-      name: budapest-k3s
+      provider.cattle.io: k3s
+      topology.kubernetes.io/region: budapest
+      topology.kubernetes.io/zone: rpi
+  helm:
+    valuesFiles:
+      - k3s.yaml
 - name: rke2
-  helm:
-    values:
-      configInline:
-        address-pools:
-        - addresses:
-          - 192.168.12.12-192.168.12.20
-          avoid-buggy-ips: true
-          name: default
-          protocol: bgp
-        peers:
-        - my-asn: 65530
-          peer-address: 192.168.10.254
-          peer-asn: 65530
   clusterSelector:
     matchLabels:
-      name: rke2
+      provider.cattle.io: rke2
+      topology.kubernetes.io/region: budapest
+      topology.kubernetes.io/zone: esxi-hp
+  helm:
+    valuesFiles:
+      - rke2.yaml

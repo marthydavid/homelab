@@ -1,4 +1,6 @@
 defaultNamespace: cattle-monitoring-system
+dependsOn:
+  - name: rancher-charts-fleet-rancher-charts-01-monitoring
 namespace: cattle-monitoring-system
 helm:
   releaseName: speedtest-exporter
