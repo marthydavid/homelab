@@ -6,48 +6,30 @@ helm:
   chart: rancher-monitoring
   repo: https://charts.rancher.io/
 targetCustomizations:
-- name: rke2-alma
+- name: rke2
   clusterSelector:
     matchLabels:
       provider.cattle.io: rke2
+      topology.kubernetes.io/region: budapest
+      topology.kubernetes.io/zone: esxi-hp
   helm:
     version: "100.1.0+up19.0.3"
     values:
       additionalPrometheusRulesMap: {}
       alertmanager:
         alertmanagerSpec:
-          additionalPeers: []
-          affinity: {}
-          alertmanagerConfigNamespaceSelector: {}
-          alertmanagerConfigSelector: {}
-          clusterAdvertiseAddress: false
-          configMaps: []
-          containers: []
-          externalUrl: null
-          forceEnableClusterMode: false
           image:
-            repository: rancher/mirrored-prometheus-alertmanager
+            repository: quay.io/prometheus/alertmanager
             sha: ''
-            tag: v0.22.2
-          initContainers: []
-          listenLocal: false
-          logFormat: logfmt
-          logLevel: info
-          nodeSelector: {}
-          paused: false
-          podAntiAffinity: ''
-          podAntiAffinityTopologyKey: kubernetes.io/hostname
-          podMetadata: {}
-          portName: web
-          priorityClassName: ''
+            tag: v0.23.0
           replicas: 1
           resources:
             limits:
-              cpu: 1000m
-              memory: 500Mi
+              cpu: 150m
+              memory: 100Mi
             requests:
               cpu: 100m
-              memory: 100Mi
+              memory: 25Mi
           retention: 120h
           routePrefix: /
           secrets: []
@@ -83,66 +65,6 @@ targetCustomizations:
           templates:
             - /etc/alertmanager/config/*.tmpl
         enabled: true
-        extraSecret:
-          annotations: {}
-          data: {}
-        ingress:
-          annotations: {}
-          enabled: false
-          hosts: []
-          labels: {}
-          paths: []
-          tls: []
-        ingressPerReplica:
-          annotations: {}
-          enabled: false
-          hostDomain: ''
-          hostPrefix: ''
-          labels: {}
-          paths: []
-          tlsSecretName: ''
-          tlsSecretPerReplica:
-            enabled: false
-            prefix: alertmanager
-        podDisruptionBudget:
-          enabled: false
-          maxUnavailable: ''
-          minAvailable: 1
-        secret:
-          annotations: {}
-        service:
-          additionalPorts: []
-          annotations: {}
-          clusterIP: ''
-          externalIPs: []
-          labels: {}
-          loadBalancerIP: ''
-          loadBalancerSourceRanges: []
-          nodePort: 30903
-          port: 9093
-          targetPort: 9093
-          type: ClusterIP
-        serviceAccount:
-          annotations: {}
-          create: true
-          name: ''
-        serviceMonitor:
-          bearerTokenFile: null
-          interval: ''
-          metricRelabelings: []
-          proxyUrl: ''
-          relabelings: []
-          scheme: ''
-          selfMonitor: true
-          tlsConfig: {}
-        servicePerReplica:
-          annotations: {}
-          enabled: false
-          loadBalancerSourceRanges: []
-          nodePort: 30904
-          port: 9093
-          targetPort: 9093
-          type: ClusterIP
         templateFiles:
           rancher_defaults.tmpl: >-
             {{- define "slack.rancher.text" -}}
@@ -266,51 +188,6 @@ targetCustomizations:
 
             {{- end -}}
         tplConfig: false
-      commonLabels: {}
-      coreDns:
-        enabled: true
-        service:
-          port: 9153
-          targetPort: 9153
-        serviceMonitor:
-          interval: ''
-          metricRelabelings: []
-          proxyUrl: ''
-          relabelings: []
-      defaultRules:
-        additionalRuleLabels: {}
-        annotations: {}
-        appNamespacesTarget: .*
-        create: true
-        labels: {}
-        rules:
-          alertmanager: true
-          etcd: true
-          general: true
-          k8s: true
-          kubeApiserver: true
-          kubeApiserverAvailability: true
-          kubeApiserverError: true
-          kubeApiserverSlos: true
-          kubePrometheusGeneral: true
-          kubePrometheusNodeAlerting: true
-          kubePrometheusNodeRecording: true
-          kubeScheduler: true
-          kubeStateMetrics: true
-          kubelet: true
-          kubernetesAbsent: true
-          kubernetesApps: true
-          kubernetesResources: true
-          kubernetesStorage: true
-          kubernetesSystem: true
-          network: true
-          node: true
-          prometheus: true
-          prometheusOperator: true
-          time: true
-        runbookUrl: >-
-          https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#
-      fullnameOverride: ''
       global:
         cattle:
           systemDefaultRegistry: ''
@@ -320,7 +197,7 @@ targetCustomizations:
         kubectl:
           pullPolicy: IfNotPresent
           repository: rancher/kubectl
-          tag: v1.20.2
+          tag: v1.21.5
         rbac:
           create: true
           pspAnnotations: {}
@@ -790,55 +667,7 @@ targetCustomizations:
           relabelings: []
           scrapeTimeout: ''
       prometheus:
-        additionalPodMonitors: []
-        additionalRulesForClusterRole: []
-        additionalServiceMonitors: []
-        annotations: {}
-        enabled: true
-        extraSecret:
-          annotations: {}
-          data: {}
-        ingress:
-          annotations: {}
-          enabled: false
-          hosts: []
-          labels: {}
-          paths: []
-          tls: []
-        ingressPerReplica:
-          annotations: {}
-          enabled: false
-          hostDomain: ''
-          hostPrefix: ''
-          labels: {}
-          paths: []
-          tlsSecretName: ''
-          tlsSecretPerReplica:
-            enabled: false
-            prefix: prometheus
-        podDisruptionBudget:
-          enabled: false
-          maxUnavailable: ''
-          minAvailable: 1
-        podSecurityPolicy:
-          allowedCapabilities: []
-          allowedHostPaths: []
-          volumes: []
         prometheusSpec:
-          additionalAlertManagerConfigs: []
-          additionalAlertManagerConfigsSecret: {}
-          additionalAlertRelabelConfigs: []
-          additionalPrometheusSecretsAnnotations: {}
-          additionalRemoteRead: []
-          additionalRemoteWrite: []
-          additionalScrapeConfigs: []
-          additionalScrapeConfigsSecret: {}
-          affinity: {}
-          alertingEndpoints: []
-          allowOverlappingBlocks: false
-          apiserverConfig: {}
-          arbitraryFSAccessThroughSMs: false
-          configMaps: []
           containers: |
             - name: prometheus-proxy
               args:
@@ -860,45 +689,13 @@ targetCustomizations:
               securityContext:
                 runAsUser: 101
                 runAsGroup: 101
-          disableCompaction: false
-          enableAdminAPI: false
-          enableFeatures: []
-          enforcedLabelLimit: false
-          enforcedLabelNameLengthLimit: false
-          enforcedLabelValueLengthLimit: false
-          enforcedNamespaceLabel: ''
-          enforcedSampleLimit: false
-          enforcedTargetLimit: false
-          evaluationInterval: 1m
-          externalLabels: {}
-          externalUrl: ''
-          ignoreNamespaceSelectors: false
           image:
-            repository: rancher/mirrored-prometheus-prometheus
+            repository: quay.io/prometheus/prometheus
             sha: ''
-            tag: v2.28.1
-          initContainers: []
-          listenLocal: false
-          logFormat: logfmt
-          logLevel: info
-          nodeSelector: {}
-          overrideHonorLabels: false
-          overrideHonorTimestamps: false
-          paused: false
-          podAntiAffinity: ''
-          podAntiAffinityTopologyKey: kubernetes.io/hostname
-          podMetadata: {}
-          podMonitorNamespaceSelector: {}
-          podMonitorSelector: {}
-          podMonitorSelectorNilUsesHelmValues: false
-          portName: nginx-http
-          priorityClassName: ''
-          probeNamespaceSelector: {}
-          probeSelector: {}
-          probeSelectorNilUsesHelmValues: true
-          prometheusExternalLabelName: ''
-          prometheusExternalLabelNameClear: false
-          prometheusRulesExcludedFromEnforce: []
+            tag: v2.34.0
+          podMetadata:
+            labels:
+              thanos-store-api: "true"
           proxy:
             image:
               repository: rancher/mirrored-library-nginx
@@ -1055,6 +852,15 @@ targetCustomizations:
           port: 9796
           targetPort: 9796
       prometheusOperator:
+        image:
+          repository: quay.io/promethues-operator/prometheus-operator
+          tag: v0.54.0
+        prometheusConfigReloaderImage:
+          repository: quay.io/prometheus-operator/prometheus-config-reloader
+          tag: v0.54.0
+        thanosImage:
+          repository: quay.io/thanos/thanos
+          tag: v0.24.0
         admissionWebhooks:
           caBundle: ''
           certManager:
@@ -1086,11 +892,6 @@ targetCustomizations:
         dnsConfig: {}
         enabled: true
         hostNetwork: false
-        image:
-          pullPolicy: IfNotPresent
-          repository: rancher/mirrored-prometheus-operator-prometheus-operator
-          sha: ''
-          tag: v0.50.0
         kubeletService:
           enabled: true
           namespace: kube-system
@@ -1098,10 +899,6 @@ targetCustomizations:
         nodeSelector: {}
         podAnnotations: {}
         podLabels: {}
-        prometheusConfigReloaderImage:
-          repository: rancher/mirrored-prometheus-operator-prometheus-config-reloader
-          sha: ''
-          tag: v0.50.0
         prometheusInstanceNamespaces: []
         resources:
           limits:
@@ -1136,10 +933,6 @@ targetCustomizations:
           relabelings: []
           scrapeTimeout: ''
           selfMonitor: true
-        thanosImage:
-          repository: rancher/mirrored-thanos-thanos
-          sha: ''
-          tag: v0.17.2
         thanosRulerInstanceNamespaces: []
         tls:
           enabled: true
@@ -1307,6 +1100,9 @@ diff:
     name: rancher-monitoring-admission
     operations:
     - {"op":"remove", "path":"/webhooks"}
+  - apiVersion: admissionregistration.k8s.io/v1beta1
+    kind: MutatingWebhookConfiguration
+    name: rancher-monitoring-admission
     jsonPointers:
     - "/webhooks"
   - apiVersion: admissionregistration.k8s.io/v1
@@ -1314,6 +1110,29 @@ diff:
     name: rancher-monitoring-admission
     operations:
     - {"op":"remove", "path":"/webhooks"}
+  - apiVersion: admissionregistration.k8s.io/v1
+    kind: MutatingWebhookConfiguration
+    name: rancher-monitoring-admission
+    jsonPointers:
+    - "/webhooks"
+  - apiVersion: admissionregistration.k8s.io/v1beta1
+    kind: ValidatingWebhookConfiguration
+    name: rancher-monitoring-admission
+    operations:
+    - {"op":"remove", "path":"/webhooks"}
+  - apiVersion: admissionregistration.k8s.io/v1beta1
+    kind: ValidatingWebhookConfiguration
+    name: rancher-monitoring-admission
+    jsonPointers:
+    - "/webhooks"
+  - apiVersion: admissionregistration.k8s.io/v1
+    kind: ValidatingWebhookConfiguration
+    name: rancher-monitoring-admission
+    operations:
+    - {"op":"remove", "path":"/webhooks"}
+  - apiVersion: admissionregistration.k8s.io/v1
+    kind: ValidatingWebhookConfiguration
+    name: rancher-monitoring-admission
     jsonPointers:
     - "/webhooks"
   - apiVersion: monitoring.coreos.com/v1

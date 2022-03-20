@@ -8,7 +8,7 @@ targetCustomizations:
 - name: rke2
   clusterSelector:
     matchLabels:
-      name: rke2
+      provider.cattle.io: rke2
   helm:
     values:
       podSecurityPolicy:
@@ -38,3 +38,11 @@ targetCustomizations:
           enabled: true
           extraEnvs:
             CONNECTION_TARGET: "tcp://marthy.xyxz:443"
+- name: k3s
+  clusterSelector:
+    matchLabels:
+      provider.cattle.io: k3s
+  helm:
+    values:
+      deployment:
+        replicas: 0

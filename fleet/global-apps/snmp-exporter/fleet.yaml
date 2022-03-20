@@ -24,7 +24,9 @@ targetCustomizations:
           release: rancher-monitoring
   clusterSelector:
     matchLabels:
-      name: budapest-k3s
+      provider.cattle.io: k3s
+      topology.kubernetes.io/region: budapest
+      topology.kubernetes.io/zone: rpi
 - name: budapest-k3s-2
   helm:
     releaseName: snmp-exporter-rack-mikrotik
@@ -46,7 +48,9 @@ targetCustomizations:
           release: rancher-monitoring
   clusterSelector:
     matchLabels:
-      name: budapest-k3s
+      provider.cattle.io: k3s
+      topology.kubernetes.io/region: budapest
+      topology.kubernetes.io/zone: rpi
 - name: budapest-k3s-3
   helm:
     releaseName: snmp-exporter-rack-tplink
@@ -69,7 +73,9 @@ targetCustomizations:
           release: rancher-monitoring
   clusterSelector:
     matchLabels:
-      name: budapest-k3s
+      provider.cattle.io: k3s
+      topology.kubernetes.io/region: budapest
+      topology.kubernetes.io/zone: rpi
 - name: marthy-xyz
   helm:
     releaseName: snmp-exporter-rack-tplink
@@ -92,4 +98,6 @@ targetCustomizations:
           release: rancher-monitoring
   clusterSelector:
     matchLabels:
-      name: marthy-xyz
+      provider.cattle.io: k3s
+      topology.kubernetes.io/region: pecs
+      topology.kubernetes.io/zone: pecs-1

@@ -4,10 +4,19 @@ helm:
   chart: rancher-monitoring-crd
   repo: https://charts.rancher.io/
 targetCustomizations:
-- name: rke2-alma
+- name: rke2
   clusterSelector:
     matchLabels:
       provider.cattle.io: rke2
       topology.kubernetes.io/region: budapest
+      topology.kubernetes.io/zone: esxi-hp
+  helm:
+    version: "100.1.0+up19.0.3"
+- name: k3s
+  clusterSelector:
+    matchLabels:
+      provider.cattle.io: k3s
+      topology.kubernetes.io/region: budapest
+      topology.kubernetes.io/zone: rpi
   helm:
     version: "100.1.0+up19.0.3"
