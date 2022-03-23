@@ -603,15 +603,7 @@ prometheus:
     serviceMonitorSelector: {}
     serviceMonitorSelectorNilUsesHelmValues: false
     shards: 1
-    storageSpec:
-      volumeClaimTemplate:
-        spec:
-          accessModes:
-            - ReadWriteOnce
-          resources:
-            requests:
-              storage: 50Gi
-          volumeMode: Filesystem
+    storageSpec: {}
     thanos: {}
     tolerations: []
     topologySpreadConstraints: []

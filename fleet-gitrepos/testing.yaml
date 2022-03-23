@@ -1,0 +1,24 @@
+apiVersion: fleet.cattle.io/v1alpha1
+kind: GitRepo
+metadata:
+  name: testing
+  namespace: fleet-default
+spec:
+  branch: main
+  insecureSkipTLSVerify: false
+  paths:
+  - fleet/testing
+  paused: false
+  repo: "https://github.com/marthydavid/homelab.git"
+  clientSecretName: marthydavid-fleet-pw
+  targets:
+  - clusterSelector:
+      matchLabels:
+        provider.cattle.io: k3s
+        topology.kubernetes.io/region: budapest
+        topology.kubernetes.io/zone: rpi
+    name: k3s
+  imageScanCommit:
+    authorName: "marthydavid fleet"
+    authorEmail: "marthy.david+fleet@gmail.com"
+    messageTemplate: "update image"
