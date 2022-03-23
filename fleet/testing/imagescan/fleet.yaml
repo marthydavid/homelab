@@ -1,0 +1,25 @@
+defaultNamespace: testing
+helm:
+  releaseName: nullserv
+  chart: nullserv
+  repo: https://k8s-at-home.com/charts/
+  version:
+targetCustomizations:
+- name: k3s
+  clusterSelector:
+    matchLabels:
+      provider.cattle.io: k3s
+      topology.kubernetes.io/region: budapest
+      topology.kubernetes.io/zone: rpi
+  helm:
+    valuesFiles:
+      - k3s.yaml
+imageScans:
+- policy:
+    semver:
+      range: "*"
+    alphabetical:
+      order: asc
+  image: "ghcr.io/marthydavid/testing"
+  tagName: testing
+  interval: 30s

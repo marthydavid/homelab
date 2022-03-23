@@ -1,0 +1,3 @@
+image:
+  repository: <image> # { "$imagescan": "testing:name" }
+  tag: <tag> # { "$imagescan": "testing:tag" }
