@@ -22,4 +22,4 @@ imageScans:
       order: asc
   image: "ghcr.io/marthydavid/testing"
   tagName: testing
-  interval: 30s
+  interval: 3m
