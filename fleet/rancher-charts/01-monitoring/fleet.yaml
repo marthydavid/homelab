@@ -13,7 +13,7 @@ targetCustomizations:
       topology.kubernetes.io/region: budapest
       topology.kubernetes.io/zone: esxi-hp
   helm:
-    version: "100.1.0+up19.0.3"
+    version: "100.1.2+up19.0.3"
     valuesFiles:
       - rke2.yaml
 - name: k3s
@@ -23,9 +23,10 @@ targetCustomizations:
       topology.kubernetes.io/region: budapest
       topology.kubernetes.io/zone: rpi
   helm:
-    version: "100.1.0+up19.0.3"
+    version: "100.1.2+up19.0.3"
     valuesFiles:
       - k3s.yaml
+
 diff:
   comparePatches:
   - apiVersion: admissionregistration.k8s.io/v1beta1

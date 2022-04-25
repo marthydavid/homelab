@@ -4,7 +4,7 @@ alertmanager:
     image:
       repository: quay.io/prometheus/alertmanager
       sha: ''
-      tag: v0.23.0
+      tag: v0.24.0
     replicas: 1
     resources:
       limits:
@@ -24,9 +24,11 @@ alertmanager:
     storage: {}
     tolerations: []
     topologySpreadConstraints: []
-    useExistingSecret: false
+    useExistingSecret: true
     volumeMounts: []
     volumes: []
+    configSecret: alertmanager-rancher-monitoring-alertmanager
+
   annotations: {}
   apiVersion: v2
   config:
