@@ -21,7 +21,15 @@ alertmanager:
       runAsGroup: 2000
       runAsNonRoot: true
       runAsUser: 1000
-    storage: {}
+    storage:
+      volumeClaimTemplate:
+        metadata:
+          name: rancher-alertmanager
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 1Gi
     tolerations: []
     topologySpreadConstraints: []
     useExistingSecret: true
@@ -701,7 +709,7 @@ prometheus:
         cpu: 750m
         memory: 750Mi
     retention: 10d
-    retentionSize: 50GiB
+    retentionSize: 18GiB
     routePrefix: /
     ruleNamespaceSelector: {}
     ruleSelector: {}
@@ -718,7 +726,15 @@ prometheus:
     serviceMonitorSelector: {}
     serviceMonitorSelectorNilUsesHelmValues: false
     shards: 1
-    storageSpec: {}
+    storageSpec:
+      volumeClaimTemplate:
+        metadata:
+          name: rancher-prometheus
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 20Gi
     thanos: {}
     tolerations: []
     topologySpreadConstraints: []
