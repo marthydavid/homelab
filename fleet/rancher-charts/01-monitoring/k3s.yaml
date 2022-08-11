@@ -603,7 +603,8 @@ prometheus:
     serviceMonitorSelector: {}
     serviceMonitorSelectorNilUsesHelmValues: false
     shards: 1
-    storageSpec: {}
+    storageSpec:
+      emptyDir: {}
     thanos: {}
     tolerations: []
     topologySpreadConstraints: []
