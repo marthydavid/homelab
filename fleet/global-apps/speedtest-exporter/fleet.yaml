@@ -5,6 +5,7 @@ namespace: cattle-monitoring-system
 helm:
   releaseName: speedtest-exporter
   chart: speedtest-exporter
+  version: 5.4.1
   repo: https://k8s-at-home.com/charts/
   values:
     env:
