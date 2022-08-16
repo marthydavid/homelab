@@ -4,6 +4,6 @@
     "config:base"
   ],
   "fleet":{
-    "fileMatch": ["'(^|/)fleet.ya?ml", "myGitRepoManifests\\.yaml"]
+    "fileMatch": ["'(^|/)fleet.ya?ml", "(^|/)*.yaml"]
   }
 }
