@@ -76,10 +76,10 @@ This is the repo for my homelab
 
 | Name | OS | Function |
 |---|---|---|
-| RPi 1 | Ubuntu 21.10 | K3s worker |
-| RPi 2 | Ubuntu 21.10 | K3s worker |
-| RPi 3 | Ubuntu 21.10 | K3s worker |
-| RPi 4 | Ubuntu 21.10 | K3s ctrl plane |
+| RPi 1 | Ubuntu 22.04 | K3s worker |
+| RPi 2 | Ubuntu 22.04 | K3s worker |
+| RPi 3 | Ubuntu 22.04 | K3s worker |
+| RPi 4 | Ubuntu 22.04 | K3s ctrl plane |
 
 ### NAS
 
@@ -97,15 +97,14 @@ This is the repo for my homelab
 
 ### Main K8s cluster
 
-* rancher
-* cert-manager
-* ingress-nginx
-* oauth2-proxy
+* [rancher](https://rancher.com)
+* [cert-manager](https://cert-manager.io)
+* [ingress-nginx](https://kubernetes.github.io/ingress-nginx)
+* [oauth2-proxy](https://oauth2-proxy.github.io/oauth2-proxy/)
 * ddns-route53
-* Radarr
-* Sonarr
-* prometheus-operator
-* karma
-* metallb
-* fleet
-* kube-vip
+* [Radarr](https://radarr.video)
+* [Sonarr](https://sonarr.tv)
+* [prometheus-operator](https://prometheus-operator.dev/)
+* [karma](https://karma-dashboard.io/)
+* [metallb](https://metallb.universe.tf/)
+* [fleet](https://fleet.rancher.io/)
