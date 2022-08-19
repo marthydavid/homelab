@@ -6,7 +6,7 @@ helm:
   version: 1.1.0
   repo: https://prometheus-community.github.io/helm-charts
 targetCustomizations:
-- name: budapest-k3s-1
+- name: budapest-k3s
   helm:
     releaseName: snmp-exporter-budapest-mikrotik
     values:
@@ -14,93 +14,25 @@ targetCustomizations:
         enabled: true
         honorLabels: true
         namespace: cattle-monitoring-system
-        params:
-          conf:
-            module:
-              - if_mib
-            target:
-              - 192.168.0.1
-          enabled: true
         path: /snmp
         scrapeTimeout: 10s
         selector:
           release: rancher-monitoring
+        params:
+          - name: budapest-mikrotik
+            module:
+              - if_mib
+            target: 192.168.0.1
+          - name: budapest-rack-mikrotik
+            module:
+              - if_mib
+            target: 192.168.0.254
+          - name: budapest-rack-tplink
+            module:
+              - if_mib
+            target: 192.168.10.230
   clusterSelector:
     matchLabels:
       provider.cattle.io: k3s
       topology.kubernetes.io/region: budapest
       topology.kubernetes.io/zone: rpi
-- name: budapest-k3s-2
-  helm:
-    releaseName: snmp-exporter-rack-mikrotik
-    values:
-      serviceMonitor:
-        enabled: true
-        honorLabels: true
-        namespace: cattle-monitoring-system
-        params:
-          conf:
-            module:
-              - if_mib
-            target:
-              - 192.168.0.254
-          enabled: true
-        path: /snmp
-        scrapeTimeout: 10s
-        selector:
-          release: rancher-monitoring
-  clusterSelector:
-    matchLabels:
-      provider.cattle.io: k3s
-      topology.kubernetes.io/region: budapest
-      topology.kubernetes.io/zone: rpi
-- name: budapest-k3s-3
-  helm:
-    releaseName: snmp-exporter-rack-tplink
-    values:
-      serviceMonitor:
-        enabled: true
-        honorLabels: true
-        namespace: cattle-monitoring-system
-        params:
-          conf:
-            module:
-              - if_mib
-            target:
-              - 192.168.10.230
-          enabled: true
-        path: /snmp
-        scrapeTimeout: 30s
-        scrapeInterval: 35s
-        selector:
-          release: rancher-monitoring
-  clusterSelector:
-    matchLabels:
-      provider.cattle.io: k3s
-      topology.kubernetes.io/region: budapest
-      topology.kubernetes.io/zone: rpi
-- name: marthy-xyz
-  helm:
-    releaseName: snmp-exporter-rack-tplink
-    values:
-      serviceMonitor:
-        enabled: true
-        honorLabels: true
-        namespace: cattle-monitoring-system
-        params:
-          conf:
-            module:
-              - if_mib
-            target:
-              - 192.168.10.230
-          enabled: true
-        path: /snmp
-        scrapeTimeout: 30s
-        scrapeInterval: 35s
-        selector:
-          release: rancher-monitoring
-  clusterSelector:
-    matchLabels:
-      provider.cattle.io: k3s
-      topology.kubernetes.io/region: pecs
-      topology.kubernetes.io/zone: pecs-1
