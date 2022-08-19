@@ -76,10 +76,10 @@ This is the repo for my homelab
 
 | Name | OS | Function |
 |---|---|---|
-| RPi 1 | Ubuntu 21.10 | K3s worker |
-| RPi 2 | Ubuntu 21.10 | K3s worker |
-| RPi 3 | Ubuntu 21.10 | K3s worker |
-| RPi 4 | Ubuntu 21.10 | K3s ctrl plane |
+| RPi 1 | Ubuntu 22.04 | K3s worker |
+| RPi 2 | Ubuntu 22.04 | K3s worker |
+| RPi 3 | Ubuntu 22.04 | K3s worker |
+| RPi 4 | Ubuntu 22.04 | K3s ctrl plane |
 
 ### NAS
 
