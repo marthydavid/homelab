@@ -3,7 +3,9 @@
   "extends": [
     "config:base"
   ],
-  "fleet":{
-    "fileMatch": ["'(^|/)fleet.ya?ml", "'(^|/).*.yaml"]
+  "fleet": {
+    "fileMatch": [
+      "(^|/)fleet\\.yaml$"
+    ]
   }
 }
