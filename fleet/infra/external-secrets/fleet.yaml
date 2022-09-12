@@ -1,4 +1,6 @@
 defaultNamespace: external-secrets
+dependsOn:
+- name: rancher-charts-fleet-rancher-charts-01-crd-monitoring
 helm:
   releaseName: external-secrets
   chart: external-secrets
@@ -6,3 +8,6 @@ helm:
   version: 0.5.9
   values:
     installCRDs: true
+    serviceMonitor.enabled: true
+    webhook.serviceMonitor.enabled: true
+    certController.serviceMonitor.enabled: true

@@ -1,0 +1,3 @@
+defaultNamespace: external-secrets
+dependsOn:
+  - name: infra-fleet-infra-external-secrets
