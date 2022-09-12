@@ -108,3 +108,5 @@ This is the repo for my homelab
 * [karma](https://karma-dashboard.io/)
 * [metallb](https://metallb.universe.tf/)
 * [fleet](https://fleet.rancher.io/)
+* [vault](https://vaultproject.io)
+* [external-secrets](https://external-secrets.io)
