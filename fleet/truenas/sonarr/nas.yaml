@@ -14,7 +14,7 @@ image:
 ingress:
   main:
     annotationsList:
-    - name: cert-manager.io/clusterissuer
+    - name: cert-manager.io/cluster-issuer
       value: letsencrypt-prod
     enableFixedMiddlewares: true
     enabled: true
@@ -31,7 +31,7 @@ ingress:
     tls:
     - hosts:
       - sonarr.pecs.marthy.xyz
-      scaleCert: null
+      secretName: sonarr-tls
 ixChartContext:
   isInstall: true
   isUpdate: false

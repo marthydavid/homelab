@@ -5,7 +5,7 @@ image:
 ingress:
   main:
     annotationsList:
-    - name: cert-manager.io/clusterissuer
+    - name: cert-manager.io/cluster-issuer
       value: letsencrypt-prod
     enableFixedMiddlewares: true
     enabled: true
