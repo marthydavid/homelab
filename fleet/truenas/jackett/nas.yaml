@@ -1,4 +1,6 @@
 TZ: Europe/Budapest
+docs:
+  confirmDocs: true
 global:
   isSCALE: true
   ixChartContext:
@@ -6,11 +8,11 @@ global:
     isUpdate: false
     isUpgrade: false
     operation: INSTALL
-    storageClassName: ix-storage-class-sonarr
+    storageClassName: ix-storage-class-jackett
     upgradeMetadata: {}
 image:
   pullPolicy: IfNotPresent
-  repository: tccr.io/truecharts/sonarr
+  repository: tccr.io/truecharts/jackett
 ingress:
   main:
     annotationsList:
@@ -21,7 +23,7 @@ ingress:
     entrypoint: websecure
     expert: true
     hosts:
-    - host: sonarr.pecs.marthy.xyz
+    - host: jackett.pecs.marthy.xyz
       paths:
       - path: /
         pathType: Prefix
@@ -30,18 +32,15 @@ ingress:
     middlewares: []
     tls:
     - hosts:
-      - sonarr.pecs.marthy.xyz
+      - jackett.pecs.marthy.xyz
       scaleCert: null
 ixChartContext:
   isInstall: true
   isUpdate: false
   isUpgrade: false
   operation: INSTALL
-  storageClassName: ix-storage-class-sonarr
+  storageClassName: ix-storage-class-jackett
   upgradeMetadata: {}
-ixExternalInterfacesConfiguration: []
-ixExternalInterfacesConfigurationNames: []
-ixVolumes: []
 persistence:
   config:
     advanced: false
@@ -49,15 +48,6 @@ persistence:
     mountPath: /config
     readOnly: false
     type: simplePVC
-persistenceList:
-- advanced: false
-  enabled: true
-  hostPathSimple: /mnt/zfs/media/series
-  mountPath: /mnt/zfs/media/series
-  name: series
-  readOnly: false
-  setPermissionsSimple: false
-  type: simpleHP
 podSecurityContext:
   fsGroup: 568
   fsGroupChangePolicy: OnRootMismatch
@@ -68,31 +58,24 @@ portal:
   enabled: true
 probes:
   liveness:
-    custom: true
-    enabled: true
-    spec:
-      exec:
-        command:
-        - /usr/bin/env
-        - bash
-        - -c
-        - curl --fail localhost:8989/api/v3/system/status?apiKey=`IFS=\> && while
-          read -d \< E C; do if [[ $E = "ApiKey" ]]; then echo $C; fi; done < /config/config.xml`
-      failureThreshold: 5
-      initialDelaySeconds: 60
-      periodSeconds: 10
-      successThreshold: 1
-      timeoutSeconds: 10
-release_name: sonarr
-security:
-  editsecurity: false
+    path: /UI/Login
+  readiness:
+    path: /UI/Login
+  startup:
+    path: /UI/Login
+release_name: jackett
+securityContext:
+  readOnlyRootFilesystem: false
 service:
   main:
     advancedsvcset: false
     enabled: true
+    loadBalancerIP: ""
     ports:
       main:
         advanced: false
-        port: 8989
-        targetPort: 8989
-    type: ClusterIP
+        port: 9117
+        protocol: HTTP
+        targetPort: 9117
+    type: LoadBalancer
+serviceexpert: false
