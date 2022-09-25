@@ -1,4 +1,6 @@
 defaultNamespace: ix-sonarr
+dependsOn:
+  - name: truenas-fleet-truenas-storageclasses
 helm:
   releaseName: sonarr
   chart: sonarr

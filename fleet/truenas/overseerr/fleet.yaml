@@ -1,4 +1,6 @@
 defaultNamespace: ix-overseerr
+dependsOn:
+  - name: truenas-fleet-truenas-storageclasses
 helm:
   releaseName: overseerr
   chart: overseerr

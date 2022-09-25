@@ -1,4 +1,6 @@
 defaultNamespace: ix-radarr
+dependsOn:
+  - name: truenas-fleet-truenas-storageclasses
 helm:
   releaseName: radarr
   chart: radarr

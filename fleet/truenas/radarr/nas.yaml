@@ -1,13 +1,4 @@
 TZ: Europe/Budapest
-global:
-  isSCALE: true
-  ixChartContext:
-    isInstall: true
-    isUpdate: false
-    isUpgrade: false
-    operation: INSTALL
-    storageClassName: ix-storage-class-radarr
-    upgradeMetadata: {}
 image:
   pullPolicy: IfNotPresent
   repository: tccr.io/truecharts/radarr
@@ -32,13 +23,6 @@ ingress:
     - hosts:
       - radarr.pecs.marthy.xyz
       scaleCert: null
-ixChartContext:
-  isInstall: true
-  isUpdate: false
-  isUpgrade: false
-  operation: INSTALL
-  storageClassName: ix-storage-class-radarr
-  upgradeMetadata: {}
 persistence:
   config:
     advanced: false
@@ -63,33 +47,4 @@ podSecurityContext:
   supplementalGroups: []
 portal:
   enabled: true
-probes:
-  liveness:
-    custom: true
-    enabled: true
-    spec:
-      exec:
-        command:
-        - /usr/bin/env
-        - bash
-        - -c
-        - curl --fail localhost:7878/api/v3/system/status?apiKey=`IFS=\> && while
-          read -d \< E C; do if [[ $E = "ApiKey" ]]; then echo $C; fi; done < /config/config.xml`
-      failureThreshold: 5
-      initialDelaySeconds: 60
-      periodSeconds: 10
-      successThreshold: 1
-      timeoutSeconds: 10
 release_name: radarr
-security:
-  editsecurity: false
-service:
-  main:
-    advancedsvcset: false
-    enabled: true
-    ports:
-      main:
-        advanced: false
-        port: 8989
-        targetPort: 8989
-    type: ClusterIP

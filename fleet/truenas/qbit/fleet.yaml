@@ -1,4 +1,6 @@
 defaultNamespace: ix-qbit
+dependsOn:
+  - name: truenas-fleet-truenas-storageclasses
 helm:
   releaseName: qbit
   chart: qbittorrent

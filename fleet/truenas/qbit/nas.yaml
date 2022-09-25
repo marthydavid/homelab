@@ -2,8 +2,8 @@ TZ: Europe/Budapest
 global:
   isSCALE: true
   ixChartContext:
-    isInstall: false
-    isUpdate: true
+    isInstall: true
+    isUpdate: false
     isUpgrade: false
     operation: UPDATE
     storageClassName: ix-storage-class-qbit
@@ -32,10 +32,10 @@ ingress:
     - hosts:
       - qbit.pecs.marthy.xyz
 ixChartContext:
-  isInstall: false
-  isUpdate: true
+  isInstall: true
+  isUpdate: false
   isUpgrade: false
-  operation: UPDATE
+  operation: INSTALL
   storageClassName: ix-storage-class-qbit
   upgradeMetadata: {}
 persistence:

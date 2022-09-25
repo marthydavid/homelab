@@ -1,4 +1,6 @@
 defaultNamespace: ix-jackett
+dependsOn:
+  - name: truenas-fleet-truenas-storageclasses
 helm:
   releaseName: jackett
   chart: jackett

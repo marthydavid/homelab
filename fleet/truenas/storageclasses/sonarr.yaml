@@ -1,0 +1,11 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: ix-storage-class-sonarr
+parameters:
+  fstype: zfs
+  shared: "yes"
+allowVolumeExpansion: true
+provisioner: zfs.csi.openebs.io
+reclaimPolicy: Retain
+volumeBindingMode: Immediate
