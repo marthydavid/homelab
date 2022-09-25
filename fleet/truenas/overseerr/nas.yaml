@@ -1,0 +1,74 @@
+TZ: Europe/Budapest
+env:
+  LOG_LEVEL: info
+global:
+  isSCALE: true
+  ixChartContext:
+    isInstall: false
+    isUpdate: false
+    isUpgrade: true
+    operation: UPGRADE
+    storageClassName: ix-storage-class-overseerr
+    upgradeMetadata:
+      newChartVersion: 6.0.33
+      oldChartVersion: 6.0.32
+      preUpgradeRevision: 6
+image:
+  pullPolicy: IfNotPresent
+  repository: tccr.io/truecharts/overseerr
+ingress:
+  main:
+    annotationsList:
+    - name: cert-manager.io/cluster-issuer
+      value: letsencrypt-prod
+    enableFixedMiddlewares: true
+    enabled: true
+    entrypoint: websecure
+    expert: true
+    hosts:
+    - host: overseerr.pecs.marthy.xyz
+      paths:
+      - path: /
+        pathType: Prefix
+    ingressClassName: ""
+    labelsList: []
+    middlewares: []
+    tls:
+    - hosts:
+      - overseerr.pecs.marthy.xyz
+ixChartContext:
+  isInstall: false
+  isUpdate: false
+  isUpgrade: true
+  operation: INSTALL
+  storageClassName: ix-storage-class-overseerr
+  upgradeMetadata: {}
+persistence:
+  config:
+    advanced: false
+    enabled: true
+    mountPath: /app/config
+    readOnly: false
+    type: simplePVC
+portal:
+  enabled: true
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    add: []
+    drop: []
+  privileged: false
+  readOnlyRootFilesystem: false
+  runAsNonRoot: true
+service:
+  main:
+    advancedsvcset: false
+    enabled: true
+    ipFamilies: []
+    ipFamilyPolicy: SingleStack
+    ports:
+      main:
+        advanced: false
+        port: 5055
+        targetPort: 5055
+    type: ClusterIP

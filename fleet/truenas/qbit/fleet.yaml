@@ -1,9 +1,9 @@
-defaultNamespace: ix-jackett
+defaultNamespace: ix-qbit
 helm:
-  releaseName: jackett
-  chart: jackett
+  releaseName: qbit
+  chart: qbittorrent
   repo: https://charts.truecharts.org
-  version: "11.0.92"
+  version: "11.0.33"
 targetCustomizations:
 - name: nas
   clusterSelector:

@@ -39,9 +39,6 @@ ixChartContext:
   operation: INSTALL
   storageClassName: ix-storage-class-sonarr
   upgradeMetadata: {}
-ixExternalInterfacesConfiguration: []
-ixExternalInterfacesConfigurationNames: []
-ixVolumes: []
 persistence:
   config:
     advanced: false

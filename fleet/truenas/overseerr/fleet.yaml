@@ -1,9 +1,9 @@
-defaultNamespace: ix-jackett
+defaultNamespace: ix-overseerr
 helm:
-  releaseName: jackett
-  chart: jackett
+  releaseName: overseerr
+  chart: overseerr
   repo: https://charts.truecharts.org
-  version: "11.0.92"
+  version: "6.0.31"
 targetCustomizations:
 - name: nas
   clusterSelector:

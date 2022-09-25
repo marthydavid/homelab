@@ -1,0 +1,110 @@
+TZ: Europe/Budapest
+global:
+  isSCALE: true
+  ixChartContext:
+    isInstall: false
+    isUpdate: true
+    isUpgrade: false
+    operation: UPDATE
+    storageClassName: ix-storage-class-qbit
+    upgradeMetadata: {}
+image:
+  pullPolicy: IfNotPresent
+  repository: tccr.io/truecharts/qbittorrent
+ingress:
+  main:
+    annotationsList:
+    - name: cert-manager.io/cluster-issuer
+      value: letsencrypt-prod
+    enableFixedMiddlewares: true
+    enabled: true
+    entrypoint: websecure
+    expert: true
+    hosts:
+    - host: qbit.pecs.marthy.xyz
+      paths:
+      - path: /
+        pathType: Prefix
+    ingressClassName: ""
+    labelsList: []
+    middlewares: []
+    tls:
+    - hosts:
+      - qbit.pecs.marthy.xyz
+ixChartContext:
+  isInstall: false
+  isUpdate: true
+  isUpgrade: false
+  operation: UPDATE
+  storageClassName: ix-storage-class-qbit
+  upgradeMetadata: {}
+persistence:
+  config:
+    advanced: false
+    enabled: true
+    mountPath: /config
+    readOnly: false
+    type: simplePVC
+persistenceList:
+- advanced: false
+  enabled: true
+  hostPathSimple: /mnt/zfs/media/movies
+  mountPath: /mnt/zfs/media/movies
+  name: movies
+  readOnly: false
+  setPermissionsSimple: false
+  type: simpleHP
+- advanced: false
+  enabled: true
+  hostPathSimple: /mnt/zfs/media/series
+  mountPath: /mnt/zfs/media/series
+  name: series
+  readOnly: false
+  setPermissionsSimple: false
+  type: simpleHP
+podSecurityContext:
+  fsGroup: 568
+  fsGroupChangePolicy: OnRootMismatch
+  runAsGroup: 568
+  runAsUser: 568
+  supplementalGroups: []
+portal:
+  enabled: true
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    add: []
+    drop: []
+  privileged: false
+  readOnlyRootFilesystem: false
+  runAsNonRoot: true
+service:
+  main:
+    enabled: true
+    ipFamilies: []
+    ipFamilyPolicy: SingleStack
+    ports:
+      main:
+        advanced: false
+        port: 10095
+        targetPort: 8080
+    type: ClusterIP
+  torrent:
+    enabled: true
+    ports:
+      torrent:
+        advanced: false
+        enabled: true
+        port: 6881
+        targetPort: 6881
+    type: Simple
+  torrentudp:
+    enabled: true
+    ports:
+      torrentudp:
+        advanced: false
+        enabled: true
+        port: 6881
+        protocol: UDP
+        targetPort: 6881
+    type: Simple
