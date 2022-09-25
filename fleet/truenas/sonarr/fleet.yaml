@@ -1,0 +1,16 @@
+defaultNamespace: ix-sonarr
+helm:
+  releaseName: sonarr
+  chart: sonarr
+  repo: https://charts.truecharts.org
+targetCustomizations:
+- name: nas
+  clusterSelector:
+    matchLabels:
+      provider.cattle.io: k3s
+      topology.kubernetes.io/region: pecs
+      topology.kubernetes.io/zone: nas
+  helm:
+    version: "11.0.35"
+    valuesFiles:
+      - nas.yaml
