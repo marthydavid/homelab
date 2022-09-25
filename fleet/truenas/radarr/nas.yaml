@@ -22,7 +22,7 @@ ingress:
     tls:
     - hosts:
       - radarr.pecs.marthy.xyz
-      scaleCert: null
+      secretName: radarr-tls
 persistence:
   config:
     advanced: false

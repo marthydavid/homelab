@@ -33,7 +33,7 @@ ingress:
     tls:
     - hosts:
       - jackett.pecs.marthy.xyz
-      scaleCert: null
+      secretName: jackett-tls
 ixChartContext:
   isInstall: true
   isUpdate: false

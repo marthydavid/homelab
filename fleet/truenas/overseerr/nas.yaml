@@ -36,6 +36,7 @@ ingress:
     tls:
     - hosts:
       - overseerr.pecs.marthy.xyz
+      secretName: overseerr-tls
 ixChartContext:
   isInstall: false
   isUpdate: false
