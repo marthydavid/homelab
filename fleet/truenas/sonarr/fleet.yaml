@@ -3,6 +3,7 @@ helm:
   releaseName: sonarr
   chart: sonarr
   repo: https://charts.truecharts.org
+  version: "11.0.35"
 targetCustomizations:
 - name: nas
   clusterSelector:
@@ -11,6 +12,5 @@ targetCustomizations:
       topology.kubernetes.io/region: pecs
       topology.kubernetes.io/zone: nas
   helm:
-    version: "11.0.35"
     valuesFiles:
       - nas.yaml
