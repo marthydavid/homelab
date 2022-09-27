@@ -1,0 +1,36 @@
+TZ: Europe/Budapest
+global:
+  isSCALE: true
+  ixChartContext:
+    isInstall: true
+    isUpdate: false
+    isUpgrade: false
+    operation: UPDATE
+    storageClassName: ix-storage-class-radarr
+    upgradeMetadata: {}
+ixChartContext:
+  isInstall: true
+  isUpdate: false
+  isUpgrade: false
+  operation: INSTALL
+  storageClassName: ix-storage-class-radarr
+  upgradeMetadata: {}
+image:
+  pullPolicy: IfNotPresent
+  repository: tccr.io/truecharts/radarr
+persistence:
+  config:
+    advanced: false
+    enabled: true
+    mountPath: /config
+    readOnly: false
+    type: simplePVC
+podSecurityContext:
+  fsGroup: 568
+  fsGroupChangePolicy: OnRootMismatch
+  runAsGroup: 568
+  runAsUser: 568
+  supplementalGroups: []
+portal:
+  enabled: true
+release_name: radarr

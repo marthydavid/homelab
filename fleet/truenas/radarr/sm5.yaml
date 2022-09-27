@@ -8,7 +8,7 @@ ingress:
     entrypoint: websecure
     expert: true
     hosts:
-    - host: jackett.pecs.marthy.xyz
+    - host: radarr.budapest.marthy.xyz
       paths:
       - path: /
         pathType: Prefix
@@ -17,5 +17,14 @@ ingress:
     middlewares: []
     tls:
     - hosts:
-      - jackett.pecs.marthy.xyz
-      secretName: jackett-tls
+      - radarr.budapest.marthy.xyz
+      secretName: radarr-tls
+persistenceList:
+- advanced: false
+  enabled: true
+  hostPathSimple: /mnt/hdd/plex/movies
+  mountPath: /mnt/hdd/plex/movies
+  name: movies
+  readOnly: false
+  setPermissionsSimple: false
+  type: simpleHP

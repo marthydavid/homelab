@@ -6,6 +6,8 @@ helm:
   chart: qbittorrent
   repo: https://charts.truecharts.org
   version: "11.0.35"
+  valuesFiles:
+    - default.yaml
 targetCustomizations:
 - name: nas
   clusterSelector:
@@ -16,3 +18,12 @@ targetCustomizations:
   helm:
     valuesFiles:
       - nas.yaml
+- name: sm5
+  clusterSelector:
+    matchLabels:
+      provider.cattle.io: k3s
+      topology.kubernetes.io/region: budapest
+      topology.kubernetes.io/zone: sm5
+  helm:
+    valuesFiles:
+      - sm5.yaml

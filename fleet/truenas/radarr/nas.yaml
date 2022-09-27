@@ -1,7 +1,3 @@
-TZ: Europe/Budapest
-image:
-  pullPolicy: IfNotPresent
-  repository: tccr.io/truecharts/radarr
 ingress:
   main:
     annotationsList:
@@ -23,13 +19,6 @@ ingress:
     - hosts:
       - radarr.pecs.marthy.xyz
       secretName: radarr-tls
-persistence:
-  config:
-    advanced: false
-    enabled: true
-    mountPath: /config
-    readOnly: false
-    type: simplePVC
 persistenceList:
 - advanced: false
   enabled: true
@@ -39,12 +28,3 @@ persistenceList:
   readOnly: false
   setPermissionsSimple: false
   type: simpleHP
-podSecurityContext:
-  fsGroup: 568
-  fsGroupChangePolicy: OnRootMismatch
-  runAsGroup: 568
-  runAsUser: 568
-  supplementalGroups: []
-portal:
-  enabled: true
-release_name: radarr

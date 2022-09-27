@@ -8,7 +8,7 @@ ingress:
     entrypoint: websecure
     expert: true
     hosts:
-    - host: qbit.pecs.marthy.xyz
+    - host: qbit.budapest.marthy.xyz
       paths:
       - path: /
         pathType: Prefix
@@ -17,21 +17,21 @@ ingress:
     middlewares: []
     tls:
     - hosts:
-      - qbit.pecs.marthy.xyz
+      - qbit.budapest.marthy.xyz
       secretName: qbit-tls
 persistenceList:
 - advanced: false
   enabled: true
-  hostPathSimple: /mnt/zfs/media/movies
-  mountPath: /mnt/zfs/media/movies
+  hostPathSimple: /mnt/hdd/plex/movies
+  mountPath: /mnt/hdd/plex/movies
   name: movies
   readOnly: false
   setPermissionsSimple: false
   type: simpleHP
 - advanced: false
   enabled: true
-  hostPathSimple: /mnt/zfs/media/series
-  mountPath: /mnt/zfs/media/series
+  hostPathSimple: /mnt/hdd/plex/series
+  mountPath: /mnt/hdd/plex/series
   name: series
   readOnly: false
   setPermissionsSimple: false

@@ -8,7 +8,7 @@ ingress:
     entrypoint: websecure
     expert: true
     hosts:
-    - host: jackett.pecs.marthy.xyz
+    - host: jackett.budapest.marthy.xyz
       paths:
       - path: /
         pathType: Prefix
@@ -17,5 +17,5 @@ ingress:
     middlewares: []
     tls:
     - hosts:
-      - jackett.pecs.marthy.xyz
+      - jackett.budapest.marthy.xyz
       secretName: jackett-tls
