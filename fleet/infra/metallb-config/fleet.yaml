@@ -1,0 +1,31 @@
+defaultNamespace: metallb-system
+dependsOn:
+  - name: infra-fleet-infra-metallb
+targetCustomizations:
+- name: nas
+  clusterSelector:
+    matchLabels:
+      provider.cattle.io: k3s
+      topology.kubernetes.io/region: pecs
+      topology.kubernetes.io/zone: nas
+  yaml:
+    overlays:
+      - nas
+- name: k3s
+  clusterSelector:
+    matchLabels:
+      provider.cattle.io: k3s
+      topology.kubernetes.io/region: budapest
+      topology.kubernetes.io/zone: rpi
+  yaml:
+    overlays:
+      - k3
+- name: sm5
+  clusterSelector:
+    matchLabels:
+      provider.cattle.io: k3s
+      topology.kubernetes.io/region: budapest
+      topology.kubernetes.io/zone: sm5
+  yaml:
+    overlays:
+      - sm5

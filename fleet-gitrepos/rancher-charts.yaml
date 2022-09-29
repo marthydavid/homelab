@@ -23,3 +23,9 @@ spec:
         topology.kubernetes.io/region: budapest
         topology.kubernetes.io/zone: rpi
     name: k3s
+  - clusterSelector:
+      matchLabels:
+        provider.cattle.io: k3s
+        topology.kubernetes.io/region: pecs
+        topology.kubernetes.io/zone: nas
+    name: nas

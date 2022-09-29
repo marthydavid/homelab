@@ -12,8 +12,12 @@ helm:
       kind: DaemonSet
       service:
         externalTrafficPolicy: "Local"
+        annotations:
+          metallb.universe.tf/allow-shared-ip: ingress-nginx
       metrics:
         enabled: true
         serviceMonitor:
           enabled: true
           scrapeInterval: 15s
+      ingressClassResource:
+        default: true

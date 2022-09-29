@@ -18,6 +18,7 @@ targetCustomizations:
   helm:
     valuesFiles:
       - k3s.yaml
+    version: v0.12.1
 - name: rke2
   clusterSelector:
     matchLabels:
@@ -25,5 +26,6 @@ targetCustomizations:
       topology.kubernetes.io/region: budapest
       topology.kubernetes.io/zone: esxi-hp
   helm:
+    version: v0.12.1
     valuesFiles:
       - rke2.yaml
