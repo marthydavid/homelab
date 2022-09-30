@@ -101,7 +101,7 @@ This is the repo for my homelab
 * [cert-manager](https://cert-manager.io)
 * [ingress-nginx](https://kubernetes.github.io/ingress-nginx)
 * [oauth2-proxy](https://oauth2-proxy.github.io/oauth2-proxy/)
-* ddns-route53
+* [ddns-route53](https://crazymax.dev/ddns-route53/)
 * [Radarr](https://radarr.video)
 * [Sonarr](https://sonarr.tv)
 * [prometheus-operator](https://prometheus-operator.dev/)
