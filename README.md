@@ -91,11 +91,11 @@ This is the repo for my homelab
 
 | Name | OS | Function |
 |---|---|---|
-| Remote | Ubuntu 20.04 | K3s cluster + Rancher |
+| Remote | TrueNAS Scale | NAS for family |
 
 
 
-### Main K8s cluster
+### Used K8s cluster
 
 * [rancher](https://rancher.com)
 * [cert-manager](https://cert-manager.io)
