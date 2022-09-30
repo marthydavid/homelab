@@ -91,7 +91,7 @@ This is the repo for my homelab
 
 | Name | OS | Function |
 |---|---|---|
-| Remote | Ubuntu 20.04 | K3s cluster + Rancher |
+| Remote | TrueNAS Scale | NAS for family|
 
 
 
