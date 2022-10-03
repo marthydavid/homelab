@@ -56,5 +56,5 @@ service:
         port: 9117
         protocol: HTTP
         targetPort: 9117
-    type: LoadBalancer
+    type: ClusterIP
 serviceexpert: false
