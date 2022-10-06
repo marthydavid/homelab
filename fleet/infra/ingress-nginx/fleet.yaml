@@ -21,3 +21,13 @@ helm:
           scrapeInterval: 15s
       ingressClassResource:
         default: true
+targetCustomizations:
+- name: sm5
+  clusterSelector:
+    matchLabels:
+      provider.cattle.io: k3s
+      topology.kubernetes.io/region: budapest
+      topology.kubernetes.io/zone: sm5
+  helm:
+    valuesFiles:
+      - sm5.yaml
