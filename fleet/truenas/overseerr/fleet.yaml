@@ -5,7 +5,7 @@ helm:
   releaseName: overseerr
   chart: overseerr
   repo: https://charts.truecharts.org
-  version: "6.0.35"
+  version: "6.0.36"
   valuesFiles:
     - default.yaml
 targetCustomizations:
