@@ -3,7 +3,7 @@ helm:
   releaseName: metallb
   chart: metallb
   repo: https://metallb.github.io/metallb
-  version: v0.12.1
+  version: 0.13.5
   valuesFiles:
     - global.yaml
 dependsOn:
