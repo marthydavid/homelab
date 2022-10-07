@@ -11,6 +11,15 @@ targetCustomizations:
   yaml:
     overlays:
       - nas
+- name: rke2
+  clusterSelector:
+    matchLabels:
+      provider.cattle.io: rke2
+      topology.kubernetes.io/region: budapest
+      topology.kubernetes.io/zone: esxi-hp
+  yaml:
+    overlays:
+      - rke2
 - name: k3s
   clusterSelector:
     matchLabels:
@@ -19,7 +28,7 @@ targetCustomizations:
       topology.kubernetes.io/zone: rpi
   yaml:
     overlays:
-      - k3
+      - k3s
 - name: sm5
   clusterSelector:
     matchLabels:

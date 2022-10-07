@@ -4,4 +4,4 @@ metadata:
   name: pool
 spec:
   autoAssign: true
-  avoidBuggyIPs: false
+  avoidBuggyIPs: true
