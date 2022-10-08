@@ -5,7 +5,7 @@ helm:
   releaseName: jackett
   chart: jackett
   repo: https://charts.truecharts.org
-  version: "11.0.104"
+  version: "11.0.105"
   valuesFiles:
     - default.yaml
 targetCustomizations:
