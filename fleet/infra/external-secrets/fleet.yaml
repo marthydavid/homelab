@@ -5,7 +5,7 @@ helm:
   releaseName: external-secrets
   chart: external-secrets
   repo: https://charts.external-secrets.io
-  version: 0.5.9
+  version: 0.6.0
   values:
     installCRDs: true
     serviceMonitor:
