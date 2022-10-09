@@ -19,3 +19,6 @@ ingress:
     - hosts:
       - jackett.budapest.marthy.xyz
       secretName: jackett-tls
+persistence:
+  config:
+    size: 999Gi
