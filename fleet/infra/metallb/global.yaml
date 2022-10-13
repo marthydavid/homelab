@@ -5,3 +5,6 @@ prometheus:
     enabled: true
   prometheusRule:
     enabled: true
+speaker:
+  frr:
+    enabled: true
