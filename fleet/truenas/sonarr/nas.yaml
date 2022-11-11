@@ -12,7 +12,7 @@ ingress:
       paths:
       - path: /
         pathType: Prefix
-    ingressClassName: ""
+    ingressClassName: "nginx"
     labelsList: []
     middlewares: []
     tls:
