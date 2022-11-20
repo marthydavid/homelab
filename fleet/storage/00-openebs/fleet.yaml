@@ -1,0 +1,16 @@
+defaultNamespace: openebs
+helm:
+  chart: openebs
+  repo: https://openebs.github.io/charts
+  releaseName: openebs
+  version: "3.1.0"
+targetCustomizations:
+  - name: rke2
+    clusterSelector:
+      matchLabels:
+      provider.cattle.io: rke2
+      topology.kubernetes.io/region: budapest
+      topology.kubernetes.io/zone: esxi-hp
+    helm:
+      valuesFiles:
+        - rke2.yaml

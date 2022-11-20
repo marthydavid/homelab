@@ -6,7 +6,6 @@ metadata:
   namespace: fleet-default
 spec:
   branch: main
-  forceSyncGeneration: 18
   insecureSkipTLSVerify: false
   paths:
   - fleet/infra

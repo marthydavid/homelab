@@ -1,0 +1,13 @@
+defaultNamespace: openebs
+dependsOn:
+  - name: storage-fleet-storage-00-openebs
+targetCustomizations:
+- name: rke2
+  clusterSelector:
+    matchLabels:
+      provider.cattle.io: rke2
+      topology.kubernetes.io/region: budapest
+      topology.kubernetes.io/zone: esxi-hp
+  yaml:
+    overlays:
+      - rke2
