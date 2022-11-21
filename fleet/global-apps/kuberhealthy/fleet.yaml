@@ -39,7 +39,7 @@ targetCustomizations:
         networkConnection:
           enabled: true
           extraEnvs:
-            CONNECTION_TARGET: "tcp://marthy.xyxz:443"
+            CONNECTION_TARGET: "tcp://github.com:443"
 - name: k3s
   clusterSelector:
     matchLabels:
