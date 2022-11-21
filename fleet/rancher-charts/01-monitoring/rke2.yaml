@@ -1,5 +1,16 @@
 additionalPrometheusRulesMap: {}
 alertmanager:
+  ingress:
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    enabled: true
+    ingressClassName: nginx
+    hosts:
+      - alertmanager.bp-rke2.marthy.xyz
+    tls:
+      - secretName: alertmanager-tls-secret
+        hosts:
+          - alertmanager.bp-rke2.marthy.xyz
   alertmanagerSpec:
     image:
       repository: quay.io/prometheus/alertmanager
@@ -660,6 +671,17 @@ nodeExporter:
     relabelings: []
     scrapeTimeout: ''
 prometheus:
+  ingress:
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    enabled: true
+    ingressClassName: nginx
+    hosts:
+      - prometheus.bp-rke2.marthy.xyz
+    tls:
+      - secretName: prometheus-tls-secret
+        hosts:
+          - prometheus.bp-rke2.marthy.xyz
   prometheusSpec:
     containers: |
       - name: prometheus-proxy
