@@ -2,7 +2,7 @@ defaultNamespace: cattle-monitoring-system
 dependsOn:
   - name: rancher-charts-fleet-rancher-charts-01-monitoring
 helm:
-  releaseName: snmp-exporter
+  releaseName: prometheus-snmp-exporter
   chart: prometheus-snmp-exporter
   version: 1.2.1
   repo: https://prometheus-community.github.io/helm-charts
