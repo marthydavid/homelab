@@ -1,0 +1,17 @@
+defaultNamespace: openebs
+dependsOn:
+  - name: storage-fleet-storage-00-openebs
+helm:
+  chart: openebs-monitoring
+  repo: https://openebs.github.io/monitoring
+  releaseName: openebs-monitoring
+  version: "0.4.10"
+  valuesFiles:
+    - global.yaml
+targetCustomizations:
+  - name: rke2
+    clusterSelector:
+      matchLabels:
+      provider.cattle.io: rke2
+      topology.kubernetes.io/region: budapest
+      topology.kubernetes.io/zone: esxi-hp

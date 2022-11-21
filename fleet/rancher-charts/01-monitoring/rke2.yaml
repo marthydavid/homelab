@@ -242,7 +242,7 @@ grafana:
           enabled: false
       provider:
         allowUiUpdates: false
-      searchNamespace: cattle-dashboards
+      searchNamespace: ALL
     datasources:
       annotations: {}
       createPrometheusReplicasDatasources: false
