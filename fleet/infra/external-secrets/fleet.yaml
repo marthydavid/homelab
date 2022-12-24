@@ -16,3 +16,10 @@ helm:
     certController:
       serviceMonitor:
         enabled: true
+targetCustomizations:
+- name: rke2
+  clusterSelector:
+    matchLabels:
+      provider.cattle.io: rke2
+  helm:
+    version: 0.6.1
