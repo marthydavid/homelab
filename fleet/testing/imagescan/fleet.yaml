@@ -2,7 +2,7 @@ defaultNamespace: testing
 helm:
   releaseName: nullserv
   chart: nullserv
-  repo: https://k8s-at-home.com/charts/
+  repo: https://geek-cookbook.github.io/charts/
   version:
 targetCustomizations:
 - name: k3s
