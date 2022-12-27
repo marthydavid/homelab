@@ -1,0 +1,2 @@
+parameters:
+  poolname: zfs/kube-storage/volumes

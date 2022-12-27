@@ -606,7 +606,7 @@ prometheus:
     storageSpec:
       volumeClaimTemplate:
         spec:
-          storageClassName: ix-cattle-prometheus
+          storageClassName: openebs-zfspv
           accessModes: ["ReadWriteOnce"]
           resources:
             requests:

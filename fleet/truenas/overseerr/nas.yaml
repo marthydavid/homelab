@@ -1,29 +1,11 @@
 ingress:
   main:
-    annotationsList:
-    - name: cert-manager.io/cluster-issuer
-      value: letsencrypt-prod
-    enableFixedMiddlewares: true
-    enabled: true
-    entrypoint: websecure
-    expert: true
     hosts:
     - host: overseerr.pecs.marthy.xyz
       paths:
       - path: /
         pathType: Prefix
-    ingressClassName: "nginx"
-    labelsList: []
-    middlewares: []
     tls:
     - hosts:
       - overseerr.pecs.marthy.xyz
       secretName: overseerr-tls
-persistence:
-  config:
-    advanced: false
-    enabled: true
-    mountPath: /app/config
-    readOnly: false
-    type: simplePVC
-    size: 999Gi

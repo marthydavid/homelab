@@ -1,11 +1,10 @@
-defaultNamespace: ix-sonarr
+defaultNamespace: sonarr
 dependsOn:
   - name: truenas-fleet-truenas-storageclasses
 helm:
   releaseName: sonarr
   chart: sonarr
-  repo: https://charts.truecharts.org
-  version: "12.0.2"
+  repo: https://geek-cookbook.github.io/charts/
   valuesFiles:
     - default.yaml
 targetCustomizations:
@@ -16,14 +15,6 @@ targetCustomizations:
       topology.kubernetes.io/region: pecs
       topology.kubernetes.io/zone: nas
   helm:
+    version: "16.3.1"
     valuesFiles:
       - nas.yaml
-- name: sm5
-  clusterSelector:
-    matchLabels:
-      provider.cattle.io: k3s
-      topology.kubernetes.io/region: budapest
-      topology.kubernetes.io/zone: sm5
-  helm:
-    valuesFiles:
-      - sm5.yaml

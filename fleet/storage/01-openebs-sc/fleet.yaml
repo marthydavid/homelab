@@ -11,3 +11,12 @@ targetCustomizations:
   yaml:
     overlays:
       - rke2
+- name: nas
+  clusterSelector:
+    matchLabels:
+      provider.cattle.io: k3s
+      topology.kubernetes.io/region: pecs
+      topology.kubernetes.io/zone: nas
+  yaml:
+    overlays:
+      - nas

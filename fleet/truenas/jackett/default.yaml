@@ -1,60 +1,36 @@
-TZ: Europe/Budapest
-docs:
-  confirmDocs: true
-global:
-  isSCALE: true
-  ixChartContext:
-    isInstall: true
-    isUpdate: false
-    isUpgrade: false
-    operation: INSTALL
-    storageClassName: ix-storage-class-jackett
-    upgradeMetadata: {}
-image:
-  pullPolicy: IfNotPresent
-  repository: tccr.io/truecharts/jackett
-ixChartContext:
-  isInstall: true
-  isUpdate: false
-  isUpgrade: false
-  operation: INSTALL
-  storageClassName: ix-storage-class-jackett
-  upgradeMetadata: {}
+ingress:
+  main:
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    enabled: true
+    hosts:
+    - host: jackett.tl.dr
+      paths:
+      - path: /
+        pathType: Prefix
+    ingressClassName: nginx
+    tls:
+    - hosts:
+      - jackett.tl.dr
+      secretName: jackett-tls
+podSecurityContext:
+  runAsUser: 568
+  runAsGroup: 568
+  fsGroup: 568
 persistence:
   config:
-    advanced: false
     enabled: true
-    mountPath: /config
-    readOnly: false
-    type: simplePVC
-podSecurityContext:
-  fsGroup: 568
-  fsGroupChangePolicy: OnRootMismatch
-  runAsGroup: 568
-  runAsUser: 568
-  supplementalGroups: []
-portal:
+    type: pvc
+    storageClass: ix-storage-class-jackett
+  downloads:
+    enabled: true
+    type: hostPath
+    hostPath: /zfs/media
+    mountPath: /downloads
+metrics:
   enabled: true
-probes:
-  liveness:
-    path: /UI/Login
-  readiness:
-    path: /UI/Login
-  startup:
-    path: /UI/Login
-release_name: jackett
-securityContext:
-  readOnlyRootFilesystem: false
-service:
-  main:
-    advancedsvcset: false
+  prometheusRule:
     enabled: true
-    loadBalancerIP: ""
-    ports:
-      main:
-        advanced: false
-        port: 9117
-        protocol: HTTP
-        targetPort: 9117
-    type: ClusterIP
-serviceexpert: false
+  exporter:
+    env:
+      unknownQueueItems: true

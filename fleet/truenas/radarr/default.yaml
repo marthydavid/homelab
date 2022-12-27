@@ -1,36 +1,36 @@
-TZ: Europe/Budapest
-global:
-  isSCALE: true
-  ixChartContext:
-    isInstall: true
-    isUpdate: false
-    isUpgrade: false
-    operation: UPDATE
-    storageClassName: ix-storage-class-radarr
-    upgradeMetadata: {}
-ixChartContext:
-  isInstall: true
-  isUpdate: false
-  isUpgrade: false
-  operation: INSTALL
-  storageClassName: ix-storage-class-radarr
-  upgradeMetadata: {}
-image:
-  pullPolicy: IfNotPresent
-  repository: tccr.io/truecharts/radarr
+ingress:
+  main:
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    enabled: true
+    hosts:
+    - host: radarr.tl.dr
+      paths:
+      - path: /
+        pathType: Prefix
+    ingressClassName: nginx
+    tls:
+    - hosts:
+      - radarr.tl.dr
+      secretName: radarr-tls
+podSecurityContext:
+  runAsUser: 568
+  runAsGroup: 568
+  fsGroup: 568
 persistence:
   config:
-    advanced: false
     enabled: true
-    mountPath: /config
-    readOnly: false
-    type: simplePVC
-podSecurityContext:
-  fsGroup: 568
-  fsGroupChangePolicy: OnRootMismatch
-  runAsGroup: 568
-  runAsUser: 568
-  supplementalGroups: []
-portal:
+    type: pvc
+    storageClass: ix-storage-class-radarr
+  media:
+    enabled: true
+    type: hostPath
+    hostPath: /zfs/media/movies
+    mountPath: /media
+metrics:
   enabled: true
-release_name: radarr
+  prometheusRule:
+    enabled: true
+  exporter:
+    env:
+      unknownQueueItems: true

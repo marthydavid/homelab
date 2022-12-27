@@ -1,2 +1,2 @@
 parameters:
-  poolname: zfs/ix-applications/releases/overseerr/volumes
+  poolname: zfs/kube-storage/overseerr/volumes

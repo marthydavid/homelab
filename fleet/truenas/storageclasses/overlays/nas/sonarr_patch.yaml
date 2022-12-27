@@ -1,2 +1,2 @@
 parameters:
-  poolname: zfs/ix-applications/releases/sonarr/volumes
+  poolname: zfs/kube-storage/sonarr/volumes
