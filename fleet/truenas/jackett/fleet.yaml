@@ -4,7 +4,7 @@ dependsOn:
 helm:
   releaseName: jackett
   chart: jackett
-  repo: https://charts.truecharts.org
+  repo: ssh://git@github.com/truecharts/catalog.git//stable?ref=main
   version: "12.0.5"
   valuesFiles:
     - default.yaml
