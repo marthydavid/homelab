@@ -7,16 +7,5 @@ helm:
   chart: speedtest-exporter
   version: 5.4.2
   repo: https://geek-cookbook.github.io/charts/
-  values:
-    env:
-      TZ: "Europe/Budapest"
-    metrics:
-      enabled: true
-      prometheusRule:
-        downloadLimit: 200000000
-        enabled: true
-        uploadLimit: 10000000
-      serviceMonitor:
-        interval: 15m
-    securityContext:
-      runAsUser: 1000
+  valuesFiles:
+  - global-values.yaml
