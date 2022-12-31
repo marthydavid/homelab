@@ -6,7 +6,7 @@ alertmanager:
 prometheusOperator:
   image:
     repository: quay.io/prometheus-operator/prometheus-operator
-    tag: v0.54.0
+    tag: v0.61.1
   prometheusConfigReloaderImage:
     repository: quay.io/prometheus-operator/prometheus-config-reloader
     tag: v0.54.0
