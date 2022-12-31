@@ -3,7 +3,6 @@ helm:
   chart: openebs
   repo: https://openebs.github.io/charts
   releaseName: openebs
-  version: "3.3.1"
 targetCustomizations:
   - name: nas
     clusterSelector:
@@ -12,6 +11,7 @@ targetCustomizations:
       topology.kubernetes.io/region: pecs
       topology.kubernetes.io/zone: nas
     helm:
+      version: "3.3.0"
       valuesFiles:
         - rke2.yaml
   - name: rke2
@@ -21,5 +21,6 @@ targetCustomizations:
       topology.kubernetes.io/region: budapest
       topology.kubernetes.io/zone: esxi-hp
     helm:
+      version: "3.3.0"
       valuesFiles:
         - rke2.yaml
