@@ -3,12 +3,12 @@
   "extends": [
     "config:base"
   ],
-  "commitMessageTopic": "{{depName}}",
+  "commitMessageTopic": "{{packageName}}",
   "commitMessageExtra": "to {{newVersion}}",
   "rebaseWhen": "conflicted",
   "prConcurrentLimit": 25,
   "fleet": {
-    "commitMessageTopic": "fleet release {{depName}}",
+    "commitMessageTopic": "fleet release {{packageName}}",
     "fileMatch": [
       "(^|/)fleet\\.yaml$"
     ]
