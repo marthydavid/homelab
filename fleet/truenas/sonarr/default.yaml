@@ -1,95 +1,32 @@
-TZ: Europe/Budapest
-global:
-  isSCALE: true
-  ixChartContext:
-    isInstall: true
-    isUpdate: false
-    isUpgrade: false
-    operation: INSTALL
-    storageClassName: ix-storage-class-sonarr
-    upgradeMetadata: {}
-image:
-  pullPolicy: IfNotPresent
-  repository: tccr.io/truecharts/sonarr
 ingress:
   main:
-    annotationsList:
-    - name: cert-manager.io/cluster-issuer
-      value: letsencrypt-prod
-    enableFixedMiddlewares: true
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
     enabled: true
-    entrypoint: websecure
-    expert: true
     hosts:
-    - host: sonarr.pecs.marthy.xyz
+    - host: sonarr.tl.dr
       paths:
       - path: /
         pathType: Prefix
-    ingressClassName: ""
-    labelsList: []
-    middlewares: []
+    ingressClassName: nginx
     tls:
     - hosts:
-      - sonarr.pecs.marthy.xyz
+      - sonarr.tl.dr
       secretName: sonarr-tls
-ixChartContext:
-  isInstall: true
-  isUpdate: false
-  isUpgrade: false
-  operation: INSTALL
-  storageClassName: ix-storage-class-sonarr
-  upgradeMetadata: {}
 persistence:
   config:
-    advanced: false
+    enabeld: true
+    type: pvc
+    storageClass: ix-storage-class-sonarr
+  media:
     enabled: true
-    mountPath: /config
-    readOnly: false
-    type: simplePVC
-persistenceList:
-- advanced: false
+    type: hostPath
+    hostPath: /mnt/zfs/media/series
+    mountPath: /media
+metrics:
   enabled: true
-  hostPathSimple: /mnt/zfs/media/series
-  mountPath: /mnt/zfs/media/series
-  name: series
-  readOnly: false
-  setPermissionsSimple: false
-  type: simpleHP
-podSecurityContext:
-  fsGroup: 568
-  fsGroupChangePolicy: OnRootMismatch
-  runAsGroup: 568
-  runAsUser: 568
-  supplementalGroups: []
-portal:
-  enabled: true
-probes:
-  liveness:
-    custom: true
+  prometheusRule:
     enabled: true
-    spec:
-      exec:
-        command:
-        - /usr/bin/env
-        - bash
-        - -c
-        - curl --fail localhost:8989/api/v3/system/status?apiKey=`IFS=\> && while
-          read -d \< E C; do if [[ $E = "ApiKey" ]]; then echo $C; fi; done < /config/config.xml`
-      failureThreshold: 5
-      initialDelaySeconds: 60
-      periodSeconds: 10
-      successThreshold: 1
-      timeoutSeconds: 10
-release_name: sonarr
-security:
-  editsecurity: false
-service:
-  main:
-    advancedsvcset: false
-    enabled: true
-    ports:
-      main:
-        advanced: false
-        port: 8989
-        targetPort: 8989
-    type: ClusterIP
+  exporter:
+    env:
+      unknownQueueItems: true
