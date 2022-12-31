@@ -5,7 +5,7 @@ helm:
   repo: https://metallb.github.io/metallb
   version: 0.13.7
   valuesFiles:
-    - global.yaml
+    - global-values.yaml
 dependsOn:
   - name: rancher-charts-fleet-rancher-charts-01-monitoring
 diff:

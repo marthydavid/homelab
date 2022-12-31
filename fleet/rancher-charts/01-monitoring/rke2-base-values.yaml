@@ -1,0 +1,16 @@
+ingressNginx:
+  enabled: true
+kube-state-metrics:
+  enabled: true
+nodeExporter:
+  enabled: true
+rke2ControllerManager:
+  enabled: false
+rke2Etcd:
+  enabled: false
+rke2IngressNginx:
+  enabled: false
+rke2Proxy:
+  enabled: false
+rke2Scheduler:
+  enabled: false

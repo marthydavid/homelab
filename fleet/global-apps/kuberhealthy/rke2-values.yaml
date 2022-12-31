@@ -1,0 +1,27 @@
+podSecurityPolicy:
+  enabled: true
+prometheus:
+  enabled: true
+  prometheusRule:
+    enabled: true
+  serviceMonitor:
+    enabled: true
+check:
+  daemonset:
+    enabled: true
+  deployment:
+    enabled: true
+  dnsInternal:
+    enabled: true
+  dnsExternal:
+    enabled: true
+    extraEnvs:
+      HOSTNAME: "marthy.xyz"
+  podRestarts:
+    enabled: true
+  podStatus:
+    enabled: true
+  networkConnection:
+    enabled: true
+    extraEnvs:
+      CONNECTION_TARGET: "tcp://github.com:443"

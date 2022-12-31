@@ -1,11 +1,18 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:base"
   ],
   "fleet": {
+    "commitMessageTopic": "fleet release {{depName}}",
     "fileMatch": [
       "(^|/)fleet\\.yaml$"
     ]
+  },
+  "helm-values": {
+    "commitMessageTopic": "helm values {{depName}}",
+    "fileMatch": [
+      "(^|/).*-values\\.yaml$"
+    ],
+    "pinDigests": false
   }
 }

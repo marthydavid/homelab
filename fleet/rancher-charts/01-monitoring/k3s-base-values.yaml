@@ -1,0 +1,14 @@
+ingressNginx:
+  enabled: true
+k3sControllerManager:
+  enabled: true
+k3sProxy:
+  enabled: true
+k3sScheduler:
+  enabled: true
+k3sServer:
+  enabled: true
+kube-state-metrics:
+  enabled: true
+nodeExporter:
+  enabled: true

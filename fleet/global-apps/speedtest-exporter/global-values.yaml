@@ -1,0 +1,18 @@
+image:
+  # -- image repository
+  repository: ghcr.io/miguelndecarvalho/speedtest-exporter
+  # -- image tag
+  tag: v3.2.2
+
+env:
+  TZ: "Europe/Budapest"
+metrics:
+  enabled: true
+  prometheusRule:
+    downloadLimit: 200000000
+    enabled: true
+    uploadLimit: 10000000
+  serviceMonitor:
+    interval: 15m
+securityContext:
+  runAsUser: 1000

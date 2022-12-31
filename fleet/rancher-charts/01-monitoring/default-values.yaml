@@ -1,0 +1,102 @@
+alertmanager:
+  alertmanagerSpec:
+    image:
+      repository: quay.io/prometheus/alertmanager
+      tag: v0.23.0
+prometheusOperator:
+  image:
+    repository: quay.io/prometheus-operator/prometheus-operator
+    tag: v0.54.0
+  prometheusConfigReloaderImage:
+    repository: quay.io/prometheus-operator/prometheus-config-reloader
+    tag: v0.54.0
+  thanosImage:
+    repository: quay.io/thanos/thanos
+    sha: ''
+    tag: v0.25.1
+prometheus:
+  prometheusSpec:
+    image:
+      repository: quay.io/prometheus/prometheus
+      tag: v2.32.1
+prometheus-adapter:
+  enabled: true
+  image:
+    pullPolicy: IfNotPresent
+    repository: k8s.gcr.io/prometheus-adapter/prometheus-adapter
+    tag: v0.9.1
+prometheus-node-exporter:
+  image:
+    repository: quay.io/prometheus/node-exporter
+    tag: v1.2.2
+  extraArgs:
+    - >-
+      --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/.+)($|/)
+    - >-
+      --collector.filesystem.ignored-fs-types=^(autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|iso9660|mqueue|nsfs|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|selinuxfs|squashfs|sysfs|tracefs)$
+    - >-
+      --collector.textfile.directory=/host/var/lib/node-exporter/textfiles/
+
+
+hardenedKubelet:
+  enabled: false
+hardenedNodeExporter:
+  enabled: false
+ingressNginx:
+  enabled: true
+k3sControllerManager:
+  enabled: true
+k3sProxy:
+  enabled: true
+k3sScheduler:
+  enabled: true
+k3sServer:
+  enabled: true
+kube-state-metrics:
+  enabled: true
+kubeAdmControllerManager:
+  enabled: false
+kubeAdmEtcd:
+  enabled: false
+kubeAdmProxy:
+  enabled: false
+kubeAdmScheduler:
+  enabled: false
+kubeApiServer:
+  enabled: true
+kubeControllerManager:
+  enabled: false
+kubeDns:
+  enabled: false
+kubeEtcd:
+  enabled: false
+kubeProxy:
+  enabled: false
+kubeScheduler:
+  enabled: false
+kubeStateMetrics:
+  enabled: true
+kubelet:
+  enabled: true
+nodeExporter:
+  enabled: true
+rke2ControllerManager:
+  enabled: false
+rke2Etcd:
+  enabled: false
+rke2IngressNginx:
+  enabled: false
+rke2Proxy:
+  enabled: false
+rke2Scheduler:
+  enabled: false
+rkeControllerManager:
+  enabled: false
+rkeEtcd:
+  enabled: false
+rkeIngressNginx:
+  enabled: false
+rkeProxy:
+  enabled: false
+rkeScheduler:
+  enabled: false

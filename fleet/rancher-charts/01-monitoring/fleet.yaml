@@ -6,6 +6,8 @@ helm:
   chart: rancher-monitoring
   repo: https://charts.rancher.io/
   version: "101.0.0+up19.0.3"
+  valuesFiles:
+  - default-values.yaml
 targetCustomizations:
 - name: rke2
   clusterSelector:
@@ -16,7 +18,8 @@ targetCustomizations:
   helm:
     version: "101.0.0+up19.0.3"
     valuesFiles:
-      - rke2.yaml
+      - rke2-base-values.yaml
+      - rke2-budapest-values.yaml
 - name: k3s
   clusterSelector:
     matchLabels:
@@ -26,7 +29,7 @@ targetCustomizations:
   helm:
     version: "101.0.0+up19.0.3"
     valuesFiles:
-      - k3s.yaml
+      - k3s-base-values.yaml
 - name: nas
   clusterSelector:
     matchLabels:
@@ -36,18 +39,8 @@ targetCustomizations:
   helm:
     version: "101.0.0+up19.0.3"
     valuesFiles:
-      - nas.yaml
-- name: sm5
-  clusterSelector:
-    matchLabels:
-      provider.cattle.io: k3s
-      topology.kubernetes.io/region: budapest
-      topology.kubernetes.io/zone: sm5
-  helm:
-    version: "101.0.0+up19.0.3"
-    valuesFiles:
-      - sm5.yaml
-
+      - k3s-base-values.yaml
+      - nas-values.yaml
 diff:
   comparePatches:
   - apiVersion: admissionregistration.k8s.io/v1beta1

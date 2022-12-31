@@ -6,20 +6,5 @@ helm:
   chart: external-secrets
   repo: https://charts.external-secrets.io
   version: 0.7.0
-  values:
-    installCRDs: true
-    serviceMonitor:
-      enabled: true
-    webhook:
-      serviceMonitor:
-        enabled: true
-    certController:
-      serviceMonitor:
-        enabled: true
-targetCustomizations:
-- name: rke2
-  clusterSelector:
-    matchLabels:
-      provider.cattle.io: rke2
-  helm:
-    version: 0.7.0
+  valuesFiles:
+  - global-values.yaml
