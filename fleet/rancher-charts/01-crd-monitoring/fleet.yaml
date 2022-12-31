@@ -1,7 +1,7 @@
 defaultNamespace: cattle-monitoring-system
 helm:
-  releaseName: prometheus-operator-crd
-  chart: prometheus-operator-crd
+  releaseName: prometheus-operator-crds
+  chart: prometheus-operator-crds
   repo: https://prometheus-community.github.io/helm-charts
   version: 0.1.0
 targetCustomizations:
