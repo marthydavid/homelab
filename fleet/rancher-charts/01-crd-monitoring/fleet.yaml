@@ -18,4 +18,4 @@ targetCustomizations:
       provider.cattle.io: k3s
   helm:
     chart: prometheus-operator-crds
-    version: "0.1.0"
+    version: "0.1.1"
