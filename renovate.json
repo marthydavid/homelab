@@ -1,7 +1,12 @@
 {
+  "semanticCommits": "enabled",
   "extends": [
     "config:base"
   ],
+  "commitMessageTopic": "{{depName}}",
+  "commitMessageExtra": "to {{newVersion}}",
+  "rebaseWhen": "conflicted",
+  "prConcurrentLimit": 25,
   "fleet": {
     "commitMessageTopic": "fleet release {{depName}}",
     "fileMatch": [
