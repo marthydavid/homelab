@@ -15,6 +15,6 @@ targetCustomizations:
       topology.kubernetes.io/region: pecs
       topology.kubernetes.io/zone: nas
   helm:
-    version: "5.4.1"
+    version: "5.4.2"
     valuesFiles:
       - nas.yaml
