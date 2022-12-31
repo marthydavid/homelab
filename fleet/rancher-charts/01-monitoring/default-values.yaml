@@ -18,7 +18,7 @@ prometheus:
   prometheusSpec:
     image:
       repository: quay.io/prometheus/prometheus
-      tag: v2.32.1
+      tag: v2.41.0
 prometheus-adapter:
   enabled: true
   image:
