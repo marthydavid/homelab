@@ -1,22 +1,19 @@
 defaultNamespace: cattle-monitoring-system
 helm:
-  releaseName: rancher-monitoring-crd
-  chart: rancher-monitoring-crd
-  repo: https://charts.rancher.io/
+  releaseName: prometheus-operator-crd
+  chart: prometheus-operator-crd
+  repo: https://prometheus-community.github.io/helm-charts
+  version: 0.1.0
 targetCustomizations:
 - name: rke2
   clusterSelector:
     matchLabels:
       provider.cattle.io: rke2
-      topology.kubernetes.io/region: budapest
-      topology.kubernetes.io/zone: esxi-hp
   helm:
-    version: "101.0.0+up19.0.3"
+    version: "0.1.0"
 - name: k3s
   clusterSelector:
     matchLabels:
       provider.cattle.io: k3s
-      topology.kubernetes.io/region: budapest
-      topology.kubernetes.io/zone: rpi
   helm:
-    version: "101.0.0+up19.0.3"
+    version: "0.1.0"
