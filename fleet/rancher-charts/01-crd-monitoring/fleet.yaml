@@ -11,11 +11,11 @@ targetCustomizations:
       provider.cattle.io: rke2
   helm:
     chart: prometheus-operator-crds
-    version: "0.1.1"
+    version: "0.1.0"
 - name: k3s
   clusterSelector:
     matchLabels:
       provider.cattle.io: k3s
   helm:
     chart: prometheus-operator-crds
-    version: "0.1.1"
+    version: "0.1.0"
