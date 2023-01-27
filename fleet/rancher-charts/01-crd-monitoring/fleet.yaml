@@ -3,7 +3,7 @@ helm:
   releaseName: prometheus-operator-crds
   chart: prometheus-operator-crds
   repo: https://prometheus-community.github.io/helm-charts
-  version: 0.1.1
+  version: 1.1.0
 targetCustomizations:
 - name: rke2
   clusterSelector:
