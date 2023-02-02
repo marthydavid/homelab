@@ -1,0 +1,25 @@
+env:
+  - name: DDNSR53_ROUTE53_RECORDSSET_0_NAME
+    value: '*.pecs.marthy.xyz.'
+  - name: DDNSR53_ROUTE53_RECORDSSET_0_TTL
+    value: "300"
+  - name: DDNSR53_ROUTE53_RECORDSSET_0_TYPE
+    value: A
+  - name: DDNSR53_ROUTE53_RECORDSSET_1_NAME
+    value: pecs.marthy.xyz.
+  - name: DDNSR53_ROUTE53_RECORDSSET_1_TTL
+    value: "300"
+  - name: DDNSR53_ROUTE53_RECORDSSET_1_TYPE
+    value: A
+  - name: DDNSR53_ROUTE53_RECORDSSET_2_NAME
+    value: '*.marthy.xyz.'
+  - name: DDNSR53_ROUTE53_RECORDSSET_2_TTL
+    value: "300"
+  - name: DDNSR53_ROUTE53_RECORDSSET_2_TYPE
+    value: A
+  - name: DDNSR53_ROUTE53_RECORDSSET_3_NAME
+    value: marthy.xyz.
+  - name: DDNSR53_ROUTE53_RECORDSSET_3_TTL
+    value: "300"
+  - name: DDNSR53_ROUTE53_RECORDSSET_3_TYPE
+    value: A

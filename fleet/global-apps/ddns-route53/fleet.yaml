@@ -1,0 +1,18 @@
+defaultNamespace: dns-route53
+helm:
+  releaseName: ddns-route53
+  chart: kah-common-chart
+  repo: https://geek-cookbook.github.io/charts/
+  version: "1.2.2"
+  valuesFiles:
+    - default.yaml
+targetCustomizations:
+- name: nas
+  clusterSelector:
+    matchLabels:
+      provider.cattle.io: k3s
+      topology.kubernetes.io/region: pecs
+      topology.kubernetes.io/zone: nas
+  helm:
+    valuesFiles:
+      - nas.yaml
