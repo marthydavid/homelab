@@ -1,25 +1,22 @@
-env:
-  - name: DDNSR53_ROUTE53_RECORDSSET_0_NAME
-    value: '*.pecs.marthy.xyz.'
-  - name: DDNSR53_ROUTE53_RECORDSSET_0_TTL
-    value: "300"
-  - name: DDNSR53_ROUTE53_RECORDSSET_0_TYPE
-    value: A
-  - name: DDNSR53_ROUTE53_RECORDSSET_1_NAME
-    value: pecs.marthy.xyz.
-  - name: DDNSR53_ROUTE53_RECORDSSET_1_TTL
-    value: "300"
-  - name: DDNSR53_ROUTE53_RECORDSSET_1_TYPE
-    value: A
-  - name: DDNSR53_ROUTE53_RECORDSSET_2_NAME
-    value: '*.marthy.xyz.'
-  - name: DDNSR53_ROUTE53_RECORDSSET_2_TTL
-    value: "300"
-  - name: DDNSR53_ROUTE53_RECORDSSET_2_TYPE
-    value: A
-  - name: DDNSR53_ROUTE53_RECORDSSET_3_NAME
-    value: marthy.xyz.
-  - name: DDNSR53_ROUTE53_RECORDSSET_3_TTL
-    value: "300"
-  - name: DDNSR53_ROUTE53_RECORDSSET_3_TYPE
-    value: A
+configmap:
+  config:
+    # -- Enables or disables the configMap
+    enabled: true
+    # -- Labels to add to the configMap
+    labels: {}
+    # -- Annotations to add to the configMap
+    annotations: {}
+    # -- configMap data content. Helm template enabled.
+    data:
+      DDNSR53_ROUTE53_RECORDSSET_0_NAME: "*.pecs.marthy.xyz."
+      DDNSR53_ROUTE53_RECORDSSET_0_TTL: "300"
+      DDNSR53_ROUTE53_RECORDSSET_0_TYPE: A
+      DDNSR53_ROUTE53_RECORDSSET_1_NAME: "pecs.marthy.xyz."
+      DDNSR53_ROUTE53_RECORDSSET_1_TTL: "300"
+      DDNSR53_ROUTE53_RECORDSSET_1_TYPE: A
+      DDNSR53_ROUTE53_RECORDSSET_2_NAME: "*.marthy.xyz."
+      DDNSR53_ROUTE53_RECORDSSET_2_TTL: "300"
+      DDNSR53_ROUTE53_RECORDSSET_2_TYPE: A
+      DDNSR53_ROUTE53_RECORDSSET_3_NAME: "marthy.xyz."
+      DDNSR53_ROUTE53_RECORDSSET_3_TTL: "300"
+      DDNSR53_ROUTE53_RECORDSSET_3_TYPE: A

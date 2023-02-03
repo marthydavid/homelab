@@ -1,4 +1,4 @@
-defaultNamespace: dns-route53
+defaultNamespace: ddns-route53
 helm:
   releaseName: ddns-route53
   chart: kah-common-chart
