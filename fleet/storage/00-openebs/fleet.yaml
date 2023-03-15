@@ -11,7 +11,7 @@ targetCustomizations:
       topology.kubernetes.io/region: pecs
       topology.kubernetes.io/zone: nas
     helm:
-      version: "3.4.1"
+      version: "3.5.0"
       valuesFiles:
         - rke2.yaml
   - name: rke2
