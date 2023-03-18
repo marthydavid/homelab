@@ -9,17 +9,30 @@ helm:
   valuesFiles:
   - default-values.yaml
 targetCustomizations:
-- name: rke2
+- name: rke2-1
   clusterSelector:
     matchLabels:
       provider.cattle.io: rke2
       topology.kubernetes.io/region: budapest
       topology.kubernetes.io/zone: esxi-hp
+      topology.kubernetes.io/cluster: rke2-1
   helm:
     version: "101.0.0+up19.0.3"
     valuesFiles:
       - rke2-base-values.yaml
       - rke2-budapest-values.yaml
+- name: rke2-2
+  clusterSelector:
+    matchLabels:
+      provider.cattle.io: rke2
+      topology.kubernetes.io/region: budapest
+      topology.kubernetes.io/zone: esxi-sm4
+      topology.kubernetes.io/cluster: rke2-2
+  helm:
+    version: "101.0.0+up19.0.3"
+    valuesFiles:
+      - rke2-base-values.yaml
+      - rke2-2-values.yaml
 - name: k3s
   clusterSelector:
     matchLabels:

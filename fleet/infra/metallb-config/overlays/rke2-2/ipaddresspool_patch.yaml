@@ -1,0 +1,5 @@
+metadata:
+  name: rke2-pool
+spec:
+  addresses:
+    - 192.168.12.21-192.168.12.30

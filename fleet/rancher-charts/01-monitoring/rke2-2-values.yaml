@@ -5,11 +5,11 @@ alertmanager:
     enabled: true
     ingressClassName: nginx
     hosts:
-      - alert-rke2.budapest.marthy.xyz
+      - alert.hackathon.marthy.xyz
     tls:
       - secretName: alertmanager-tls-secret
         hosts:
-          - alert-rke2.budapest.marthy.xyz
+          - alert.hackathon.marthy.xyz
   alertmanagerSpec:
     storage:
       volumeClaimTemplate:
@@ -27,11 +27,11 @@ prometheus:
     enabled: true
     ingressClassName: nginx
     hosts:
-      - prom-rke2.budapest.marthy.xyz
+      - prom.hackathon.marthy.xyz
     tls:
       - secretName: prometheus-tls-secret
         hosts:
-          - prom-rke2.budapest.marthy.xyz
+          - prom.hackathon.marthy.xyz
   prometheusSpec:
     resources:
       limits:

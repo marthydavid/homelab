@@ -1,0 +1,17 @@
+configmap:
+  config:
+    # -- Enables or disables the configMap
+    enabled: true
+    # -- Labels to add to the configMap
+    labels: {}
+    # -- Annotations to add to the configMap
+    annotations: {}
+    # -- configMap data content. Helm template enabled.
+    data:
+      DDNSR53_ROUTE53_RECORDSSET_0_NAME: "*.budapest.marthy.xyz."
+      DDNSR53_ROUTE53_RECORDSSET_0_TTL: "300"
+      DDNSR53_ROUTE53_RECORDSSET_0_TYPE: A
+      DDNSR53_ROUTE53_RECORDSSET_1_NAME: "budapest.marthy.xyz."
+      DDNSR53_ROUTE53_RECORDSSET_1_TTL: "300"
+      DDNSR53_ROUTE53_RECORDSSET_1_TYPE: A
+

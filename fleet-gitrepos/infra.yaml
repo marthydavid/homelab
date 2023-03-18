@@ -3,7 +3,7 @@ apiVersion: fleet.cattle.io/v1alpha1
 kind: GitRepo
 metadata:
   name: infra
-  namespace: fleet-default
+  #namespace: fleet-default
 spec:
   branch: main
   insecureSkipTLSVerify: false
@@ -23,16 +23,24 @@ spec:
         provider.cattle.io: rke2
         topology.kubernetes.io/region: budapest
         topology.kubernetes.io/zone: esxi-hp
-    name: rke2
+        topology.kubernetes.io/cluster: rke2-1
+    name: rke2-1
+  - clusterSelector:
+      matchLabels:
+        provider.cattle.io: rke2
+        topology.kubernetes.io/region: budapest
+        topology.kubernetes.io/zone: esxi-sm4
+        topology.kubernetes.io/cluster: rke2-2
+    name: rke2-2
   - clusterSelector:
       matchLabels:
         provider.cattle.io: k3s
         topology.kubernetes.io/region: budapest
         topology.kubernetes.io/zone: sm5
     name: sm5
-  - name: nas
-    clusterSelector:
+  - clusterSelector:
       matchLabels:
         provider.cattle.io: k3s
         topology.kubernetes.io/region: pecs
         topology.kubernetes.io/zone: nas
+    name: nas

@@ -3,24 +3,21 @@ helm:
   chart: openebs
   repo: https://openebs.github.io/charts
   releaseName: openebs
+  version: "3.4.1"
 targetCustomizations:
   - name: nas
     clusterSelector:
       matchLabels:
-      provider.cattle.io: k3s
-      topology.kubernetes.io/region: pecs
-      topology.kubernetes.io/zone: nas
+        provider.cattle.io: k3s
+        topology.kubernetes.io/region: pecs
+        topology.kubernetes.io/zone: nas
     helm:
-      version: "3.4.1"
       valuesFiles:
         - rke2.yaml
   - name: rke2
     clusterSelector:
       matchLabels:
-      provider.cattle.io: rke2
-      topology.kubernetes.io/region: budapest
-      topology.kubernetes.io/zone: esxi-hp
+        provider.cattle.io: rke2
     helm:
-      version: "3.4.1"
       valuesFiles:
         - rke2.yaml

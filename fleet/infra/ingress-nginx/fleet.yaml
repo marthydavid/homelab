@@ -28,3 +28,23 @@ targetCustomizations:
   helm:
     valuesFiles:
       - nas.yaml
+- name: rke2-1
+  clusterSelector:
+    matchLabels:
+      provider.cattle.io: rke2
+      topology.kubernetes.io/region: budapest
+      topology.kubernetes.io/zone: esxi-hp
+      topology.kubernetes.io/cluster: rke2-1
+  helm:
+    valuesFiles:
+      - rke2-1.yaml
+- name: rke2-2
+  clusterSelector:
+    matchLabels:
+      provider.cattle.io: rke2
+      topology.kubernetes.io/region: budapest
+      topology.kubernetes.io/zone: esxi-sm4
+      topology.kubernetes.io/cluster: rke2-2
+  helm:
+    valuesFiles:
+      - rke2-2.yaml
