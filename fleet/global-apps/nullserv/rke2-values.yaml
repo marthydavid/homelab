@@ -1,0 +1,27 @@
+ingress:
+  main:
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      nginx.ingress.kubernetes.io/proxy-buffer-size: "128k"
+      nginx.ingress.kubernetes.io/auth-response-headers: Authorization
+      nginx.ingress.kubernetes.io/auth-signin: https://oauth2.hackathon.marthy.xyz/oauth2/start?rd=$scheme://$best_http_host$request_uri
+      nginx.ingress.kubernetes.io/auth-url: https://oauth2.hackathon.marthy.xyz/oauth2/auth
+      nginx.ingress.kubernetes.io/configuration-snippet: |
+        auth_request_set $name_upstream_1 $upstream_cookie__oauth2_proxy_1;
+
+        access_by_lua_block {
+          if ngx.var.name_upstream_1 ~= "" then
+            ngx.header["Set-Cookie"] = "_oauth2_proxy_1=" .. ngx.var.name_upstream_1 .. ngx.var.auth_cookie:match("(; .*)")
+          end
+        }
+    hosts:
+    - host: null.hackathon.marthy.xyz
+      paths:
+      - path: /
+        pathType: Prefix
+    ingressClassName: nginx
+    tls:
+    - hosts:
+      - null.hackathon.marthy.xyz
+      secretName: null-hackathon-marthy-xyz

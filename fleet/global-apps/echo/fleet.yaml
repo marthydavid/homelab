@@ -1,0 +1,22 @@
+
+
+
+defaultNamespace: echo-server
+dependsOn:
+  - name: infra-fleet-infra-oauth2-proxy
+helm:
+  releaseName: echo-server
+  chart: echo-server
+  repo: https://ealenn.github.io/charts
+  version: "0.5.0"
+targetCustomizations:
+- name: rke2
+  clusterSelector:
+    matchLabels:
+      provider.cattle.io: rke2
+      topology.kubernetes.io/region: budapest
+      topology.kubernetes.io/zone: esxi-sm4
+      topology.kubernetes.io/cluster: rke2-2
+  helm:
+    valuesFiles:
+    - rke2-values.yaml

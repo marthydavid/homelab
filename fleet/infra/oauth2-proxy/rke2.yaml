@@ -19,7 +19,6 @@ config:
     provider = "azure"
     azure_tenant = "123c73da-4266-432d-a561-5452cb07ee8a"
     oidc_issuer_url = "https://login.microsoftonline.com/123c73da-4266-432d-a561-5452cb07ee8a/v2.0"
-    allowed_groups = "ERFIDO"
 htpasswdFile:
   enabled: false
 
@@ -43,7 +42,7 @@ ingress:
   className: nginx
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
-    nginx.ingress.kubernetes.io/proxy-buffer-size: "8k"
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "128k"
   tls:
     - secretName: oauth2-hackathon-marthy-xyz
       hosts:
