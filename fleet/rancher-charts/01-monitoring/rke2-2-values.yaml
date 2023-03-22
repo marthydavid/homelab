@@ -51,3 +51,7 @@ prometheus:
           resources:
             requests:
               storage: 20Gi
+grafana:
+  image:
+    repository: grafana/grafana
+    tag: 8.3.5
