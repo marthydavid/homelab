@@ -27,18 +27,32 @@ This is the repo for my homelab
 
 | Name | Motherboard | CPU | Memory | Boot | Disk | NIC |
 |----|----|----|----|----|----|----|
-| SM1 | [X10SLM+-LN4F](https://www.supermicro.com/en/products/motherboard/X10SLM+-LN4F)                     | Xeon [E3-1230v3](https://ark.intel.com/content/www/us/en/ark/products/75054/intel-xeon-processor-e3-1230-v3-8m-cache-3-30-ghz.html)  | 32GB | 120GB SataDOM | 250GB SSD 320GB HDD                              | 1IPMI, 4x1Gig |
-| SM2 | [X10SLM+-LN4F](https://www.supermicro.com/en/products/motherboard/X10SLM+-LN4F)                     | Xeon [E3-1265Lv3](https://ark.intel.com/content/www/us/en/ark/products/75463/intel-xeon-processor-e31265l-v3-8m-cache-2-50-ghz.html) | 32GB | 120GB SataDOM | 250GB SSD 320GB HDD                              | 1IPMI, 4x1Gig |
-| SM3 | [X10SLM+-LN4F](https://www.supermicro.com/en/products/motherboard/X10SLM+-LN4F)                     | Xeon [E3-1231v3](https://ark.intel.com/content/www/us/en/ark/products/80910/intel-xeon-processor-e31231-v3-8m-cache-3-40-ghz.html)   | 32GB | 120GB SataDOM | 250GB SSD 320GB HDD                              | 1IPMI, 4x1Gig |
-| SM4 | [X11SCL-IF](https://www.supermicro.com/en/products/motherboard/X11SCL-IF)                           | Core [i3-8100T](https://ark.intel.com/content/www/us/en/ark/products/129944/intel-core-i38100t-processor-6m-cache-3-10-ghz.html)     | 64GB | 120GB SataDOM | 500GB NVMe 1TB SSD 1TB HDD                       | 1IPMI, 2x1Gig |
-| SM5 | [X10SDV-6C+-TLN4F](https://www.supermicro.com/en/products/motherboard/X10SDV-6C+-TLN4F)             | Xeon [D-1528](https://ark.intel.com/content/www/us/en/ark/products/91198/intel-xeon-processor-d1528-9m-cache-1-90-ghz.html)          | 64GB | 500GB NVMe    | 4x1TB SSD ZFS Mirror+Stripe 2X2TB HDD ZFS Mirror | 1IPMI, 2x1Gig, 2x10Gig |
-| HP  | [Z2G4](https://support.hp.com/us-en/product/hp-z2-tower-g4-workstation/20063240/document/c06100744) | Core [i5-9400](https://ark.intel.com/content/www/us/en/ark/products/134898/intel-core-i59400-processor-9m-cache-up-to-4-10-ghz.html) | 128GB | 250GB SSD     | 500GB NVMe 1TB SSD                               | 3x1Gig |
-| HP-2  | [Z2G4](https://support.hp.com/us-en/product/hp-z2-tower-g4-workstation/20063240/document/c06100744) | Core [i5-9400f](https://ark.intel.com/content/www/us/en/ark/products/190883/intel-core-i59400f-processor-9m-cache-up-to-4-10-ghz.html) | 128GB | 250GB SSD     | 500GB NVMe 1TB SSD                               | 1x1Gig |
+| SM1 | [X11SCL-F](https://www.supermicro.com/en/products/motherboard/X11SCL-F) | Core [i5-9400](https://ark.intel.com/content/www/us/en/ark/products/134898/intel-core-i59400-processor-9m-cache-up-to-4-10-ghz.html)  | 128GB  |120GB SataDOM     | 500GB NVMe 1TB SSD                               | 1IPMI, 2x1Gig |
+| SM2 | [X11SCL-F](https://www.supermicro.com/en/products/motherboard/X11SCL-F) | Core [i5-9400F](https://ark.intel.com/content/www/us/en/ark/products/190883/intel-core-i59400f-processor-9m-cache-up-to-4-10-ghz.html) | 128GB | 120GB SataDOM     | 500GB NVMe 1TB SSD                               | 1IPMI, 2x1Gig |
+| SM3 | [X11SCL-IF](https://www.supermicro.com/en/products/motherboard/X11SCL-IF)                           | Core [i3-8100T](https://ark.intel.com/content/www/us/en/ark/products/129944/intel-core-i38100t-processor-6m-cache-3-10-ghz.html)     | 32GB | 120GB SataDOM | 500GB NVMe 1TB SSD                        | 1IPMI, 2x1Gig |
+| SM4 | [X10SDV-6C+-TLN4F](https://www.supermicro.com/en/products/motherboard/X10SDV-6C+-TLN4F)             | Xeon [D-1528](https://ark.intel.com/content/www/us/en/ark/products/91198/intel-xeon-processor-d1528-9m-cache-1-90-ghz.html)          | 64GB | 500GB NVMe    | 4x1TB SSD ZFS Mirror+Stripe 2X2TB HDD ZFS Mirror | 1IPMI, 2x1Gig, 2x10Gig |
 | RPi 1 |  RPi 4b 8GB  | 4core ARMv8 | 8GB | 500GB SSD | -     | 1Gig |
 | RPi 2 |  RPi 4b 8GB  | 4core ARMv8 | 8GB | 500GB SSD | -     | 1Gig |
 | RPi 3 |  RPi 4b 4GB  | 4core ARMv8 | 4GB | 500GB SSD | -     | 1Gig |
 | RPi 4 |  RPi 4b 4GB  | 4core ARMv8 | 4GB | 500GB SSD | -     | 1Gig |
 | RPi 5 |  RPi 3b+ 1GB | 4core ARMv8 | 1GB | 16GB SD   | 320GB | 1Gig |
+
+
+### Decomissoned
+
+| Name | Motherboard | CPU | Memory | Boot | Disk | NIC |
+|----|----|----|----|----|----|----|
+| SM1 | [X10SLM+-LN4F](https://www.supermicro.com/en/products/motherboard/X10SLM+-LN4F)                     | Xeon [E3-1230v3](https://ark.intel.com/content/www/us/en/ark/products/75054/intel-xeon-processor-e3-1230-v3-8m-cache-3-30-ghz.html)  | 32GB | | | 1IPMI, 4x1Gig |
+| SM2 | [X10SLM+-LN4F](https://www.supermicro.com/en/products/motherboard/X10SLM+-LN4F)                     | Xeon [E3-1265Lv3](https://ark.intel.com/content/www/us/en/ark/products/75463/intel-xeon-processor-e31265l-v3-8m-cache-2-50-ghz.html) | 32GB | | | 1IPMI, 4x1Gig |
+| SM3 | [X10SLM+-LN4F](https://www.supermicro.com/en/products/motherboard/X10SLM+-LN4F)                     | Xeon [E3-1231v3](https://ark.intel.com/content/www/us/en/ark/products/80910/intel-xeon-processor-e31231-v3-8m-cache-3-40-ghz.html)   | 32GB | | | 1IPMI, 4x1Gig |
+
+
+### Not in use
+
+| Name | Motherboard | CPU | Memory | Boot | Disk | NIC |
+|----|----|----|----|----|----|----|
+| HP  | [Z2G4](https://support.hp.com/us-en/product/hp-z2-tower-g4-workstation/20063240/document/c06100744) | Core [G5400](https://ark.intel.com/content/www/us/en/ark/products/129951/intel-pentium-gold-g5400-processor-4m-cache-3-70-ghz.html) | 32GB | 250GB SSD     |                                | 1x1Gig |
+| HP  | [Z2G4](https://support.hp.com/us-en/product/hp-z2-tower-g4-workstation/20063240/document/c06100744) | Core [G5400](https://ark.intel.com/content/www/us/en/ark/products/129951/intel-pentium-gold-g5400-processor-4m-cache-3-70-ghz.html) | 32GB | 250GB SSD     |                                | 1x1Gig |
 
 ### Remote
 
@@ -67,11 +81,9 @@ This is the repo for my homelab
 
 | Name | OS | Function |
 |---|---|---|
-| HP  | ESXi 7 | Main VM Host |
-| SM1 | ESXi 7 | VM Host(Sometimes vSAN cluster) |
-| SM2 | ESXi 7 | VM Host(Sometimes vSAN cluster) |
-| SM3 | ESXi 7 | VM Host(Sometimes vSAN cluster) |
-| SM4 | ESXi 7 | VM Host |
+| SM1 | ESXi 7 | VM Host |
+| SM2 | ESXi 7 | VM Host |
+| SM3 | ESXi 7 | VM Host |
 
 ### K3s cluster
 
