@@ -29,7 +29,7 @@ targetCustomizations:
       topology.kubernetes.io/zone: esxi-sm4
       topology.kubernetes.io/cluster: rke2-2
   helm:
-    version: "101.0.0+up19.0.3"
+    version: "102.0.0+up40.1.2"
     valuesFiles:
       - rke2-base-values.yaml
       - rke2-2-values.yaml
