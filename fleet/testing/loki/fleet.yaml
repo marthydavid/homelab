@@ -1,0 +1,14 @@
+defaultNamespace: monitoring
+helm:
+  releaseName: loki
+  chart: loki-stack
+  repo: https://grafana.github.io/helm-charts
+  version: 2.9.10
+targetCustomizations:
+- name: rke2
+  clusterSelector:
+    matchLabels:
+      provider.cattle.io: rke2
+  helm:
+    valuesFiles:
+      - rke2.yaml

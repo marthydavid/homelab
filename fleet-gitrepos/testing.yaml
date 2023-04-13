@@ -15,10 +15,8 @@ spec:
   - clusterSelector:
       matchLabels:
         provider.cattle.io: k3s
-        topology.kubernetes.io/region: budapest
-        topology.kubernetes.io/zone: rpi
-    name: k3s
-  imageScanCommit:
-    authorName: "marthydavid fleet"
-    authorEmail: "marthy.david+fleet@gmail.com"
-    messageTemplate: "update image"
+    name: rke2
+  #imageScanCommit:
+  #  authorName: "marthydavid fleet"
+  #  authorEmail: "marthy.david+fleet@gmail.com"
+  #  messageTemplate: "update image"
