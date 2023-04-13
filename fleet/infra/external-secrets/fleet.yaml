@@ -1,6 +1,6 @@
 defaultNamespace: external-secrets
 dependsOn:
-  - name: rancher-charts-fleet-rancher-charts-01-crd-moni-9c89b
+  - name: rancher-charts-fleet-rancher-charts-01-crd-monitoring
 helm:
   releaseName: external-secrets
   chart: external-secrets

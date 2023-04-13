@@ -1,9 +1,9 @@
 defaultNamespace: cattle-monitoring-system
 helm:
-  releaseName: prometheus-operator-crds
-  chart: prometheus-operator-crds
-  repo: https://prometheus-community.github.io/helm-charts
-  version: 2.0.0
+  releaseName: rancher-monitoring-crd
+  chart: rancher-monitoring-crd
+  repo: https://charts.rancher.io/
+  version: "102.0.0+up40.1.2"
 targetCustomizations:
 - name: rke2
   clusterSelector:

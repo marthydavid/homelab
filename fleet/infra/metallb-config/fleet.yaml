@@ -16,7 +16,7 @@ targetCustomizations:
     matchLabels:
       provider.cattle.io: rke2
       topology.kubernetes.io/region: budapest
-      topology.kubernetes.io/zone: esxi-hp
+      topology.kubernetes.io/zone: esxi-sm1
       topology.kubernetes.io/cluster: rke2-1
   yaml:
     overlays:

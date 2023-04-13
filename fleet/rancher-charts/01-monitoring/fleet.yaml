@@ -1,6 +1,6 @@
 defaultNamespace: cattle-monitoring-system
 dependsOn:
-  - name: rancher-charts-fleet-rancher-charts-01-crd-moni-9c89b
+  - name: rancher-charts-fleet-rancher-charts-01-crd-monitoring
 helm:
   releaseName: rancher-monitoring
   chart: rancher-monitoring
@@ -14,7 +14,7 @@ targetCustomizations:
     matchLabels:
       provider.cattle.io: rke2
       topology.kubernetes.io/region: budapest
-      topology.kubernetes.io/zone: esxi-hp
+      topology.kubernetes.io/zone: esxi-sm1
       topology.kubernetes.io/cluster: rke2-1
   helm:
     version: "102.0.0+up40.1.2"
