@@ -4,7 +4,7 @@ helm:
   releaseName: oauth2-proxy
   chart: oauth2-proxy
   repo: https://oauth2-proxy.github.io/manifests
-  version: "6.10.1"
+  version: "6.11.0"
 targetCustomizations:
 - name: rke2-2
   clusterSelector:
