@@ -5,6 +5,7 @@ loki:
   persistence:
     enabled: true
     size: 5Gi
+    storageClass: openebs-zfspv
   serviceMonitor:
     enabled: true
   containerSecurityContext:
