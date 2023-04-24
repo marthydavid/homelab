@@ -2,6 +2,7 @@ test_pod:
   enabled: false
 
 loki:
+  isDefault: false
   persistence:
     enabled: true
     size: 5Gi

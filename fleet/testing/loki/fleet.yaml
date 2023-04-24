@@ -1,4 +1,4 @@
-defaultNamespace: monitoring
+defaultNamespace: cattle-monitoring-system
 helm:
   releaseName: loki
   chart: loki-stack
