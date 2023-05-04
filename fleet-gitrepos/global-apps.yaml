@@ -20,6 +20,12 @@ spec:
       name: k3s
     - clusterSelector:
         matchLabels:
+          provider.cattle.io: k3s
+          topology.kubernetes.io/region: pecs
+          topology.kubernetes.io/zone: nas
+      name: nas
+    - clusterSelector:
+        matchLabels:
           provider.cattle.io: rke2
           topology.kubernetes.io/region: budapest
           topology.kubernetes.io/zone: esxi-sm1
