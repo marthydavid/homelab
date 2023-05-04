@@ -1,0 +1,10 @@
+defaultNamespace: chaos-mesh
+dependsOn:
+  - name: rancher-charts-fleet-rancher-charts-01-crd-monitoring
+helm:
+  releaseName: chaos-mesh
+  chart: chaos-mesh
+  repo: https://charts.chaos-mesh.org
+  version: 2.5.1
+  valuesFiles:
+  - global-values.yaml

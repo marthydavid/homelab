@@ -2,4 +2,4 @@ controller:
   service:
     annotations:
       metallb.universe.tf/allow-shared-ip: ingress-nginx
-      metallb.universe.tf/loadBalancerIPs: 192.168.9.1
+      metallb.universe.tf/loadBalancerIPs: 192.168.11.1
