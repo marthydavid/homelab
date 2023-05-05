@@ -1,12 +1,9 @@
-defaultNamespace: radarr
-dependsOn:
-  - name: truenas-fleet-truenas-storageclasses
+defaultNamespace: mediarr
 helm:
   releaseName: radarr
-  chart: radarr
-  repo: https://geek-cookbook.github.io/charts/
-  valuesFiles:
-    - default.yaml
+  chart: app-template
+  repo: https://bjw-s.github.io/helm-charts
+  version: 1.4.0
 targetCustomizations:
 - name: nas
   clusterSelector:
@@ -15,6 +12,5 @@ targetCustomizations:
       topology.kubernetes.io/region: pecs
       topology.kubernetes.io/zone: nas
   helm:
-    version: "16.3.2"
     valuesFiles:
       - nas.yaml

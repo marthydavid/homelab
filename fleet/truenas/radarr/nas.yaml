@@ -1,11 +1,64 @@
+controller:
+  annotations:
+    reloader.stakater.com/auto: "true"
+
+image:
+  repository: ghcr.io/onedr0p/radarr-develop
+  tag: 4.5.0.7106
+
+podSecurityContext:
+  runAsUser: 568
+  runAsGroup: 568
+  fsGroup: 568
+  fsGroupChangePolicy: "OnRootMismatch"
+  supplementalGroups:
+    - 65539
+
+env:
+  RADARR__INSTANCE_NAME: Radarr
+  RADARR__PORT: 7878
+  RADARR__APPLICATION_URL: "https://radarr.pecs.marthy.xyz"
+  RADARR__LOG_LEVEL: info
+  RADARR__API_KEY:
+    valueFrom:
+      secretKeyRef:
+        name: radarr-secret
+        key: api_key
+
+service:
+  main:
+    ports:
+      http:
+        port: 7878
+
 ingress:
   main:
+    enabled: true
+    ingressClassName: "nginx"
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
     hosts:
-    - host: radarr.pecs.marthy.xyz
-      paths:
-      - path: /
-        pathType: Prefix
+      - host: "radarr.pecs.marthy.xyz"
+        paths:
+          - path: /
     tls:
-    - hosts:
-      - radarr.pecs.marthy.xyz
-      secretName: radarr-tls
+      - hosts:
+          - radarr.pecs.marthy.xyz
+        secretName: radarr-tls
+persistence:
+  config:
+    enabled: true
+    existingClaim: radarr-config
+
+  media:
+    enabled: true
+    type: hostPath
+    path: /zfs/media
+    mountPath: /zfs/media
+
+resources:
+  requests:
+    cpu: 5m
+    memory: 431M
+  limits:
+    memory: 431M
