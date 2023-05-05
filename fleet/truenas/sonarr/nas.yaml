@@ -49,7 +49,8 @@ ingress:
 persistence:
   config:
     enabled: true
-    existingClaim: sonarr-config
+    type: hostPath
+    path: /zfs/k3s/configs/sonarr-config
 
   media:
     enabled: true

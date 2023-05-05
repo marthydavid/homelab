@@ -67,23 +67,18 @@ ingress:
 persistence:
   config:
     enabled: true
-    type: emptyDir
-    mountPath: /config/qBittorrent/config
+    type: hostPath
+    path: /zfs/k3s/configs/qbittorrent-config
 
   cache:
     enabled: true
     type: emptyDir
     mountPath: /config/qBittorrent/cache
 
-  configfiles:
-    enabled: true
-    type: configMap
-    name: qbittorrent-configmap
-    mountPath: "-"
-
   data:
     enabled: true
-    existingClaim: qbittorrent-config
+    type: hostPath
+    path: /zfs/k3s/configs/qbittorrent-data
     mountPath: /config/qBittorrent/data
 
   media:

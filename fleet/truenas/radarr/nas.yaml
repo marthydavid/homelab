@@ -48,7 +48,8 @@ ingress:
 persistence:
   config:
     enabled: true
-    existingClaim: radarr-config
+    type: hostPath
+    path: /zfs/k3s/configs/radarr-config
 
   media:
     enabled: true
