@@ -49,12 +49,12 @@ persistence:
   config:
     enabled: true
     type: hostPath
-    path: /zfs/k3s/configs/radarr-config
+    hostPath: /zfs/k3s/configs/radarr-config
 
   media:
     enabled: true
     type: hostPath
-    path: /zfs/media
+    hostPath: /zfs/media
     mountPath: /zfs/media
 
 resources:

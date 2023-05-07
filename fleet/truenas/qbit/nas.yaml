@@ -68,7 +68,12 @@ persistence:
   config:
     enabled: true
     type: hostPath
-    path: /zfs/k3s/configs/qbittorrent-config
+    hostPath: /zfs/k3s/configs/qbittorrent-config
+
+  configfiles:
+    enabled: true
+    type: hostPath
+    hostPath: /zfs/k3s/configs/qbittorrent-configfiles
 
   cache:
     enabled: true
@@ -78,13 +83,13 @@ persistence:
   data:
     enabled: true
     type: hostPath
-    path: /zfs/k3s/configs/qbittorrent-data
+    hostPath: /zfs/k3s/configs/qbittorrent-data
     mountPath: /config/qBittorrent/data
 
   media:
     enabled: true
     type: hostPath
-    path: /zfs/media
+    hostPath: /zfs/media
     mountPath: /zfs/media
 
 resources:
