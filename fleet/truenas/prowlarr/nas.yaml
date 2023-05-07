@@ -1,0 +1,60 @@
+controller:
+  annotations:
+    reloader.stakater.com/auto: "true"
+
+image:
+  repository: ghcr.io/onedr0p/prowlarr-develop
+  tag: 1.4.1.3258
+
+podSecurityContext:
+  runAsUser: 568
+  runAsGroup: 568
+  fsGroup: 568
+  fsGroupChangePolicy: "OnRootMismatch"
+  supplementalGroups:
+    - 65539
+
+env:
+  PROWLARR__INSTANCE_NAME: prowlarr
+  PROWLARR__PORT: 9696
+  PROWLARR__APPLICATION_URL: "https://prowlarr.pecs.marthy.xyz"
+  PROWLARR__LOG_LEVEL: info
+  PROWLARR__API_KEY:
+    valueFrom:
+      secretKeyRef:
+        name: prowlarr-secret
+        key: api_key
+
+service:
+  main:
+    ports:
+      http:
+        port: 9696
+
+ingress:
+  main:
+    enabled: true
+    ingressClassName: "nginx"
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - host: "prowlarr.pecs.marthy.xyz"
+        paths:
+          - path: /
+    tls:
+      - hosts:
+          - prowlarr.pecs.marthy.xyz
+        secretName: prowlarr-tls
+
+persistence:
+  config:
+    enabled: true
+    type: hostPath
+    hostPath: /zfs/k3s/configs/prowlarr-config
+
+resources:
+  requests:
+    cpu: 5m
+    memory: 323M
+  limits:
+    memory: 323M

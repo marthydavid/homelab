@@ -1,0 +1,54 @@
+controller:
+  annotations:
+    reloader.stakater.com/auto: "true"
+
+image:
+  repository: ghcr.io/sct/overseerr
+  tag: 1.32.5
+
+podSecurityContext:
+  runAsUser: 568
+  runAsGroup: 568
+  fsGroup: 568
+  fsGroupChangePolicy: "OnRootMismatch"
+  supplementalGroups:
+    - 65539
+
+env:
+  PORT: 80
+  TZ: Europe/Budapest
+  LOG_LEVEL: "info"
+service:
+  main:
+    ports:
+      http:
+        port: 80
+
+ingress:
+  main:
+    enabled: true
+    ingressClassName: "nginx"
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - host: "overseerr.pecs.marthy.xyz"
+        paths:
+          - path: /
+    tls:
+      - hosts:
+          - overseerr.pecs.marthy.xyz
+        secretName: overseerr-tls
+
+persistence:
+  config:
+    enabled: true
+    type: hostPath
+    hostPath: /zfs/k3s/configs/overseerr-config
+    mountPath: /app/config
+
+resources:
+  requests:
+    cpu: 5m
+    memory: 323M
+  limits:
+    memory: 323M

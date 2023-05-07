@@ -17,20 +17,6 @@ podSecurityContext:
   supplementalGroups:
     - 65539
 
-initContainers:
-  copy-config:
-    image: busybox:latest@sha256:b5d6fe0712636ceb7430189de28819e195e8966372edfc2d9409d79402a0dc16
-    command:
-      - "/bin/sh"
-      - -c
-    args:
-      - cp /data/configfiles/* /data/config/
-    volumeMounts:
-      - name: config
-        mountPath: /data/config
-      - name: configfiles
-        mountPath: /data/configfiles
-
 env:
   UMASK: "022"
   QBITTORRENT__PORT: 8080
@@ -69,11 +55,6 @@ persistence:
     enabled: true
     type: hostPath
     hostPath: /zfs/k3s/configs/qbittorrent-config
-
-  configfiles:
-    enabled: true
-    type: hostPath
-    hostPath: /zfs/k3s/configs/qbittorrent-configfiles
 
   cache:
     enabled: true
