@@ -42,19 +42,20 @@ ingress:
         proxy_set_header Accept-Encoding "";
       cert-manager.io/cluster-issuer: letsencrypt-prod
     hosts:
-      - host: "qbit.pecs.marthyx.yz"
+      - host: "qbit.pecs.marthy.xyz"
         paths:
           - path: /
     tls:
       - hosts:
-          - qbit.pecs.marthyx.yz
+          - qbit.pecs.marthy.xyz
         secretName: qbit-tls
 
 persistence:
   config:
-    enabled: false
-    type: emptyDir
-    #hostPath: /zfs/k3s/configs/qbittorrent-config
+    enabled: true
+    type: hostPath
+    hostPath: /zfs/k3s/configs/qbittorrent-config
+    mountPath: /config/qBittorrent/config
 
   cache:
     enabled: true
