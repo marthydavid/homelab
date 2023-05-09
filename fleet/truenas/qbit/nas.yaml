@@ -52,9 +52,9 @@ ingress:
 
 persistence:
   config:
-    enabled: true
-    type: hostPath
-    hostPath: /zfs/k3s/configs/qbittorrent-config
+    enabled: false
+    type: emptyDir
+    #hostPath: /zfs/k3s/configs/qbittorrent-config
 
   cache:
     enabled: true
