@@ -1,0 +1,16 @@
+defaultNamespace: mediarr
+helm:
+  releaseName: tautulli
+  chart: app-template
+  repo: https://bjw-s.github.io/helm-charts
+  version: 1.4.0
+targetCustomizations:
+- name: nas
+  clusterSelector:
+    matchLabels:
+      provider.cattle.io: k3s
+      topology.kubernetes.io/region: pecs
+      topology.kubernetes.io/zone: nas
+  helm:
+    valuesFiles:
+      - nas.yaml

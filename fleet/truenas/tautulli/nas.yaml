@@ -3,8 +3,8 @@ controller:
     reloader.stakater.com/auto: "true"
 
 image:
-  repository: ghcr.io/onedr0p/prowlarr-develop
-  tag: 1.4.1.3258
+  repository: ghcr.io/onedr0p/tautulli
+  tag: 2.12.3
 
 podSecurityContext:
   runAsUser: 568
@@ -14,22 +14,11 @@ podSecurityContext:
   supplementalGroups:
     - 65539
 
-env:
-  PROWLARR__INSTANCE_NAME: prowlarr
-  PROWLARR__PORT: 9696
-  PROWLARR__APPLICATION_URL: "https://prowlarr.pecs.marthy.xyz"
-  PROWLARR__LOG_LEVEL: info
-  PROWLARR__API_KEY:
-    valueFrom:
-      secretKeyRef:
-        name: prowlarr-secret
-        key: api_key
-
 service:
   main:
     ports:
       http:
-        port: 9696
+        port: 8181
 
 ingress:
   main:
@@ -38,20 +27,20 @@ ingress:
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
     hosts:
-      - host: "prowlarr.pecs.marthy.xyz"
+      - host: "tautulli.pecs.marthy.xyz"
         paths:
           - path: /
     tls:
       - hosts:
-          - prowlarr.pecs.marthy.xyz
-        secretName: prowlarr-tls
+          - tautulli.pecs.marthy.xyz
+        secretName: tautulli-tls
 
 persistence:
   config:
     enabled: true
     type: hostPath
     mountPath: /config
-    hostPath: /zfs/k3s/configs/prowlarr-config
+    hostPath: /zfs/k3s/configs/tautulli-config
 
 resources:
   requests:
