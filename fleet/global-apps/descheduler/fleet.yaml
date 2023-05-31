@@ -1,6 +1,6 @@
 defaultNamespace: kube-system
 helm:
   chart: descheduler
-  version: 0.27.0
+  version: 0.27.1
   repo: https://kubernetes-sigs.github.io/descheduler/
   releaseName: descheduler
