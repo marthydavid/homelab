@@ -1,0 +1,14 @@
+defaultNamespace: cattle-monitoring-system
+dependsOn:
+  - name: rancher-charts-fleet-rancher-charts-01-monitoring
+helm:
+  releaseName: prometheus-blackbox-exporter
+  chart: prometheus-blackbox-exporter
+  repo: https://prometheus-community.github.io/helm-charts
+  version: v0.24.0
+  values:
+    securityContext:
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        add: ["NET_RAW"]

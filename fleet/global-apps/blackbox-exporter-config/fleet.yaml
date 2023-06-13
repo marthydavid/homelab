@@ -1,3 +1,4 @@
 defaultNamespace: cattle-monitoring-system
 dependsOn:
   - name: rancher-charts-fleet-rancher-charts-01-monitoring
+  - name: global-apps-fleet-global-apps-blackbox-exporter
