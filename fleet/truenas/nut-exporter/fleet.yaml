@@ -1,0 +1,35 @@
+defaultNamespace: monitoring
+helm:
+  releaseName: prometheus-nut-exporter
+  chart: prometheus-nut-exporter
+  repo: https://geek-cookbook.github.io/charts/
+  version: 5.4.2
+  values:
+    image:
+      # -- image repository
+      repository: hon95/prometheus-nut-exporter
+      # -- image tag
+      tag: 1.1.1
+    metrics:
+      # -- Enable and configure a Prometheus serviceMonitor for the chart under this key.
+      # @default -- See values.yaml
+      enabled: true
+      serviceMonitor:
+        # Specify the list of NUT servers that should be monitored
+        targets:
+          - hostname: sm4.marthy.xyz
+            port: 3493
+            interval: 30s
+            scrapeTimeout: 10s
+    prometheusRule:
+      enabled: true
+      rules:
+        - alert: UpsStatusUnknown
+          annotations:
+            description: UPS {{ "{{ $labels.ups }}" }} is reporting a status of unknown.
+            summary: UPS status unknown.
+          expr: |
+            nut_status == 0
+          for: 10s
+          labels:
+            severity: critical
