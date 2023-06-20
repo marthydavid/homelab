@@ -6,14 +6,18 @@ alertmanager:
 prometheusOperator:
   image:
     repository: quay.io/prometheus-operator/prometheus-operator
-    tag: v0.63.0
+    tag: v0.59.1
   prometheusConfigReloaderImage:
     repository: quay.io/prometheus-operator/prometheus-config-reloader
-    tag: v0.63.0
+    tag: v0.59.1
   thanosImage:
     repository: quay.io/thanos/thanos
     sha: ''
     tag: v0.31.0
+grafana:
+  image:
+    repository: docker.io/grafana/grafana
+    tag: 9.5.3
 prometheus:
   prometheusSpec:
     image:
