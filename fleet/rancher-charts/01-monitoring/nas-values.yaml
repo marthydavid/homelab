@@ -12,6 +12,34 @@ alertmanager:
       - secretName: alertmanager-tls-secret
         hosts:
           - alert.pecs.marthy.xyz
+  config:
+    global:
+      slack_api_url: https://hooks.slack.com/services/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
+    route:
+      receiver: "slack"
+      group_by:
+        - job
+        - alertname
+        - stage
+        - severity
+        - app
+      routes:
+        - matchers:
+            - alertname="Watchdog"
+          receiver: "slack"
+          continue: true
+        - matchers:
+            - severity="Critical"
+          receiver: "slack"
+          continue: true
+        - matchers:
+            - severity="Warning"
+          receiver: "slack"
+          continue: true
+    receivers:
+      - name: "slack"
+        slack_configs:
+          - send_resolved: true
 prometheus:
   ingress:
     annotations:
