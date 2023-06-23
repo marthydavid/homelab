@@ -2,8 +2,8 @@ alertmanager:
   ingress:
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
-      nginx.ingress.kubernetes.io/auth-signin: https://oauth2.pecs.marthy.xyz/oauth2/start?rd=$scheme://$best_http_host$request_uri
-      nginx.ingress.kubernetes.io/auth-url: https://oauth2.pecs.marthy.xyz/oauth2/auth
+      #nginx.ingress.kubernetes.io/auth-signin: https://oauth2.pecs.marthy.xyz/oauth2/start?rd=$scheme://$best_http_host$request_uri
+      #nginx.ingress.kubernetes.io/auth-url: https://oauth2.pecs.marthy.xyz/oauth2/auth
     enabled: true
     ingressClassName: nginx
     hosts:
@@ -47,8 +47,8 @@ prometheus:
   ingress:
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
-      nginx.ingress.kubernetes.io/auth-signin: https://oauth2.pecs.marthy.xyz/oauth2/start?rd=$scheme://$best_http_host$request_uri
-      nginx.ingress.kubernetes.io/auth-url: https://oauth2.pecs.marthy.xyz/oauth2/auth
+      #nginx.ingress.kubernetes.io/auth-signin: https://oauth2.pecs.marthy.xyz/oauth2/start?rd=$scheme://$best_http_host$request_uri
+      #nginx.ingress.kubernetes.io/auth-url: https://oauth2.pecs.marthy.xyz/oauth2/auth
     enabled: true
     ingressClassName: nginx
     hosts:
@@ -75,3 +75,15 @@ prometheus:
           resources:
             requests:
               storage: 100Gi
+grafana:
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - "grafana.pecs.marthy.xyz"
+    tls:
+      - secretName: "grafana-pecs-marthy-xyz"
+        hosts:
+          - "grafana.pecs.marthy.xyz"
