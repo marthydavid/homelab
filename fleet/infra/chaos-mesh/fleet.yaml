@@ -5,6 +5,6 @@ helm:
   releaseName: chaos-mesh
   chart: chaos-mesh
   repo: https://charts.chaos-mesh.org
-  version: 2.6.0
+  version: 2.6.1
   valuesFiles:
   - global-values.yaml
