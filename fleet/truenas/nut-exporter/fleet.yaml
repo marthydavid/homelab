@@ -9,7 +9,7 @@ helm:
       # -- image repository
       repository: hon95/prometheus-nut-exporter
       # -- image tag
-      tag: 1.1.1
+      tag: 1.2.1
     metrics:
       # -- Enable and configure a Prometheus serviceMonitor for the chart under this key.
       # @default -- See values.yaml
