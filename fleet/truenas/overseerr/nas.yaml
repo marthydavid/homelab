@@ -29,6 +29,7 @@ ingress:
     enabled: true
     ingressClassName: "nginx"
     annotations:
+      external-dns.alpha.kubernetes.io/target: pecs.marthy.xyz
       cert-manager.io/cluster-issuer: letsencrypt-prod
     hosts:
       - host: "overseerr.pecs.marthy.xyz"
