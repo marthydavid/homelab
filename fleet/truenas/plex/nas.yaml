@@ -1,0 +1,62 @@
+controller:
+  type: statefulset
+image:
+  repository: ghcr.io/onedr0p/plex
+  tag: 1.32.4.7195-7c8f9d3b6
+env:
+  TZ: Europe/Budapest
+service:
+  main:
+    ports:
+      http:
+        port: 32400
+ingress:
+  main:
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    hosts:
+      - host: plex.pecs.marthy.xyz
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - hosts:
+          - plex.pecs.marthy.xyz
+        secretName: plex-tls
+podSecurityContext:
+  runAsUser: 568
+  runAsGroup: 568
+  fsGroup: 568
+  fsGroupChangePolicy: OnRootMismatch
+  supplementalGroups: [44, 109, 10000]
+persistence:
+  config:
+    enabled: true
+    hostPath: /zfs/k3s/configs/plex-config
+    mountPath: /config
+    type: hostPath
+  media:
+    enabled: true
+    hostPath: /zfs/media
+    mountPath: /zfs/media
+    type: hostPath
+  transcode:
+    enabled: true
+    type: emptyDir
+  local:
+    enabled: true
+    type: emptyDir
+    mountPath: /.local
+nodeSelector:
+  nvidia.com/gpu.count: "1"
+resources:
+  requests:
+    nvidia.com/gpu: 1
+    cpu: 100m
+    memory: 2000Mi
+  limits:
+    nvidia.com/gpu: 1
+    memory: 10000Mi
