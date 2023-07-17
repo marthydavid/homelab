@@ -1,0 +1,7 @@
+defaultNamespace: onlineboutique
+dependsOn:
+  - name: rancher-charts-fleet-rancher-charts-01-crd-monitoring
+helm:
+  chart: oci://us-docker.pkg.dev/online-boutique-ci/charts/onlineboutique
+  releaseName: onlineboutique
+  version: "0.8.0"
