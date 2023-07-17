@@ -1,0 +1,21 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    email: marthy.david@gmail.com
+    preferredChain: ""
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    server: https://acme-v02.api.letsencrypt.org/directory
+    solvers:
+    - dns01:
+        route53:
+          region: eu-west-1
+          accessKeyIDSecretRef:
+            key: aws_ak
+            name: route53-awssecret
+          secretAccessKeySecretRef:
+            key: aws_sk
+            name: route53-awssecret

@@ -7,3 +7,9 @@ webhook:
 certController:
   serviceMonitor:
     enabled: true
+dashboard:
+  enabled: true
+  ingress:
+    ## Set to true to enable ingress record generation
+    enabled: true
+  securityMode: false

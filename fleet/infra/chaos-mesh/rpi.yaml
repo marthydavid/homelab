@@ -1,0 +1,15 @@
+dashboard:
+  enabled: true
+  ingress:
+    ## Set to true to enable ingress record generation
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - name: chaos.budapest.marthy.xyz
+        tls: true
+        tlsHosts:
+          - chaos.budapest.marthy.xyz
+        tlsSecret: chaos-budapest-tls
+    ingressClassName: "nginx"
+  securityMode: false

@@ -1,12 +1,12 @@
 redis-ha:
-  enabled: true
+  enabled: false
 
 controller:
   replicas: 1
 
 server:
   autoscaling:
-    enabled: true
+    enabled: false
     minReplicas: 1
   ingress:
     # -- Enable an ingress resource for the Argo CD server
@@ -25,7 +25,7 @@ server:
 
 repoServer:
   autoscaling:
-    enabled: true
+    enabled: false
     minReplicas: 1
 
 applicationSet:
