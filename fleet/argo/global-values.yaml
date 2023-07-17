@@ -1,0 +1,30 @@
+redis-ha:
+  enabled: true
+
+controller:
+  replicas: 1
+
+server:
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+  ingress:
+    # -- Enable an ingress resource for the Argo CD server
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    ingressClassName: "nginx"
+    hosts:
+      - argo.budapest.marthy.xyz
+    tls:
+      - secretName: argo-budapest-tls
+        hosts:
+          - argo.budapest.marthy.xyz
+
+repoServer:
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+
+applicationSet:
+  replicaCount: 1
