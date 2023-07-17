@@ -32,7 +32,7 @@ prometheus-adapter:
 prometheus-node-exporter:
   image:
     repository: quay.io/prometheus/node-exporter
-    tag: v1.6.0
+    tag: v1.6.1
   extraArgs:
     - >-
       --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/.+)($|/)
