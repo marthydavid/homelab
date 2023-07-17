@@ -11,8 +11,10 @@ server:
   ingress:
     # -- Enable an ingress resource for the Argo CD server
     enabled: true
+    https: true
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     ingressClassName: "nginx"
     hosts:
       - argo.budapest.marthy.xyz
@@ -28,3 +30,9 @@ repoServer:
 
 applicationSet:
   replicaCount: 1
+
+
+configs:
+  cm:
+    create: true
+    url: "https://argo.budapest.marthy.xyz"
