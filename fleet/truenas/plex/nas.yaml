@@ -26,6 +26,7 @@ ingress:
       - hosts:
           - plex.pecs.marthy.xyz
         secretName: plex-tls
+hostNetwork: true
 podSecurityContext:
   runAsUser: 568
   runAsGroup: 568
