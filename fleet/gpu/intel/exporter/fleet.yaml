@@ -1,0 +1,16 @@
+defaultNamespace: kube-system
+helm:
+  releaseName: intel-gpu-exporter
+  chart: app-template
+  repo: https://bjw-s.github.io/helm-charts
+  version: 1.5.1
+targetCustomizations:
+- name: rpi
+  clusterSelector:
+    matchLabels:
+      provider.cattle.io: k3s
+      topology.kubernetes.io/region: budapest
+      topology.kubernetes.io/zone: rpi
+  helm:
+    valuesFiles:
+      - rpi.yaml

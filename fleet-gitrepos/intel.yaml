@@ -1,0 +1,20 @@
+---
+apiVersion: fleet.cattle.io/v1alpha1
+kind: GitRepo
+metadata:
+  name: intel
+  namespace: fleet-default
+spec:
+  branch: main
+  insecureSkipTLSVerify: false
+  paths:
+  - fleet/gpu/intel
+  paused: false
+  repo: https://github.com/marthydavid/homelab
+  targets:
+  - clusterSelector:
+      matchLabels:
+        provider.cattle.io: k3s
+        topology.kubernetes.io/region: budapest
+        topology.kubernetes.io/zone: rpi
+    name: rpi
