@@ -16,5 +16,15 @@
       "(^|/).*-values\\.yaml$",
       "(^|/).*\\.yaml$"
     ]
-  }
+  },
+  "packageRules": [
+    {
+      "description": "Auto merge container digests",
+      "matchDatasources": ["docker"],
+      "automerge": true,
+      "ignoreTests": true,
+      "automergeType": "branch",
+      "matchPackagePatterns": ["ghcr.io/bjw-s", "ghcr.io/onedr0p"]
+    }
+  ]
 }
