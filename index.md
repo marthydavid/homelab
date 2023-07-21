@@ -6,7 +6,7 @@ This is the repo for my homelab
 ## Network
 
 | Type | Functions | Usage |
-|----|----|
+|----|----|----|
 | Mikrotik [hAP AC^3](https://mikrotik.com/product/hap_ac3) | Router, BGP, VLAN | Main router for RPI |
 | Mikrotik [hAP AC^2](https://mikrotik.com/product/hap_ac2) | Router, BGP, VLAN | -
 | TP-Link [SG-108PE](https://www.tp-link.com/hu/business-networking/easy-smart-switch/tl-sg108pe/) | PoE for RPis | Switch for RPis |
