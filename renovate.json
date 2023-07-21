@@ -36,7 +36,7 @@
     },
     {
       "description": "Auto merge helm deps",
-      "matchDatasources": ["fleet","helm-values"],
+      "matchDatasources": ["helm","git-tags"],
       "automerge": true,
       "ignoreTests": true,
       "automergeType": "branch",
