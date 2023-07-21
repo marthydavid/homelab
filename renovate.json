@@ -5,7 +5,7 @@
   "rebaseWhen": "conflicted",
   "prConcurrentLimit": 25,
   "fleet": {
-    "commitMessageTopic": "fleet release {{packageName}}",
+    "commitMessageTopic": "fleet release {{packageName}} {{depName}}",
     "fileMatch": [
       "(^|/)fleet\\.yaml$"
     ]
