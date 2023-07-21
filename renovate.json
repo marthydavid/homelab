@@ -25,6 +25,22 @@
       "ignoreTests": true,
       "automergeType": "branch",
       "matchPackagePatterns": ["ghcr.io/bjw-s", "ghcr.io/onedr0p", "ghcr.io/scr"]
+    },
+    {
+      "description": "Auto merge container digests",
+      "matchDatasources": ["docker"],
+      "automerge": true,
+      "ignoreTests": true,
+      "automergeType": "branch",
+      "matchUpdateTypes": ["patch"]
+    },
+    {
+      "description": "Auto merge helm deps",
+      "matchDatasources": ["fleet","helm-values"],
+      "automerge": true,
+      "ignoreTests": true,
+      "automergeType": "branch",
+      "matchUpdateTypes": ["patch"]
     }
   ]
 }
