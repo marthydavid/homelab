@@ -20,11 +20,12 @@
   "packageRules": [
     {
       "description": "Auto merge container digests",
-      "matchDatasources": ["docker"],
+      "matchDatasources": ["docker","helm-values"],
       "automerge": true,
       "ignoreTests": true,
       "automergeType": "branch",
-      "matchPackagePatterns": ["ghcr.io/bjw-s", "ghcr.io/onedr0p", "ghcr.io/scr"]
+      "matchUpdateTypes": ["patch", "minor"],
+      "matchPackagePatterns": ["ghcr.io/bjw-s", "ghcr.io/onedr0p", "ghcr.io/scr", "ghcr.io/marthydavid"]
     },
     {
       "description": "Auto merge container digests",
