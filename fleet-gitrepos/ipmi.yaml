@@ -2,13 +2,13 @@
 apiVersion: fleet.cattle.io/v1alpha1
 kind: GitRepo
 metadata:
-  name: truenas
+  name: ipmi
   namespace: fleet-default
 spec:
   branch: main
   insecureSkipTLSVerify: false
   paths:
-    - fleet/truenas
+    - fleet/ipmi
   paused: false
   repo: https://github.com/marthydavid/homelab
   targets:
