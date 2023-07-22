@@ -1,4 +1,5 @@
 {
+  "extends": ["mergeConfidence:all-badges"],
   "semanticCommits": "enabled",
   "commitMessageTopic": "{{packageName}}",
   "commitMessageExtra": "to {{newVersion}}",
