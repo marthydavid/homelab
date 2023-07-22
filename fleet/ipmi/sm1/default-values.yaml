@@ -8,7 +8,7 @@ controller:
     schedule: "10 */2 * * *"
 image:
   repository: ghcr.io/marthydavid/supermicro-letsencrypt
-  tag: v0.2.1
+  tag: v0.2.0
   pullPolicy: IfNotPresent
 securityContext:
   runAsUser: 1000
