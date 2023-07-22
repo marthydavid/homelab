@@ -49,7 +49,7 @@ This is the repo for my homelab
 ### Main
 
 | Type | Capacity | Usage |
-|---|---|
+|---|---|---|
 | CyberPower [OR1500ERM1U](https://www.cyberpower.com/eu/en/product/sku/or1500erm1u) | 1500VA / 900W | Main |
 | Eaton [5E650iUSBDIN](http://powerquality.eaton.com/5E650iUSBDIN.aspx?cx=58) | 650VA / 360W | RPis | 
 
@@ -84,13 +84,19 @@ This is the repo for my homelab
 * [rancher](https://rancher.com)
 * [cert-manager](https://cert-manager.io)
 * [ingress-nginx](https://kubernetes.github.io/ingress-nginx)
+* [supermicro-letsencrypt](https://github.com/marthydavid/supermicro-letsencrypt)
 * [oauth2-proxy](https://oauth2-proxy.github.io/oauth2-proxy/)
 * [ddns-route53](https://crazymax.dev/ddns-route53/)
 * [Radarr](https://radarr.video)
 * [Sonarr](https://sonarr.tv)
+* [Overseerr](https://overseerr.dev)
+* [plex](https://plex.tv)
+* [tautulli](https://tautulli.com/)
 * [prometheus-operator](https://prometheus-operator.dev/)
 * [karma](https://karma-dashboard.io/)
 * [metallb](https://metallb.universe.tf/)
 * [fleet](https://fleet.rancher.io/)
 * [vault](https://vaultproject.io)
 * [external-secrets](https://external-secrets.io)
+* [intel-gpu](https://github.com/intel/intel-device-plugins-for-kubernetes/)
+* [nvidia-gpu](https://github.com/NVIDIA/k8s-device-plugin)
