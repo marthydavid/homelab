@@ -17,9 +17,10 @@ helm:
         schedule: "10 */2 * * *"
     image:
       repository: ghcr.io/marthydavid/supermicro-letsencrypt
-      tag: v0.1.1
+      tag: v0.2.0
       pullPolicy: IfNotPresent
-
+    securityContext:
+      runAsUser: 1000
     service:
       main:
         enabled: false
@@ -47,7 +48,7 @@ helm:
         # -- configMap data content. Helm template enabled.
         data:
           IPMI_USERNAME: ADMIN
-          IPMI_ADDRESS: sm1.ipmi.marthy.xyz
+          IPMI_DOMAIN: sm1.ipmi.marthy.xyz
           LE_EMAIL: marthy.david+ipmi@gmail.com
     envFrom:
       - configMapRef:
