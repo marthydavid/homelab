@@ -1,0 +1,18 @@
+configMaps:
+  config:
+    # -- Enables or disables the configMap
+    enabled: true
+    # -- Labels to add to the configMap
+    labels: {}
+    # -- Annotations to add to the configMap
+    annotations: {}
+    # -- configMap data content. Helm template enabled.
+    data:
+      IPMI_USERNAME: ADMIN
+      IPMI_DOMAIN: sm1.ipmi.marthy.xyz
+      LE_EMAIL: marthy.david+ipmi@gmail.com
+envFrom:
+  - configMapRef:
+      name: sm1-ipmi-config
+  - secretRef:
+      name: ipmi-secret

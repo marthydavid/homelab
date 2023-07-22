@@ -6,59 +6,6 @@ helm:
   chart: app-template
   repo: https://bjw-s.github.io/helm-charts
   version: 1.5.1
-  values:
-    controller:
-      type: cronjob
-      cronjob:
-        # -- Specifies how to treat concurrent executions of a job that is created by this cron job
-        # valid values are Allow, Forbid or Replace
-        concurrencyPolicy: Forbid
-        # -- Sets the CronJob time when to execute your jobs
-        schedule: "10 */2 * * *"
-    image:
-      repository: ghcr.io/marthydavid/supermicro-letsencrypt
-      tag: v0.2.0
-      pullPolicy: IfNotPresent
-    securityContext:
-      runAsUser: 1000
-    service:
-      main:
-        enabled: false
-
-    ingress:
-      main:
-        enabled: false
-
-    probes:
-      liveness:
-        enabled: false
-      readiness:
-        enabled: false
-      startup:
-        enabled: false
-
-    configMaps:
-      config:
-        # -- Enables or disables the configMap
-        enabled: true
-        # -- Labels to add to the configMap
-        labels: {}
-        # -- Annotations to add to the configMap
-        annotations: {}
-        # -- configMap data content. Helm template enabled.
-        data:
-          IPMI_USERNAME: ADMIN
-          IPMI_DOMAIN: sm2.ipmi.marthy.xyz
-          LE_EMAIL: marthy.david+ipmi@gmail.com
-    envFrom:
-      - configMapRef:
-          name: sm2-ipmi-config
-      - secretRef:
-          name: ipmi-secret
-
-    persistence:
-      lego:
-        enabled: true
-        hostPath: /zfs/k3s/configs/sm-lego
-        mountPath: /home/lego/.lego
-        type: hostPath
+  valuesFiles:
+    - default-values.yaml
+    - sm2-values.yaml
