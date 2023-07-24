@@ -4,7 +4,7 @@ controller:
 
 image:
   repository: ghcr.io/sct/overseerr
-  tag: 1.33.0
+  tag: 1.33.1
 
 podSecurityContext:
   runAsUser: 568
