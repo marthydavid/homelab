@@ -7,19 +7,22 @@ image:
   tag: 2.0.3
 
 podSecurityContext:
-  runAsUser: 568
-  runAsGroup: 568
-  fsGroup: 568
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
   fsGroupChangePolicy: "OnRootMismatch"
   supplementalGroups:
     - 65539
 
 env:
-  PUID: 568
-  PGID: 568
+  PUID: 1000
+  PGID: 1000
   TZ: Europe/Budapest
   LOG_LEVEL: "info"
   DB_HOST: postgres-rw.database.svc
+envFrom:
+  - secretRef:
+      name: babybuddy-db
 service:
   main:
     ports:
