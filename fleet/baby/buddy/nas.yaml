@@ -4,7 +4,7 @@ controller:
 
 image:
   repository: ghcr.io/linuxserver/babybuddy
-  tag: 2.0.2
+  tag: 2.0.3
 
 podSecurityContext:
   runAsUser: 568
