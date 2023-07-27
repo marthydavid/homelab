@@ -1,0 +1,20 @@
+---
+apiVersion: fleet.cattle.io/v1alpha1
+kind: GitRepo
+metadata:
+  name: argo
+  namespace: fleet-default
+spec:
+  branch: main
+  insecureSkipTLSVerify: false
+  paths:
+  - fleet/argo
+  paused: false
+  repo: https://github.com/marthydavid/homelab
+  targets:
+  - clusterSelector:
+      matchLabels:
+        provider.cattle.io: k3s
+        topology.kubernetes.io/region: pecs
+        topology.kubernetes.io/zone: nas
+    name: nas

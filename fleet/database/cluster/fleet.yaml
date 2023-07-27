@@ -1,0 +1,4 @@
+defaultNamespace: cnpg-system
+dependsOn:
+  - name: database-fleet-database-secret
+  - name: database-fleet-database-operator
