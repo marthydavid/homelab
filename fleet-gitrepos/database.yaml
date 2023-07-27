@@ -2,13 +2,13 @@
 apiVersion: fleet.cattle.io/v1alpha1
 kind: GitRepo
 metadata:
-  name: argo
+  name: database
   namespace: fleet-default
 spec:
   branch: main
   insecureSkipTLSVerify: false
   paths:
-  - fleet/argo
+  - fleet/database
   paused: false
   repo: https://github.com/marthydavid/homelab
   targets:
