@@ -1,0 +1,56 @@
+controller:
+  annotations:
+    reloader.stakater.com/auto: "true"
+
+image:
+  repository: ghcr.io/linuxserver/babybuddy
+  tag: 2.0.2
+
+podSecurityContext:
+  runAsUser: 568
+  runAsGroup: 568
+  fsGroup: 568
+  fsGroupChangePolicy: "OnRootMismatch"
+  supplementalGroups:
+    - 65539
+
+env:
+  PUID: 568
+  PGID: 568
+  TZ: Europe/Budapest
+  LOG_LEVEL: "info"
+  DB_HOST: postgres-rw.database.svc
+service:
+  main:
+    ports:
+      http:
+        port: 8000
+
+ingress:
+  main:
+    enabled: true
+    ingressClassName: "nginx"
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - host: "baby.pecs.marthy.xyz"
+        paths:
+          - path: /
+    tls:
+      - hosts:
+          - baby.pecs.marthy.xyz
+        secretName: baby-tls
+
+persistence:
+  config:
+    enabled: true
+    type: hostPath
+    hostPath: /zfs/k3s/configs/babybuddy-config
+    mountPath: /config
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 323M
+  limits:
+    memory: 323M

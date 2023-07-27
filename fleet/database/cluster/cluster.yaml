@@ -17,5 +17,6 @@ spec:
     parameters:
       max_connections: "600"
       shared_buffers: 512MB
+      timezone: "Europe/Budapest"
   monitoring:
     enablePodMonitor: true
