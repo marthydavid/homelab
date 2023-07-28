@@ -1,0 +1,12 @@
+metadata:
+  name: aws-cred
+spec:
+  data:
+  - remoteRef:
+      key: secret/cert-manager-budapest
+      property: aws_ak
+    secretKey: aws_ak
+  - remoteRef:
+      key: secret/cert-manager-budapest
+      property: aws_sk
+    secretKey: aws_sk

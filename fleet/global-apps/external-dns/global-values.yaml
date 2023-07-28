@@ -1,0 +1,20 @@
+image:
+  registry: docker.io
+  repository: bitnami/external-dns
+  tag: 0.13.5-debian-11-r55
+
+provider: aws
+
+aws:
+  credentials:
+    accessKeyIDSecretRef:
+      name: aws-cred
+      key: aws_ak
+    secretAccessKeySecretRef:
+      name: aws-cred
+      key: aws_sk
+
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true

@@ -1,0 +1,10 @@
+defaultNamespace: external-dns
+dependsOn:
+  - name: global-apps-fleet-global-apps-external-dns-secrets
+helm:
+  releaseName: external-dns
+  chart: external-dns
+  repo: https://charts.bitnami.com/bitnami
+  version: 6.20.5
+  valuesFiles:
+  - global-values.yaml

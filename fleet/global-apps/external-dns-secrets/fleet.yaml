@@ -1,0 +1,20 @@
+defaultNamespace: external-dns
+dependsOn:
+  - name: global-apps-fleet-global-apps-external-secrets
+targetCustomizations:
+- name: nas
+  clusterSelector:
+    matchLabels:
+      provider.cattle.io: k3s
+      topology.kubernetes.io/region: pecs
+      topology.kubernetes.io/zone: nas
+  yaml:
+    overlays:
+      - nas
+- name: bp
+  clusterSelector:
+    matchLabels:
+      topology.kubernetes.io/region: budapest
+  yaml:
+    overlays:
+      - bp
