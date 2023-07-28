@@ -26,8 +26,8 @@ ingress:
     ingressClassName: "nginx"
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
-      external-dns.alpha.kubernetes.io/hostname: pecs.marthy.xyz
-      external-dns.alpha.kubernetes.io/alias: "true"
+      external-dns.alpha.kubernetes.io/hostname: tautulli.pecs.marthy.xyz
+      external-dns.alpha.kubernetes.io/target: pecs.marthy.xyz
     hosts:
       - host: "tautulli.pecs.marthy.xyz"
         paths:
