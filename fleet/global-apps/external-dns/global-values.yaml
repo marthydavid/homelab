@@ -13,7 +13,7 @@ aws:
     secretAccessKeySecretRef:
       name: aws-cred
       key: aws_sk
-
+  zoneType: public
 metrics:
   enabled: true
   serviceMonitor:
