@@ -1,4 +1,6 @@
 defaultNamespace: mediarr
+dependsOn:
+  - name: truenas-fleet-truenas-secrets
 helm:
   releaseName: plex
   chart: app-template
