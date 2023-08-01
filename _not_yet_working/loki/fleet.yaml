@@ -3,7 +3,7 @@ helm:
   releaseName: loki
   chart: loki-stack
   repo: https://grafana.github.io/helm-charts
-  version: 2.9.10
+  version: 2.9.11
 targetCustomizations:
 - name: rke2
   clusterSelector:
