@@ -18,3 +18,12 @@ targetCustomizations:
     helm:
       valuesFiles:
         - rpi.yaml
+  - name: nuc
+    clusterSelector:
+      matchLabels:
+        provider.cattle.io: rke2
+        topology.kubernetes.io/region: budapest
+        topology.kubernetes.io/zone: nuc
+    helm:
+      valuesFiles:
+        - nuc.yaml

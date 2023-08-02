@@ -8,7 +8,7 @@ spec:
   branch: main
   insecureSkipTLSVerify: false
   paths:
-  - fleet/global-apps
+    - fleet/global-apps
   paused: false
   repo: https://github.com/marthydavid/homelab
   targets:
@@ -24,6 +24,12 @@ spec:
           topology.kubernetes.io/region: pecs
           topology.kubernetes.io/zone: nas
       name: nas
+    - clusterSelector:
+        matchLabels:
+          provider.cattle.io: rke2
+          topology.kubernetes.io/region: budapest
+          topology.kubernetes.io/zone: nuc
+      name: nuc
     - clusterSelector:
         matchLabels:
           provider.cattle.io: rke2

@@ -1,0 +1,89 @@
+alertmanager:
+  ingress:
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      #nginx.ingress.kubernetes.io/auth-signin: https://oauth2.nuc.marthy.xyz/oauth2/start?rd=$scheme://$best_http_host$request_uri
+      #nginx.ingress.kubernetes.io/auth-url: https://oauth2.nuc.marthy.xyz/oauth2/auth
+    enabled: true
+    ingressClassName: nginx
+    hosts:
+      - alert.nuc.marthy.xyz
+    tls:
+      - secretName: alertmanager-tls-secret
+        hosts:
+          - alert.nuc.marthy.xyz
+  config:
+    global:
+      slack_api_url: https://hooks.slack.com/services/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
+    route:
+      receiver: "slack"
+      group_by:
+        - job
+        - alertname
+        - stage
+        - severity
+        - app
+      routes:
+        - receiver: 'null'
+          matchers:
+            - alertname =~ "InfoInhibitor|Watchdog"
+        - matchers:
+            - alertname="Watchdog"
+          receiver: "slack"
+          continue: true
+        - matchers:
+            - severity="Critical"
+          receiver: "slack"
+          continue: true
+        - matchers:
+            - severity="Warning"
+          receiver: "slack"
+          continue: true
+    receivers:
+      - name: "slack"
+        slack_configs:
+          - send_resolved: true
+prometheus:
+  ingress:
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      #nginx.ingress.kubernetes.io/auth-signin: https://oauth2.nuc.marthy.xyz/oauth2/start?rd=$scheme://$best_http_host$request_uri
+      #nginx.ingress.kubernetes.io/auth-url: https://oauth2.nuc.marthy.xyz/oauth2/auth
+    enabled: true
+    ingressClassName: nginx
+    hosts:
+      - prom.nuc.marthy.xyz
+    tls:
+      - secretName: prometheus-tls-secret
+        hosts:
+          - prom.nuc.marthy.xyz
+  prometheusSpec:
+    resources:
+      limits:
+        cpu: 500m
+        memory: 2Gi
+      requests:
+        cpu: 100m
+        memory: 100Mi
+    retention: 100d
+    retentionSize: 45GiB
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: openebs-zfspv
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 100Gi
+grafana:
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - "grafana.nuc.marthy.xyz"
+    tls:
+      - secretName: "grafana-pecs-marthy-xyz"
+        hosts:
+          - "grafana.nuc.marthy.xyz"

@@ -1,0 +1,4 @@
+spec:
+  myASN: 65530
+  peerASN: 65530
+  peerAddress: 192.168.0.1

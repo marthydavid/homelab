@@ -8,13 +8,13 @@ spec:
   branch: main
   insecureSkipTLSVerify: false
   paths:
-  - fleet/gpu/intel
+    - fleet/gpu/intel
   paused: false
   repo: https://github.com/marthydavid/homelab
   targets:
-  - clusterSelector:
-      matchLabels:
-        provider.cattle.io: k3s
-        topology.kubernetes.io/region: budapest
-        topology.kubernetes.io/zone: rpi
-    name: rpi
+    - clusterSelector:
+        matchLabels:
+          provider.cattle.io: k3s
+          topology.kubernetes.io/region: budapest
+          topology.kubernetes.io/zone: rpi
+      name: rpi

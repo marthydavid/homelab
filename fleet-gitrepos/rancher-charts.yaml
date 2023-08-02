@@ -8,7 +8,7 @@ spec:
   branch: main
   insecureSkipTLSVerify: false
   paths:
-  - fleet/rancher-charts
+    - fleet/rancher-charts
   repo: https://github.com/marthydavid/homelab
   targets:
     - clusterSelector:
@@ -17,6 +17,12 @@ spec:
           topology.kubernetes.io/region: budapest
           topology.kubernetes.io/zone: rpi
       name: k3s
+    - clusterSelector:
+        matchLabels:
+          provider.cattle.io: rke2
+          topology.kubernetes.io/region: budapest
+          topology.kubernetes.io/zone: nuc
+      name: nuc
     - clusterSelector:
         matchLabels:
           provider.cattle.io: rke2

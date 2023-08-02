@@ -8,12 +8,12 @@ spec:
   branch: main
   insecureSkipTLSVerify: false
   paths:
-  - fleet/clusterrepos
+    - fleet/clusterrepos
   repo: https://github.com/marthydavid/homelab
   targets:
-  - clusterSelector:
-      matchExpressions:
-      - key: provider.cattle.io
-        operator: NotIn
-        values:
-        - harvester
+    - clusterSelector:
+        matchExpressions:
+          - key: provider.cattle.io
+            operator: NotIn
+            values:
+              - harvester

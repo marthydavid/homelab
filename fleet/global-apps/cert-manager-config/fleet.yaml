@@ -2,21 +2,17 @@ defaultNamespace: cert-manager
 dependsOn:
   - name: global-apps-fleet-global-apps-external-secrets-config
 targetCustomizations:
-- name: rpi
+- name: budapest
   clusterSelector:
     matchLabels:
-      provider.cattle.io: k3s
       topology.kubernetes.io/region: budapest
-      topology.kubernetes.io/zone: rpi
   yaml:
     overlays:
-      - rpi
-- name: nas
+      - budapest
+- name: pecs
   clusterSelector:
     matchLabels:
-      provider.cattle.io: k3s
       topology.kubernetes.io/region: pecs
-      topology.kubernetes.io/zone: nas
   yaml:
     overlays:
-      - nas
+      - pecs
