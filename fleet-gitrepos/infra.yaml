@@ -3,7 +3,7 @@ apiVersion: fleet.cattle.io/v1alpha1
 kind: GitRepo
 metadata:
   name: infra
-  #namespace: fleet-default
+  namespace: fleet-default
 spec:
   branch: main
   insecureSkipTLSVerify: false
