@@ -2,7 +2,7 @@ alertmanager:
   alertmanagerSpec:
     image:
       repository: quay.io/prometheus/alertmanager
-      tag: v0.25.0
+      tag: v0.26.0
 prometheusOperator:
   image:
     repository: quay.io/prometheus-operator/prometheus-operator
