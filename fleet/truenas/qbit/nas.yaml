@@ -4,7 +4,7 @@ controller:
 
 image:
   repository: ghcr.io/onedr0p/qbittorrent
-  tag: 4.5.4
+  tag: 4.5.5
 
 podAnnotations:
   setGateway: "true"
