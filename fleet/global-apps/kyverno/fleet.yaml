@@ -1,0 +1,10 @@
+defaultNamespace: kyverno
+dependsOn:
+  - name: rancher-charts-fleet-rancher-charts-01-crd-monitoring
+helm:
+  releaseName: kyverno
+  chart: kyverno
+  repo: https://kyverno.github.io/kyverno/
+  version: 3.0.5
+  valuesFiles:
+  - global-values.yaml
