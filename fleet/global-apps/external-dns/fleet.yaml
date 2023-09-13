@@ -5,7 +5,7 @@ helm:
   releaseName: external-dns
   chart: external-dns
   repo: https://charts.bitnami.com/bitnami
-  version: 6.25.0
+  version: 6.25.1
   valuesFiles:
   - global-values.yaml
 targetCustomizations:
