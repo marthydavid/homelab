@@ -13,7 +13,7 @@ prometheusOperator:
   thanosImage:
     repository: quay.io/thanos/thanos
     sha: ''
-    tag: v0.32.3
+    tag: v0.32.4
 grafana:
   image:
     repository: docker.io/grafana/grafana
