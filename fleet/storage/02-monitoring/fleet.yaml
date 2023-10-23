@@ -5,7 +5,7 @@ helm:
   chart: openebs-monitoring
   repo: https://openebs.github.io/monitoring
   releaseName: openebs-monitoring
-  version: "0.4.12"
+  version: "0.4.13"
   valuesFiles:
     - global.yaml
 targetCustomizations:
