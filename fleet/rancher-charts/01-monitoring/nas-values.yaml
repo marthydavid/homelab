@@ -14,7 +14,7 @@ alertmanager:
           - alert.pecs.marthy.xyz
   config:
     global:
-      slack_api_url: https://hooks.slack.com/services/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
+      slack_api_url: https://hooks.slack.com/services/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
     route:
       receiver: "slack"
       group_by:
@@ -24,12 +24,9 @@ alertmanager:
         - severity
         - app
       routes:
-        - receiver: 'null'
+        - receiver: 'slack'
           matchers:
             - alertname =~ "InfoInhibitor|Watchdog"
-        - matchers:
-            - alertname="Watchdog"
-          receiver: "slack"
           continue: true
         - matchers:
             - severity="Critical"
@@ -43,6 +40,7 @@ alertmanager:
       - name: "slack"
         slack_configs:
           - send_resolved: true
+            channel: sm4-alerts
 prometheus:
   ingress:
     annotations:

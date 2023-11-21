@@ -33,3 +33,21 @@ helm:
           for: 10s
           labels:
             severity: critical
+        - alert: UpsIsRunningOnBattery
+          annotations:
+            description: UPS {{ "{{ $labels.ups }}" }} is running on battery
+            summary: UPS on battery
+          expr: |
+            nut_ups_status{status="OB"} == 1
+          for: 10s
+          labels:
+            severity: critical
+        - alert: UpsIsLowOnBattery
+          annotations:
+            description: UPS {{ "{{ $labels.ups }}" }} is running low on battery
+            summary: UPS low battery
+          expr: |
+            nut_ups_status{status="LB"} == 1
+          for: 10s
+          labels:
+            severity: critical
