@@ -14,7 +14,7 @@ alertmanager:
           - alert.pecs.marthy.xyz
   config:
     global:
-      slack_api_url: https://hooks.slack.com/services/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
+      slack_api_url_file: /etc/alertmanager/secrets/slack-api-url/slack_api_url
     route:
       receiver: "slack"
       group_by:
@@ -41,6 +41,9 @@ alertmanager:
         slack_configs:
           - send_resolved: true
             channel: sm4-alerts
+  alertmanagerSpec:
+    secrets:
+      - slack-api
 prometheus:
   ingress:
     annotations:

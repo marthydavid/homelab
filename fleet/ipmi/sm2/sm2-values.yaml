@@ -11,6 +11,7 @@ configMaps:
       IPMI_USERNAME: ADMIN
       IPMI_DOMAIN: sm2.ipmi.marthy.xyz
       LE_EMAIL: marthy.david+ipmi@gmail.com
+      AWS_DEFAULT_REGION: eu-central-1
 envFrom:
   - configMapRef:
       name: sm2-ipmi-config
