@@ -61,7 +61,7 @@ targetCustomizations:
       topology.kubernetes.io/region: pecs
       topology.kubernetes.io/zone: nas
   helm:
-    version: "102.0.2+up40.1.2"
+    version: "103.0.0+up45.31.1"
     valuesFiles:
       - k3s-base-values.yaml
       - nas-values.yaml
