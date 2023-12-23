@@ -9,6 +9,15 @@ helm:
   valuesFiles:
     - global-values.yaml
 targetCustomizations:
+  - name: nas
+    clusterSelector:
+      matchLabels:
+        provider.cattle.io: k3s
+        topology.kubernetes.io/region: pecs
+        topology.kubernetes.io/zone: nas
+    helm:
+      valuesFiles:
+        - nas.yaml
   - name: rpi
     clusterSelector:
       matchLabels:
