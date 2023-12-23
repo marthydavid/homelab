@@ -40,7 +40,7 @@ alertmanager:
       - name: "slack"
         slack_configs:
           - send_resolved: true
-            channel: sm4-alerts
+            channel: '#sm4-alerts'
   alertmanagerSpec:
     secrets:
       - slack-api

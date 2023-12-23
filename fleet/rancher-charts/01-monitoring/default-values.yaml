@@ -1,19 +1,8 @@
 alertmanager:
   alertmanagerSpec:
-    image:
-      repository: quay.io/prometheus/alertmanager
-      tag: v0.25.0
 prometheusOperator:
-  image:
-    repository: quay.io/prometheus-operator/prometheus-operator
-    tag: v0.59.1
-  prometheusConfigReloaderImage:
-    repository: quay.io/prometheus-operator/prometheus-config-reloader
-    tag: v0.59.1
   thanosImage:
-    repository: quay.io/thanos/thanos
     sha: ''
-    tag: v0.32.5
 grafana:
   image:
     repository: docker.io/grafana/grafana
@@ -21,18 +10,12 @@ grafana:
 prometheus:
   prometheusSpec:
     image:
-      repository: quay.io/prometheus/prometheus
-      tag: v2.43.0
 prometheus-adapter:
   enabled: true
   image:
     pullPolicy: IfNotPresent
-    repository: k8s.gcr.io/prometheus-adapter/prometheus-adapter
-    tag: v0.10.0
 prometheus-node-exporter:
   image:
-    repository: quay.io/prometheus/node-exporter
-    tag: v1.7.0
   extraArgs:
     - >-
       --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/.+)($|/)
