@@ -13,8 +13,6 @@ alertmanager:
         hosts:
           - alert.pecs.marthy.xyz
   config:
-    global:
-      slack_api_url_file: /etc/alertmanager/secrets/slack-api-url/slack_api_url
     route:
       receiver: "slack"
       group_by:
@@ -40,7 +38,8 @@ alertmanager:
       - name: "slack"
         slack_configs:
           - send_resolved: true
-            channel: '#sm4-alerts'
+            api_url_file: /etc/alertmanager/secrets/slack-api/slack_api_url
+            channel: "#sm4-alerts"
   alertmanagerSpec:
     secrets:
       - slack-api
