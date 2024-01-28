@@ -4,7 +4,7 @@ controller:
 
 image:
   repository: ghcr.io/linuxserver/babybuddy
-  tag: 2.2.0
+  tag: 2.2.1
 
 env:
   PUID: 1000
