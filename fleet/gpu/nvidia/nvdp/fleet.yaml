@@ -5,7 +5,7 @@ helm:
   releaseName: nvidia-device-plugin
   chart: nvidia-device-plugin
   repo: https://nvidia.github.io/k8s-device-plugin
-  version: 0.14.3
+  version: 0.14.4
   values:
     runtimeClassName: nvidia
     gfd:
