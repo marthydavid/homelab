@@ -4,7 +4,7 @@ controller:
 
 image:
   repository: ghcr.io/onedr0p/sonarr-develop
-  tag: 4.0.1.1096
+  tag: 4.0.1.1114
 
 podSecurityContext:
   runAsUser: 568
