@@ -2,7 +2,7 @@ controller:
   type: statefulset
 image:
   repository: ghcr.io/onedr0p/plex
-  tag: rolling@sha256:637fe10cef736f249d96cb004c12f81646c81ca17ddce22374ea8782aa6646c2
+  tag: rolling@sha256:76dce9fa27f91b96bf164c4cb2b25e55e59f6efee83f4b0760b240d465bf6ae4
 env:
   TZ: Europe/Budapest
 service:
