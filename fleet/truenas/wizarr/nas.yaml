@@ -1,0 +1,52 @@
+controller:
+  annotations:
+    reloader.stakater.com/auto: "true"
+
+image:
+  repository: ghcr.io/wizarrrr/wizarr
+  tag: 3.5.1
+
+podSecurityContext:
+#  runAsUser: 568
+  runAsGroup: 568
+  fsGroup: 568
+  fsGroupChangePolicy: "OnRootMismatch"
+  supplementalGroups:
+    - 65539
+
+service:
+  main:
+    ports:
+      http:
+        port: 5690
+
+ingress:
+  main:
+    enabled: true
+    ingressClassName: "nginx"
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      external-dns.alpha.kubernetes.io/target: pecs.marthy.xyz
+      external-dns.alpha.kubernetes.io/alias: "true"
+    hosts:
+      - host: "wizarr.pecs.marthy.xyz"
+        paths:
+          - path: /
+    tls:
+      - hosts:
+          - wizarr.pecs.marthy.xyz
+        secretName: wizarr-tls
+
+persistence:
+  config:
+    enabled: true
+    type: hostPath
+    mountPath: /data/database
+    hostPath: /zfs/k3s/configs/wizarr-database
+
+resources:
+  requests:
+    cpu: 5m
+    memory: 323M
+  limits:
+    memory: 323M
