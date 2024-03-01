@@ -1,0 +1,3 @@
+defaultNamespace: nvidia-device-plugin
+dependsOn:
+  - name: rancher-charts-fleet-rancher-charts-01-crd-monitoring
