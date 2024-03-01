@@ -3,7 +3,7 @@ helm:
   releaseName: qbittorrent
   chart: app-template
   repo: https://bjw-s.github.io/helm-charts
-  version: 1.5.1
+  version: 2.6.0
 targetCustomizations:
 - name: nas
   clusterSelector:

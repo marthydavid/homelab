@@ -3,7 +3,7 @@ helm:
   releaseName: intel-gpu-exporter
   chart: app-template
   repo: https://bjw-s.github.io/helm-charts
-  version: 1.5.1
+  version: 2.6.0
 targetCustomizations:
 - name: rpi
   clusterSelector:
