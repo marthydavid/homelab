@@ -1,8 +1,32 @@
+global:
+  imageRegistry: ""
+  cattle:
+    clusterId: dummy
+    clusterName: dummy
 alertmanager:
   alertmanagerSpec:
+    image:
+      registry: quay.io
+      repository: prometheus/alertmanager
+      tag: v0.25.0
 prometheusOperator:
-  thanosImage:
-    sha: ''
+  admissionWebhooks:
+    patch:
+      enabled: true
+      image:
+        pullPolicy: IfNotPresent
+        registry: docker.io
+        repository: rancher/mirrored-ingress-nginx-kube-webhook-certgen
+        tag: v20221220-controller-v1.5.1-58-g787ea74b6
+  image:
+    registry: quay.io
+    repository: prometheus-operator/prometheus-operator
+    tag: v0.66.0
+  prometheusConfigReloader:
+    image:
+      registry: quay.io
+      repository: prometheus-operator/prometheus-config-reloader
+      tag: v0.66.0
 grafana:
   image:
     repository: docker.io/grafana/grafana
@@ -10,21 +34,20 @@ grafana:
 prometheus:
   prometheusSpec:
     image:
+      registry: quay.io
+      repository: prometheus/prometheus
+      tag: v2.44.0
 prometheus-adapter:
   enabled: true
   image:
     pullPolicy: IfNotPresent
+    repository: registry.k8s.io/prometheus-adapter/prometheus-adapter
+    tag: v0.10.0
 prometheus-node-exporter:
   image:
-  extraArgs:
-    - >-
-      --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/.+)($|/)
-    - >-
-      --collector.filesystem.ignored-fs-types=^(autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|iso9660|mqueue|nsfs|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|selinuxfs|squashfs|sysfs|tracefs)$
-    - >-
-      --collector.textfile.directory=/host/var/lib/node-exporter/textfiles/
-
-
+    registry: quay.io
+    repository: prometheus/node-exporter
+    tag: v1.5.0
 hardenedKubelet:
   enabled: false
 hardenedNodeExporter:
@@ -41,6 +64,10 @@ k3sServer:
   enabled: true
 kube-state-metrics:
   enabled: true
+  image:
+    registry: registry.k8s.io
+    repository: kube-state-metrics/kube-state-metrics
+    tag: v2.10.0
 kubeAdmControllerManager:
   enabled: false
 kubeAdmEtcd:

@@ -1,3 +1,8 @@
+global:
+  cattle:
+    clusterId: nuc
+    clusterName: nuc
+
 alertmanager:
   ingress:
     annotations:
