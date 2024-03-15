@@ -5,7 +5,7 @@ prometheusOperator:
     sha: ''
   image:
     repository: ghcr.io/prometheus-operator/prometheus-operator
-    tag: v0.66.0
+    tag: v0.72.0
 grafana:
   image:
     repository: docker.io/grafana/grafana
