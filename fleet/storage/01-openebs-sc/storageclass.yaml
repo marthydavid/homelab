@@ -9,7 +9,7 @@ allowVolumeExpansion: true
 parameters:
   fstype: zfs
   poolname: data
-  shared: "no"
+  shared: "yes"
 provisioner: zfs.csi.openebs.io
 reclaimPolicy: Retain
 volumeBindingMode: WaitForFirstConsumer

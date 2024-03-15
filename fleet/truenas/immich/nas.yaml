@@ -1,0 +1,59 @@
+postgresql:
+  enabled: true
+
+immich:
+  persistence:
+    library:
+      existingClaim: immich
+
+server:
+  enabled: true
+  image:
+    repository: ghcr.io/immich-app/immich-server
+    pullPolicy: IfNotPresent
+
+  ingress:
+    main:
+      enabled: true
+      annotations:
+        # proxy-body-size is set to 0 to remove the body limit on file uploads
+        nginx.ingress.kubernetes.io/proxy-body-size: "0"
+        cert-manager.io/cluster-issuer: letsencrypt-prod
+        external-dns.alpha.kubernetes.io/target: pecs.marthy.xyz
+        external-dns.alpha.kubernetes.io/alias: "true"
+      hosts:
+        - host: immich.marthy.xyz
+          paths:
+            - path: "/"
+      tls:
+        - hosts:
+            - immich.marthy.xyz
+          secretName: immich-tls
+
+  runtimeClassName: nvidia
+  resources:
+    requests:
+      nvidia.com/gpu: 1
+    limits:
+      nvidia.com/gpu: 1
+
+machine-learning:
+  enabled: true
+  image:
+    repository: ghcr.io/immich-app/immich-machine-learning
+    pullPolicy: IfNotPresent
+  env:
+    TRANSFORMERS_CACHE: /cache
+  persistence:
+    cache:
+      enabled: true
+      size: 10Gi
+      # Optional: Set this to pvc to avoid downloading the ML models every start.
+      type: emptyDir
+      accessMode: ReadWriteOnce
+  runtimeClassName: nvidia
+  resources:
+    requests:
+      nvidia.com/gpu: 1
+    limits:
+      nvidia.com/gpu: 1

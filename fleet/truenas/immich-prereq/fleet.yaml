@@ -1,0 +1,3 @@
+defaultNamespace: mediarr
+dependsOn:
+  - name: truenas-fleet-truenas-secrets

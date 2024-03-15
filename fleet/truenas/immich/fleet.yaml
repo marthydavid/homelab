@@ -1,0 +1,19 @@
+defaultNamespace: mediarr
+dependsOn:
+  - name: truenas-fleet-truenas-secrets
+  - name: truenas-fleet-truenas-immich-prereq
+helm:
+  releaseName: immich
+  chart: immich
+  repo: https://immich-app.github.io/immich-charts
+  version: 0.3.1
+targetCustomizations:
+- name: nas
+  clusterSelector:
+    matchLabels:
+      provider.cattle.io: k3s
+      topology.kubernetes.io/region: pecs
+      topology.kubernetes.io/zone: nas
+  helm:
+    valuesFiles:
+      - nas.yaml

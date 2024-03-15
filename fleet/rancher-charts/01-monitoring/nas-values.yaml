@@ -65,8 +65,8 @@ prometheus:
       requests:
         cpu: 100m
         memory: 100Mi
-    retention: 100d
-    retentionSize: 45GiB
+    retention: 15d
+    retentionSize: 100GiB
     storageSpec:
       volumeClaimTemplate:
         spec:
