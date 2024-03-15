@@ -6,7 +6,7 @@ helm:
   releaseName: immich
   chart: immich
   repo: https://immich-app.github.io/immich-charts
-  version: 0.3.1
+  version: 0.4.0
 targetCustomizations:
 - name: nas
   clusterSelector:
