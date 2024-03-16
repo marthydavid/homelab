@@ -7,7 +7,7 @@ spec:
   accessModes:
   - ReadWriteMany
   capacity:
-    storage: 200Gi
+    storage: 400Gi
   csi:
     driver: zfs.csi.openebs.io
     fsType: zfs
@@ -43,4 +43,4 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: 200Gi
+      storage: 400Gi
