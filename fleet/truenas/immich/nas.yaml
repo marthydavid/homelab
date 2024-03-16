@@ -50,7 +50,7 @@ server:
 machine-learning:
   enabled: true
   image:
-    repository: ghcr.io/immich-app/immich-machine-learning
+    repository: ghcr.io/immich-app/immich-machine-learning-cuda
     pullPolicy: IfNotPresent
   env:
     TRANSFORMERS_CACHE: /cache
