@@ -1,0 +1,11 @@
+defaultNamespace: nvidia-device-plugin
+dependsOn:
+  - name: rancher-charts-fleet-rancher-charts-01-crd-monitoring
+  - name: nvidia-fleet-gpu-nvidia-00-prereq
+helm:
+  releaseName: dcgm-exporter
+  chart: dcgm-exporter
+  repo: https://nvidia.github.io/dcgm-exporter/helm-charts
+  version: 3.4.0
+  values:
+    runtimeClassName: nvidia
