@@ -1,5 +1,15 @@
+image:
+  tag: v1.98.2
+
 postgresql:
   enabled: true
+  image:
+#    tag: pg14-v0.2.1
+redis:
+  enabled: true
+  architecture: standalone
+  auth:
+    enabled: false
 
 immich:
   persistence:
