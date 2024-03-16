@@ -42,7 +42,7 @@ prometheus-adapter:
   image:
     pullPolicy: IfNotPresent
     repository: registry.k8s.io/prometheus-adapter/prometheus-adapter
-    tag: v0.10.0
+    tag: v0.11.2
 prometheus-node-exporter:
   image:
     registry: quay.io
