@@ -22,3 +22,9 @@ diff:
     operations:
     - {"op":"remove", "path":"/spec/conversion/webhook/clientConfig/caBundle"}
     - {"op":"remove", "path":"/status"}
+  - apiVersion: apiextensions.k8s.io/v1
+    kind: CustomResourceDefinition
+    name: bgppeers.metallb.io
+    jsonPointers:
+    - "/spec/conversion/webhook/clientConfig/caBundle"
+    - "/spec/conversion/webhook"
