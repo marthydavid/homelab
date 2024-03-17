@@ -17,19 +17,19 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: openebs-zfspv
   volumeMode: Filesystem
-# ---
-# apiVersion: zfs.openebs.io/v1
-# kind: ZFSVolume
-# metadata:
-#   name: immich
-#   namespace: openebs
-# spec:
-#   capacity: "214748364800"
-#   fsType: zfs
-#   ownerNodeID: sm4.marthy.xyz
-#   poolName: zfs/media
-#   shared: "yes"
-#   volumeType: DATASET
+---
+apiVersion: zfs.openebs.io/v1
+kind: ZFSVolume
+metadata:
+  name: immich
+  namespace: openebs
+spec:
+  capacity: "214748364800"
+  fsType: zfs
+  ownerNodeID: sm4.marthy.xyz
+  poolName: zfs/media
+  shared: "yes"
+  volumeType: DATASET
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
