@@ -15,13 +15,15 @@ server:
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
       nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+      external-dns.alpha.kubernetes.io/target: pecs.marthy.xyz
+      external-dns.alpha.kubernetes.io/alias: "true"
     ingressClassName: "nginx"
     hosts:
-      - argo.budapest.marthy.xyz
+      - argocd.marthy.xyz
     tls:
-      - secretName: argo-budapest-tls
+      - secretName: argocd-server-tls
         hosts:
-          - argo.budapest.marthy.xyz
+          - argocd.marthy.xyz
 
 repoServer:
   autoscaling:
@@ -35,4 +37,4 @@ applicationSet:
 configs:
   cm:
     create: true
-    url: "https://argo.budapest.marthy.xyz"
+    url: "https://argocd.marthy.xyz"
