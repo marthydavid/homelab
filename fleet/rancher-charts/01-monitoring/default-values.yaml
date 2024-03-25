@@ -27,6 +27,14 @@ prometheusOperator:
       registry: quay.io
       repository: prometheus-operator/prometheus-config-reloader
       tag: v0.66.0
+  resources:
+    limits:
+      cpu: 200m
+      memory: 500Mi
+    requests:
+      cpu: 200m
+      memory: 100Mi
+
 grafana:
   image:
     repository: docker.io/grafana/grafana
