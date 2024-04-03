@@ -46,7 +46,7 @@ prometheus:
       repository: prometheus/prometheus
       tag: v2.44.0
 prometheus-adapter:
-  enabled: true
+  enabled: false
   image:
     pullPolicy: IfNotPresent
     repository: registry.k8s.io/prometheus-adapter/prometheus-adapter
