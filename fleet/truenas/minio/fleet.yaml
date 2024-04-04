@@ -3,7 +3,7 @@ helm:
   releaseName: minio
   chart: minio
   repo: https://charts.bitnami.com/bitnami
-  version: 14.1.4
+  version: 14.1.5
   values:
     persistence:
       enabled: true
