@@ -2,8 +2,8 @@ defaultNamespace: minio
 helm:
   releaseName: minio
   chart: minio
-  repo: https://charts.bitnami.com/bitnami
-  version: 14.1.5
+  repo: https://helm.min.io/
+  version: 5.1.0
   values:
     persistence:
       enabled: true
@@ -12,10 +12,14 @@ helm:
     ingress:
       enabled: true
       ingressClassName: nginx
-      hostname: minio.marthy.xyz
+      hosts:
+        - minio.marthy.xyz
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-prod
         external-dns.alpha.kubernetes.io/alias: "true"
         external-dns.alpha.kubernetes.io/target: pecs.marthy.xyz
         nginx.ingress.kubernetes.io/proxy-body-size: "0"
-      tls: true
+      tls:
+        - secretName: minio-marthy-xyz
+          hosts:
+            - minio.marthy.xyz
