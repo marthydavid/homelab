@@ -2,3 +2,9 @@ kube-prometheus-stack:
   install: false
 node-problem-detector:
   install: false
+
+openebsMonitoringAddon:
+  volume:
+    enabled: true
+    alertRules:
+      enabled: false
