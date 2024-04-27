@@ -26,10 +26,6 @@ alertmanager:
         - severity
         - app
       routes:
-        - receiver: 'slack'
-          matchers:
-            - alertname =~ "InfoInhibitor|Watchdog"
-          continue: true
         - matchers:
             - severity="Critical"
           receiver: "slack"
