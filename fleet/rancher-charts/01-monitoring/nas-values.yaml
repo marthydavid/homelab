@@ -18,7 +18,7 @@ alertmanager:
           - alert.pecs.marthy.xyz
   config:
     route:
-      receiver: "slack"
+      receiver: "null"
       group_by:
         - job
         - alertname
@@ -35,6 +35,7 @@ alertmanager:
           receiver: "slack"
           continue: true
     receivers:
+      - name: "null"
       - name: "slack"
         slack_configs:
           - send_resolved: true
