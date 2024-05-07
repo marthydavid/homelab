@@ -3,7 +3,7 @@ helm:
   releaseName: minio-operator
   chart: operator
   repo: https://operator.min.io/
-  version: 5.0.14
+  version: 5.0.15
   # values:
   #   persistence:
   #     enabled: true
