@@ -6,6 +6,6 @@ helm:
   releaseName: cloudnative-pg
   chart: cloudnative-pg
   repo: https://cloudnative-pg.github.io/charts
-  version: 0.21.2
+  version: 0.21.3
   valuesFiles:
     - global-values.yaml
