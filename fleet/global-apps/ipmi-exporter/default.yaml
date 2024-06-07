@@ -1,0 +1,8 @@
+image:
+  repository: registry.hub.docker.com/prometheuscommunity/ipmi-exporter
+  tag: v1.8.0
+
+configSecret:
+  enabled: true
+  name: ipmi-exporter-secret
+  key: config.yml

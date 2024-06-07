@@ -1,0 +1,35 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: ipmi-exporter
+  namespace: cattle-monitoring-system
+  labels:
+    app: prometheus-ipmi-exporter
+spec:
+  endpoints:
+    - metricRelabelings:
+        - action: replace
+          regex: (.*)
+          replacement: ${1}
+          separator: ;
+        - action: replace
+          regex: (.*)
+          replacement: ${1}
+          separator: ;
+        - action: replace
+          replacement: prometheus-ipmi-exporter
+          targetLabel: target
+      params:
+        target:
+          - sm1.ipmi.marthy.xyz
+          - sm2.ipmi.marthy.xyz
+          - sm3.ipmi.marthy.xyz
+          - sm4.ipmi.marthy.xyz
+      path: /metrics
+      port: '9290'
+      scheme: http
+  jobLabel: prometheus-ipmi-exporter
+  selector:
+    matchLabels:
+      release: prometheus-ipmi-exporter
