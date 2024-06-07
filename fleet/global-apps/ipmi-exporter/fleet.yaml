@@ -1,0 +1,10 @@
+defaultNamespace: cattle-monitoring-system
+dependsOn:
+  - name: rancher-charts-fleet-rancher-charts-01-monitoring
+helm:
+  releaseName: prometheus-ipmi-exporter
+  chart: prometheus-ipmi-exporter
+  repo: https://prometheus-community.github.io/helm-charts
+  version: 0.4.0
+  valuesFiles:
+    - "default.yml"

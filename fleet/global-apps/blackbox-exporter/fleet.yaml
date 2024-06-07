@@ -12,3 +12,6 @@ helm:
       allowPrivilegeEscalation: false
       capabilities:
         add: ["NET_RAW"]
+    serviceMonitor:
+      selfMonitor:
+        enabled: true
