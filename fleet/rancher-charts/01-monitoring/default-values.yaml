@@ -8,7 +8,7 @@ alertmanager:
     image:
       registry: quay.io
       repository: prometheus/alertmanager
-      tag: v0.25.0
+      tag: v0.27.0
 prometheusOperator:
   admissionWebhooks:
     patch:
