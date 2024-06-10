@@ -44,7 +44,7 @@ prometheus:
     image:
       registry: quay.io
       repository: prometheus/prometheus
-      tag: v2.44.0
+      tag: v2.45.5
 prometheus-adapter:
   enabled: false
   image:
