@@ -1,8 +1,3 @@
-image:
-  registry: docker.io
-  repository: bitnami/external-dns
-  tag: 0.13.5-debian-11-r55
-
 provider: aws
 
 aws:
