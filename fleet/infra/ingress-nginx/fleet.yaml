@@ -6,7 +6,7 @@ helm:
   releaseName: ingress-nginx
   chart: ingress-nginx
   repo: https://kubernetes.github.io/ingress-nginx
-  version: 4.10.2
+  version: 4.11.0
   valuesFiles:
   - global-values.yaml
 targetCustomizations:
