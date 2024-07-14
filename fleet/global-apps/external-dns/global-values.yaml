@@ -1,17 +1,16 @@
 provider: aws
 
-aws:
-  credentials:
-    accessKeyIDSecretRef:
-      name: aws-cred
-      key: aws_ak
-    secretAccessKeySecretRef:
-      name: aws-cred
-      key: aws_sk
-  zoneType: public
-metrics:
-  enabled: true
-  serviceMonitor:
+serviceMonitor:
     enabled: true
-crd:
-  create: true
+
+env:
+  - name: AWS_ACCESS_KEY_ID
+    valueFrom:
+      secretKeyRef:
+        name: aws-cred
+        key: aws_ak
+  - name: AWS_SECRET_KEY
+    valueFrom:
+      secretKeyRef:
+        name: aws-cred
+        key: aws_sk

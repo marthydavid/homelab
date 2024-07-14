@@ -4,8 +4,8 @@ dependsOn:
 helm:
   releaseName: external-dns
   chart: external-dns
-  repo: https://charts.bitnami.com/bitnami
-  version: 8.2.1
+  repo: https://kubernetes-sigs.github.io/external-dns/
+  version: 1.14.5
   valuesFiles:
   - global-values.yaml
 targetCustomizations:

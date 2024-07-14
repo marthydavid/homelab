@@ -8,5 +8,6 @@ cleanupController:
   serviceMonitor:
     enabled: true
 reportsController:
+  enabled: false
   serviceMonitor:
     enabled: true
