@@ -27,11 +27,11 @@ alertmanager:
         - app
       routes:
         - matchers:
-            - severity="Critical"
+            - severity="critical"
           receiver: "slack"
           continue: true
         - matchers:
-            - severity="Warning"
+            - severity="warning"
           receiver: "slack"
           continue: true
     receivers:
@@ -40,7 +40,6 @@ alertmanager:
         slack_configs:
           - send_resolved: true
             api_url_file: /etc/alertmanager/secrets/slack-api/slack_api_url
-            channel: "#sm4-alerts"
   alertmanagerSpec:
     secrets:
       - slack-api

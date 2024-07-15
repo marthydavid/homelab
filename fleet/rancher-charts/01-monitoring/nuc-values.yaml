@@ -29,17 +29,17 @@ alertmanager:
       routes:
         - receiver: 'null'
           matchers:
-            - alertname =~ "InfoInhibitor|Watchdog"
+            - alertname=~"InfoInhibitor|Watchdog"
         - matchers:
             - alertname="Watchdog"
           receiver: "slack"
           continue: true
         - matchers:
-            - severity="Critical"
+            - severity="critical"
           receiver: "slack"
           continue: true
         - matchers:
-            - severity="Warning"
+            - severity="warning"
           receiver: "slack"
           continue: true
     receivers:
