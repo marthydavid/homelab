@@ -53,7 +53,7 @@ machine-learning:
   image:
     repository: ghcr.io/immich-app/immich-machine-learning
     pullPolicy: IfNotPresent
-    tag: v1.108.0-cuda
+    tag: v1.109.2-cuda
   env:
     TRANSFORMERS_CACHE: /cache
   persistence:
