@@ -19,7 +19,7 @@ spec:
         args:
         - manager
         env:
-        image: ghcr.io/kube-vip/kube-vip:v0.8.1
+        image: ghcr.io/kube-vip/kube-vip:v0.8.2
         imagePullPolicy: IfNotPresent
         resources: {}
         securityContext:
