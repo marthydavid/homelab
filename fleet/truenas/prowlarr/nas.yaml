@@ -4,7 +4,7 @@ controller:
 
 image:
   repository: ghcr.io/onedr0p/prowlarr-develop
-  tag: 1.21.1.4631
+  tag: 1.21.2.4649
 
 podSecurityContext:
   runAsUser: 568
