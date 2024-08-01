@@ -5,7 +5,7 @@ helm:
   releaseName: rancher-monitoring
   chart: rancher-monitoring
   repo: https://charts.rancher.io/
-  version: "103.1.1+up45.31.1"
+  version: "104.1.0+up57.0.3"
   valuesFiles:
   - default-values.yaml
 targetCustomizations:
@@ -61,7 +61,7 @@ targetCustomizations:
       topology.kubernetes.io/region: pecs
       topology.kubernetes.io/zone: nas
   helm:
-    version: "103.1.1+up45.31.1"
+    version: "104.1.0+up57.0.3"
     valuesFiles:
       - k3s-base-values.yaml
       - nas-values.yaml
