@@ -4,7 +4,7 @@ helm:
   releaseName: node-feature-discovery
   chart: node-feature-discovery
   repo: https://kubernetes-sigs.github.io/node-feature-discovery/charts
-  version: 0.16.3
+  version: 0.16.4
   valuesFiles:
     - global.yaml
 targetCustomizations:
