@@ -11,7 +11,6 @@ env:
   PGID: 1000
   TZ: Europe/Budapest
   LOG_LEVEL: "info"
-  DB_HOST: postgres-rw.database.svc
 envFrom:
   - secretRef:
       name: babybuddy-db
