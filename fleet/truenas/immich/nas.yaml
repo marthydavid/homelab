@@ -5,8 +5,11 @@ image:
 postgresql:
   enabled: true
   image:
-    repository: tensorchord/pgvecto-rs
-    tag: pg14-v0.2.0
+    # after upgrade read README.md
+    registry: ghcr.io
+    repository: marthydavid/bitnami-postgres-pgvecto-rs
+    tag: pg14-v0.3.0-amd64
+
 redis:
   enabled: true
   architecture: standalone
