@@ -59,9 +59,12 @@ This is the repo for my homelab
 
 | Name | OS | Function |
 |---|---|---|
-| SM1 | ESXi 7 | VM Host |
-| SM2 | ESXi 7 | VM Host |
-| SM3 | ESXi 7 | VM Host |
+| SM1 | ESXi 8.0.3 | VM Host |
+| SM2 | ESXi 8.0.3 | VM Host |
+| SM3 | ESXi 8.0.3 | VM Host |
+| SM4 | Ubuntu 22.04 | NAS - K8s/VM Host |
+| SM4-VM | ESXi 8.0.3 | VCSA Host |
+| NUC01 | ESXi 8.0.3 | VM Host |
 
 ### K3s cluster
 
