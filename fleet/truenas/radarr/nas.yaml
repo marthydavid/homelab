@@ -4,7 +4,7 @@ controller:
 
 image:
   repository: ghcr.io/onedr0p/radarr-develop
-  tag: 5.10.1.9125
+  tag: 5.10.2.9164
 
 podSecurityContext:
   runAsUser: 568
