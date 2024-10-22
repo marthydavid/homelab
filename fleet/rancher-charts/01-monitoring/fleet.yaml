@@ -16,7 +16,7 @@ targetCustomizations:
       topology.kubernetes.io/region: budapest
       topology.kubernetes.io/zone: nuc
   helm:
-    version: "104.1.1+up57.0.3"
+    version: "104.1.2+up57.0.3"
     valuesFiles:
       - rke2-base-values.yaml
       - nuc-values.yaml
