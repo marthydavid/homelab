@@ -15,7 +15,7 @@ podSecurityContext:
   fsGroup: 568
   fsGroupChangePolicy: "OnRootMismatch"
   supplementalGroups:
-    - 65539
+    - 10000
 
 env:
   UMASK: "022"
@@ -76,7 +76,6 @@ persistence:
 
 resources:
   requests:
-    cpu: 29m
-    memory: 1190Mi
+    cpu: 100m
   limits:
     memory: 2Gi
