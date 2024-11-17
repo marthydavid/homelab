@@ -78,4 +78,4 @@ resources:
   requests:
     cpu: 100m
   limits:
-    memory: 2Gi
+    memory: 4Gi
