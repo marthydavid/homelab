@@ -5,6 +5,6 @@ helm:
   releaseName: external-secrets
   chart: external-secrets
   repo: https://charts.external-secrets.io
-  version: 0.10.6
+  version: 0.10.7
   valuesFiles:
   - global-values.yaml
