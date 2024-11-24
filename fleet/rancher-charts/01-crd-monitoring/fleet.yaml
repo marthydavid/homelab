@@ -3,7 +3,7 @@ helm:
   releaseName: rancher-monitoring-crd
   chart: rancher-monitoring-crd
   repo: https://charts.rancher.io/
-  version: "104.1.2+up57.0.3"
+  version: "105.1.0+up61.3.2"
 targetCustomizations:
 - name: rke2
   clusterSelector:
