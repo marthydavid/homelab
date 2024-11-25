@@ -1,0 +1,22 @@
+defaultNamespace: cattle-monitoring-system
+dependsOn:
+  - name: rancher-charts-fleet-rancher-charts-01-monitoring
+helm:
+  releaseName: prometheus-snmp-exporter
+  chart: prometheus-snmp-exporter
+  version: 5.6.0
+  repo: https://prometheus-community.github.io/helm-charts
+  values:
+    serviceMonitor:
+      enabled: true
+      honorLabels: true
+      namespace: cattle-monitoring-system
+      path: /snmp
+      scrapeTimeout: 10s
+      selector:
+        release: rancher-monitoring
+      params:
+        - name: budapest-mikrotik
+          module:
+            - if_mib
+          target: 192.168.1.1
