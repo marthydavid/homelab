@@ -12,13 +12,13 @@ targetCustomizations:
 - name: nuc
   clusterSelector:
     matchLabels:
-      provider.cattle.io: rke2
+      provider.cattle.io: k3s
       topology.kubernetes.io/region: budapest
       topology.kubernetes.io/zone: nuc
   helm:
     version: "105.1.0+up61.3.2"
     valuesFiles:
-      - rke2-base-values.yaml
+      - k3s-base-values.yaml
       - nuc-values.yaml
 - name: rke2-1
   clusterSelector:
