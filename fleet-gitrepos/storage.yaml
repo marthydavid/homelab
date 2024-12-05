@@ -34,7 +34,7 @@ spec:
       name: nas
     - clusterSelector:
         matchLabels:
-          provider.cattle.io: rke2
+          provider.cattle.io: k3s
           topology.kubernetes.io/region: budapest
           topology.kubernetes.io/zone: nuc
       name: nuc
