@@ -1,6 +1,6 @@
 defaultNamespace: ingress-nginx
 dependsOn:
-  - name: rancher-charts-fleet-rancher-charts-01-monitoring
+  - name: rancher-charts-fleet-rancher-charts-01-crd-monitoring
   - name: infra-fleet-infra-metallb
 helm:
   releaseName: ingress-nginx

@@ -1,6 +1,6 @@
 defaultNamespace: cnpg-system
 dependsOn:
-  - name: rancher-charts-fleet-rancher-charts-01-monitoring
+  - name: rancher-charts-fleet-rancher-charts-01-crd-monitoring
   - name: storage-fleet-storage-01-openebs-sc
 helm:
   releaseName: cloudnative-pg

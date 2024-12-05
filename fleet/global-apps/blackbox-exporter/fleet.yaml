@@ -1,6 +1,6 @@
 defaultNamespace: cattle-monitoring-system
 dependsOn:
-  - name: rancher-charts-fleet-rancher-charts-01-monitoring
+  - name: rancher-charts-fleet-rancher-charts-01-crd-monitoring
 helm:
   releaseName: prometheus-blackbox-exporter
   chart: prometheus-blackbox-exporter
