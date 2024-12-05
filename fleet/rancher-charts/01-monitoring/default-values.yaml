@@ -3,6 +3,9 @@ global:
   cattle:
     clusterId: dummy
     clusterName: dummy
+  kubectl:
+     repository: rancher/kubectl
+     tag: v1.31.3
 alertmanager:
   alertmanagerSpec:
     image:
