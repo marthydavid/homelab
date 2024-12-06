@@ -40,6 +40,15 @@ targetCustomizations:
   yaml:
     overlays:
       - k3s
+- name: nuc
+  clusterSelector:
+    matchLabels:
+      provider.cattle.io: k3s
+      topology.kubernetes.io/region: budapest
+      topology.kubernetes.io/zone: nuc
+  yaml:
+    overlays:
+      - nuc
 - name: sm5
   clusterSelector:
     matchLabels:
