@@ -71,15 +71,15 @@ prometheus:
         cpu: 100m
         memory: 100Mi
     retention: 100d
-    retentionSize: 45GiB
+    retentionSize: 30GiB
     storageSpec:
       volumeClaimTemplate:
         spec:
-          storageClassName: openebs-zfspv
+          storageClassName: local-path
           accessModes: ["ReadWriteOnce"]
           resources:
             requests:
-              storage: 100Gi
+              storage: 32Gi
 grafana:
   ingress:
     enabled: true
