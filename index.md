@@ -15,6 +15,7 @@ This is the repo for my homelab
 ## Compute
 
 ### In use
+
 | Name | Motherboard | CPU | Memory | Boot | Disk | NIC |
 |----|----|----|----|----|----|----|
 | SM1 | [X11SCL-F](https://www.supermicro.com/en/products/motherboard/X11SCL-F) | Core [i5-9400](https://ark.intel.com/content/www/us/en/ark/products/134898/intel-core-i59400-processor-9m-cache-up-to-4-10-ghz.html)  | 128GB  | 120GB SataDOM | 500GB NVMe 2x1TB SSD | 1IPMI, 2x1Gig, 2x100Gig |
