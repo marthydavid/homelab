@@ -1,0 +1,43 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: "Docs"
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - README.md
+
+permissions:
+  pages: write
+  contents: write
+
+jobs:
+  copy:
+    name: Copy docs
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+        with:
+          ref: 'gh-pages'
+          path: gh-pages
+      - name: Copy README.md to index.md
+        run: |
+          cp README.md ${GITHUB_WORKSPACE}/gh-pages/index.md
+
+      - name: Deploy to gh-pages
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd gh-pages
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git status
+          git add index.md
+          git commit -m "Update index.md from README.md" || echo "No changes to commit"
+          git push
