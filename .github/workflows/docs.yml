@@ -1,0 +1,31 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: "Docs"
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - README.md
+
+permissions:
+  pages: write
+  contents: write
+
+jobs:
+  copy:
+    name: Copy docs
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+      - name: Copy README
+        shell: sh
+        run: |
+          cp README.md index.md
+          git checkout gh-pages
+          git add index.md
+          git commit -m "Update docs"
+          git push
