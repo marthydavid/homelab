@@ -17,7 +17,7 @@ This is the repo for my homelab
 ### In use
 | Name | Motherboard | CPU | Memory | Boot | Disk | NIC |
 |----|----|----|----|----|----|----|
-| SM1 | [X11SCL-F](https://www.supermicro.com/en/products/motherboard/X11SCL-F) | Core [i5-9400](https://ark.intel.com/content/www/us/en/ark/products/134898/intel-core-i59400-processor-9m-cache-up-to-4-10-ghz.html)  | 128GB  |120GB SataDOM | 500GB NVMe 2x1TB SSD | 1IPMI, 2x1Gig, 2x100Gig |
+| SM1 | [X11SCL-F](https://www.supermicro.com/en/products/motherboard/X11SCL-F) | Core [i5-9400](https://ark.intel.com/content/www/us/en/ark/products/134898/intel-core-i59400-processor-9m-cache-up-to-4-10-ghz.html)  | 128GB  | 120GB SataDOM | 500GB NVMe 2x1TB SSD | 1IPMI, 2x1Gig, 2x100Gig |
 | SM2 | [X11SCL-F](https://www.supermicro.com/en/products/motherboard/X11SCL-F) | Core [i5-9400F](https://ark.intel.com/content/www/us/en/ark/products/190883/intel-core-i59400f-processor-9m-cache-up-to-4-10-ghz.html) | 128GB | 120GB SataDOM | 500GB NVMe 2x1TB SSD | 1IPMI, 2x1Gig, 2x100Gig |
 | SM3 | [X11SCL-IF](https://www.supermicro.com/en/products/motherboard/X11SCL-IF) | Core [i3-8100T](https://ark.intel.com/content/www/us/en/ark/products/129944/intel-core-i38100t-processor-6m-cache-3-10-ghz.html)     | 64GB | 120GB SataDOM | 500GB NVMe 2x1TB SSD | 1IPMI, 2x1Gig, 2x100Gig |
 | SM4 | [X10SDV-6C+-TLN4F](https://www.supermicro.com/en/products/motherboard/X10SDV-6C+-TLN4F) | Xeon [D-1528](https://ark.intel.com/content/www/us/en/ark/products/91198/intel-xeon-processor-d1528-9m-cache-1-90-ghz.html) | 64GB | 256GB Sata SSD | 500GB NVMe + 1TB SSD ZFS + 4X4TB HDD ZFS RaidZ1 | 1IPMI, 2x1Gig, 2x10Gig |
