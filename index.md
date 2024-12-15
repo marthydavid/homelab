@@ -7,7 +7,7 @@ This is the repo for my homelab
 
 | Type | Functions | Usage |
 |----|----|----|
-| Mikrotik [hAP AC^3](https://mikrotik.com/product/hap_ac3) | Router, BGP, VLAN | Main router for RPI |
+| Mikrotik [hAP AX^3](https://mikrotik.com/product/hap_ax3) | Router, BGP, VLAN | Main router for BP |
 | Mikrotik [hAP AC^2](https://mikrotik.com/product/hap_ac2) | Router, BGP, VLAN | Main router for Family |
 | Mikrotik [cAP AC](https://mikrotik.com/product/cap_ac) | Wifi CAP | AP |
 | TP-Link [T1600G-28TS](https://www.tp-link.com/business-networking/smart-switch/t1600g-28ts) | VLAN, LACP | Main switch for servers |
@@ -44,21 +44,10 @@ This is the repo for my homelab
 
 | Type | Functions | Usage |
 |----|----|----|
+| Mikrotik [hAP AC^3](https://mikrotik.com/product/hap_ac3) | Router, BGP, VLAN | - |
 | Mikrotik [hAP AC^2](https://mikrotik.com/product/hap_ac2) | Router, BGP, VLAN | - |
 | TP-Link [SG-108PE](https://www.tp-link.com/hu/business-networking/easy-smart-switch/tl-sg108pe/) | PoE for RPis | Switch for RPis |
 | TP-Link [SG-108E](https://www.tp-link.com/hu/business-networking/easy-smart-switch/tl-sg108pe/) | - | - |
-
-### Compute
-
-| Name | Motherboard | CPU | Memory | Boot | Disk | NIC |
-|----|----|----|----|----|----|----|
-| HP  | [Z2G4](https://support.hp.com/us-en/product/hp-z2-tower-g4-workstation/20063240/document/c06100744) | Core [G5400](https://ark.intel.com/content/www/us/en/ark/products/129951/intel-pentium-gold-g5400-processor-4m-cache-3-70-ghz.html) | 32GB | 250GB SSD     |                                | 1x1Gig |
-| HP  | [Z2G4](https://support.hp.com/us-en/product/hp-z2-tower-g4-workstation/20063240/document/c06100744) | Core [G5400](https://ark.intel.com/content/www/us/en/ark/products/129951/intel-pentium-gold-g5400-processor-4m-cache-3-70-ghz.html) | 32GB | 250GB SSD     |                                | 1x1Gig |
-| RPi 1 |  RPi 4b 8GB  | 4core ARMv8 | 8GB | 500GB SSD | -     | 1Gig |
-| RPi 2 |  RPi 4b 8GB  | 4core ARMv8 | 8GB | 500GB SSD | -     | 1Gig |
-| RPi 3 |  RPi 4b 4GB  | 4core ARMv8 | 4GB | 500GB SSD | -     | 1Gig |
-| RPi 4 |  RPi 4b 4GB  | 4core ARMv8 | 4GB | 500GB SSD | -     | 1Gig |
-| RPi 5 |  RPi 3b+ 1GB | 4core ARMv8 | 1GB | 16GB SD   | 320GB | 1Gig |
 
 ## UPS
 
