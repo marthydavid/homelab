@@ -3,3 +3,5 @@ controller:
     annotations:
       metallb.universe.tf/allow-shared-ip: ingress-nginx
       metallb.universe.tf/loadBalancerIPs: 192.168.11.1
+  config:
+    allow-snippet-annotations: "true"
