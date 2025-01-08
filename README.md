@@ -10,7 +10,8 @@ This is the repo for my homelab
 | Mikrotik [hAP AX^3](https://mikrotik.com/product/hap_ax3) | Router, BGP, VLAN | Main router for BP |
 | Mikrotik [hAP AC^2](https://mikrotik.com/product/hap_ac2) | Router, BGP, VLAN | Main router for Family |
 | Mikrotik [cAP AC](https://mikrotik.com/product/cap_ac) | Wifi CAP | AP |
-| TP-Link [T1600G-28TS](https://www.tp-link.com/business-networking/smart-switch/t1600g-28ts) | VLAN, LACP | Main switch for servers |
+| Mikrotik [CRS354-48G-4S+2Q+RM](https://mikrotik.com/product/crs354_48g_4splus2qplusrm) | VLAN, LACP, Routing | Main switch for servers, routing for homelab |
+| TP-Link [T1600G-28TS](https://www.tp-link.com/business-networking/smart-switch/t1600g-28ts) | Spare| Spare|
 
 ## Compute
 
