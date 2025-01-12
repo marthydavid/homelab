@@ -4,7 +4,7 @@ controller:
 
 image:
   repository: ghcr.io/onedr0p/tautulli
-  tag: 2.15.0
+  tag: 2.15.1
 
 podSecurityContext:
   runAsUser: 568
