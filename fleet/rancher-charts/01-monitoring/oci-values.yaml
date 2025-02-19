@@ -1,0 +1,88 @@
+global:
+  cattle:
+    clusterId: local
+    clusterName: oci
+alertmanager:
+  ingress:
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      #nginx.ingress.kubernetes.io/auth-signin: https://oauth2.oci.marthy.xyz/oauth2/start?rd=$scheme://$best_http_host$request_uri
+      #nginx.ingress.kubernetes.io/auth-url: https://oauth2.oci.marthy.xyz/oauth2/auth
+    enabled: true
+    ingressClassName: nginx
+    hosts:
+      - alert.oci.marthy.xyz
+    tls:
+      - secretName: alertmanager-tls-secret
+        hosts:
+          - alert.oci.marthy.xyz
+  config:
+    route:
+      receiver: "null"
+      group_by:
+        - job
+        - alertname
+        - stage
+        - severity
+        - app
+      routes:
+        - matchers:
+            - severity="critical"
+          receiver: "slack"
+          continue: true
+        - matchers:
+            - severity="warning"
+          receiver: "slack"
+          continue: true
+    receivers:
+      - name: "null"
+      - name: "slack"
+        slack_configs:
+          - send_resolved: true
+            api_url_file: /etc/alertmanager/secrets/slack-api/slack_api_url
+  alertmanagerSpec:
+    secrets:
+      - slack-api
+prometheus:
+  ingress:
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      #nginx.ingress.kubernetes.io/auth-signin: https://oauth2.oci.marthy.xyz/oauth2/start?rd=$scheme://$best_http_host$request_uri
+      #nginx.ingress.kubernetes.io/auth-url: https://oauth2.oci.marthy.xyz/oauth2/auth
+    enabled: true
+    ingressClassName: nginx
+    hosts:
+      - prom.oci.marthy.xyz
+    tls:
+      - secretName: prometheus-tls-secret
+        hosts:
+          - prom.oci.marthy.xyz
+  prometheusSpec:
+    resources:
+      limits:
+        memory: 4Gi
+      requests:
+        cpu: 100m
+        memory: 100Mi
+    retention: 5d
+    retentionSize: 5GiB
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: local-path
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 8Gi
+grafana:
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - "grafana.oci.marthy.xyz"
+    tls:
+      - secretName: "grafana-oci-marthy-xyz"
+        hosts:
+          - "grafana.oci.marthy.xyz"
