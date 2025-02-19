@@ -10,6 +10,14 @@ helm:
   valuesFiles:
   - global-values.yaml
 targetCustomizations:
+- name: oci
+  clusterSelector:
+    matchLabels:
+      provider.cattle.io: k3s
+      topology.kubernetes.io/region: eu-frankfurt-1
+  helm:
+    valuesFiles:
+      - oci.yaml
 - name: sm5
   clusterSelector:
     matchLabels:

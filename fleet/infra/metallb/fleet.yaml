@@ -28,3 +28,12 @@ diff:
     jsonPointers:
     - "/spec/conversion/webhook/clientConfig/caBundle"
     - "/spec/conversion/webhook"
+targetCustomizations:
+- name: oci
+  clusterSelector:
+    matchLabels:
+      provider.cattle.io: k3s
+      topology.kubernetes.io/region: eu-frankfurt-1
+  helm:
+    valuesFiles:
+      - oci.yaml

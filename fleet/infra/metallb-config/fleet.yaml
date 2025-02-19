@@ -2,6 +2,14 @@ defaultNamespace: metallb-system
 dependsOn:
   - name: infra-fleet-infra-metallb
 targetCustomizations:
+- name: oci
+  clusterSelector:
+    matchLabels:
+      provider.cattle.io: k3s
+      topology.kubernetes.io/region: eu-frankfurt-1
+  helm:
+    valuesFiles:
+      - oci
 - name: nas
   clusterSelector:
     matchLabels:

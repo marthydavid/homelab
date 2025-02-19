@@ -1,7 +1,6 @@
 controller:
   kind: DaemonSet
   service:
-    externalTrafficPolicy: "Local"
     annotations:
       metallb.universe.tf/allow-shared-ip: ingress-nginx
   metrics:
