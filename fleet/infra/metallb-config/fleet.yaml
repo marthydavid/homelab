@@ -7,8 +7,8 @@ targetCustomizations:
     matchLabels:
       provider.cattle.io: k3s
       topology.kubernetes.io/region: eu-frankfurt-1
-  helm:
-    valuesFiles:
+  yaml:
+    overlays:
       - oci
 - name: nas
   clusterSelector:

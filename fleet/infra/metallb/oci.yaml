@@ -1,4 +1,4 @@
 controller:
-  enabled: false
+  enabled: true
 speaker:
   enabled: false

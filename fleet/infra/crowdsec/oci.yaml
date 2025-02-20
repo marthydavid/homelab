@@ -1,0 +1,9 @@
+lapi:
+  dashboard:
+    enabled: false
+    ingress:
+      enabled: true
+      ingressClassName: "nginx"
+      host: "crowdsec.oci.marthy.xyz"
+      tls:
+        - secretName: crowdsec-dashboard-tls
