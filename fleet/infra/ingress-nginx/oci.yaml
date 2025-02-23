@@ -6,5 +6,30 @@ controller:
     type: ClusterIP
   config:
     allow-snippet-annotations: "true"
+    plugins: "crowdsec"
+    lua-shared-dicts: "crowdsec_cache: 50m"
   hostPort:
     enabled: true
+  extraVolumes:
+  - name: crowdsec-bouncer-plugin
+    emptyDir: {}
+  extraInitContainers:
+  - name: init-clone-crowdsec-bouncer
+    image: crowdsecurity/lua-bouncer-plugin
+    imagePullPolicy: IfNotPresent
+    env:
+      - name: API_URL
+        value: "http://crowdsec-service.crowdsec.svc.cluster.local:8080"
+      - name: BOUNCER_CONFIG
+        value: "/crowdsec/crowdsec-bouncer.conf"
+    envFrom:
+      - secretRef:
+          name: crowdsec-ingress
+    command: ['sh', '-c', "sh /docker_start.sh; mkdir -p /lua_plugins/crowdsec/; cp -R /crowdsec/* /lua_plugins/crowdsec/"]
+    volumeMounts:
+    - name: crowdsec-bouncer-plugin
+      mountPath: /lua_plugins
+  extraVolumeMounts:
+  - name: crowdsec-bouncer-plugin
+    mountPath: /etc/nginx/lua/plugins/crowdsec
+    subPath: crowdsec
