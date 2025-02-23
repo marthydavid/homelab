@@ -22,6 +22,9 @@ lapi:
     requests:
       cpu: 100m
       memory: 250Mi
+  envFrom:
+    - secretRef:
+        name: crowdsec-token
 agent:
   acquisition:
     - namespace: "ingress-nginx"

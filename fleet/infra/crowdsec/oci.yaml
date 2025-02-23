@@ -7,3 +7,6 @@ lapi:
       host: "crowdsec.oci.marthy.xyz"
       tls:
         - secretName: crowdsec-dashboard-tls
+  env:
+    - name: ENROLL_TAGS
+      value: 'k8s linux oci'
