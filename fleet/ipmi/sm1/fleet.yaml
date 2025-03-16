@@ -5,7 +5,7 @@ helm:
   releaseName: sm1-ipmi
   chart: app-template
   repo: https://bjw-s.github.io/helm-charts
-  version: 1.5.1
+  version: 3.7.3
   valuesFiles:
     - default-values.yaml
     - sm1-values.yaml
