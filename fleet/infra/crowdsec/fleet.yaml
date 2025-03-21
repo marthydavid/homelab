@@ -6,7 +6,7 @@ helm:
   releaseName: crowdsec
   chart: crowdsec
   repo: https://crowdsecurity.github.io/helm-charts
-  version: 0.18.0
+  version: 0.18.1
   valuesFiles:
   - global.yaml
 targetCustomizations:
