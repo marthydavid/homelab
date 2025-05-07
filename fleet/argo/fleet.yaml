@@ -3,7 +3,7 @@ helm:
   releaseName: argocd
   chart: argo-cd
   repo: https://argoproj.github.io/argo-helm 
-  version: 7.9.1
+  version: 8.0.0
   valuesFiles:
     - global-values.yaml
 dependsOn:
