@@ -15,7 +15,7 @@ targetCustomizations:
       provider.cattle.io: k3s
       topology.kubernetes.io/region: eu-frankfurt-1
   helm:
-    version: "105.1.4+up61.3.2-rancher.5"
+    version: "106.1.1+up69.8.2-rancher.5"
     valuesFiles:
       - k3s-base-values.yaml
       - oci-values.yaml
