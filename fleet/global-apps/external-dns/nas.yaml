@@ -1,3 +1,4 @@
 txtOwnerId: sm4.marthy.xyz
 extraArgs:
   - "--zone-id-filter=ZZMVV0CZ1LNBX"
+  - "--exclude-record-types=AAAA"
