@@ -1,4 +1,5 @@
 txtOwnerId: sm4.marthy.xyz
+policy: sync
 extraArgs:
   - "--zone-id-filter=ZZMVV0CZ1LNBX"
   - "--exclude-record-types=AAAA"
