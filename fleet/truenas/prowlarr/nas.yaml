@@ -4,7 +4,7 @@ controller:
 
 image:
   repository: ghcr.io/home-operations/prowlarr
-  tag: rolling@sha256:18d3db43f2e138a2eb8857cabcc689dbc99f437bef7ce83019531691ee21c373
+  tag: rolling@sha256:5915438f7226ab8390503cc9f7288412b4584fc80e444faa224ccf2055d5f812
 
 podSecurityContext:
   runAsUser: 568
