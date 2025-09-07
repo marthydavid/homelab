@@ -3,7 +3,7 @@ controller:
     reloader.stakater.com/auto: "true"
 
 image:
-  repository: ghcr.io/onedr0p/qbittorrent
+  repository: ghcr.io/home-operations/qbittorrent
   tag: 4
 
 podAnnotations:

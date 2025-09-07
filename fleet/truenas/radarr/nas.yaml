@@ -3,7 +3,7 @@ controller:
     reloader.stakater.com/auto: "true"
 
 image:
-  repository: ghcr.io/onedr0p/radarr-develop
+  repository: ghcr.io/home-operations/radarr
   tag: 5.20.1.9773
 
 podSecurityContext:
