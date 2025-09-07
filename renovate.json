@@ -26,7 +26,7 @@
       "ignoreTests": true,
       "automergeType": "pr",
       "matchUpdateTypes": ["patch", "minor", "digest"],
-      "matchPackagePatterns": ["ghcr.io/bjw-s", "ghcr.io/onedr0p", "ghcr.io/scr", "ghcr.io/marthydavid"]
+      "matchPackagePatterns": ["ghcr.io/bjw-s", "ghcr.io/onedr0p", "ghcr.io/home-operations", "ghcr.io/scr", "ghcr.io/marthydavid"]
     },
     {
       "description": "Auto merge container digests",
