@@ -2,7 +2,7 @@ controller:
   type: statefulset
 image:
   repository: ghcr.io/home-operations/plex
-  tag: rolling@sha256:6d393c4eee152100bd6762a94bdd891b8c80c1c8a914a7f906b4097ab69fd557
+  tag: rolling@sha256:04563be281364ba2462285aacb2ca13d7ef7e1d0b19e1203f4c19b4a56840c5c
 env:
   TZ: Europe/Budapest
 service:
