@@ -4,7 +4,7 @@ controller:
 
 image:
   repository: ghcr.io/wizarrrr/wizarr
-  tag: 2025.9.5
+  tag: 2025.9.6
 
 podSecurityContext:
 #  runAsUser: 568
