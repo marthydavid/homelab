@@ -6,6 +6,6 @@ helm:
   releaseName: dcgm-exporter
   chart: dcgm-exporter
   repo: https://nvidia.github.io/dcgm-exporter/helm-charts
-  version: 4.5.2
+  version: 4.6.0
   values:
     runtimeClassName: nvidia
