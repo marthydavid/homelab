@@ -41,7 +41,7 @@ prometheusOperator:
 grafana:
   image:
     repository: docker.io/grafana/grafana
-    tag: 11.6.8
+    tag: 11.6.9
 prometheus:
   prometheusSpec:
     image:
