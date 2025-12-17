@@ -4,4 +4,4 @@ dependsOn:
 helm:
   chart: oci://us-docker.pkg.dev/online-boutique-ci/charts/onlineboutique
   releaseName: onlineboutique
-  version: "0.10.3"
+  version: "0.10.4"
