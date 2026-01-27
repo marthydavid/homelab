@@ -26,7 +26,7 @@ targetCustomizations:
       topology.kubernetes.io/region: budapest
       topology.kubernetes.io/zone: nuc
   helm:
-    version: "108.0.1+up77.9.1-rancher.10"
+    version: "108.0.2+up77.9.1-rancher.11"
     valuesFiles:
       - k3s-base-values.yaml
       - nuc-values.yaml
