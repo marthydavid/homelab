@@ -3,7 +3,7 @@ helm:
   releaseName: sonarr
   chart: app-template
   repo: https://bjw-s-labs.github.io/helm-charts
-  version: 1.5.1
+  version: 4.6.2
 targetCustomizations:
 - name: nas
   clusterSelector:
