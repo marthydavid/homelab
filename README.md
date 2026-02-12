@@ -116,3 +116,19 @@ This is the repo for my homelab
 | - | [X10SLM+-LN4F](https://www.supermicro.com/en/products/motherboard/X10SLM+-LN4F)                     | Xeon [E3-1230v3](https://ark.intel.com/content/www/us/en/ark/products/75054/intel-xeon-processor-e3-1230-v3-8m-cache-3-30-ghz.html)  | 32GB | | | 1IPMI, 4x1Gig |
 | - | [X10SLM+-LN4F](https://www.supermicro.com/en/products/motherboard/X10SLM+-LN4F)                     | Xeon [E3-1231v3](https://ark.intel.com/content/www/us/en/ark/products/80910/intel-xeon-processor-e31231-v3-8m-cache-3-40-ghz.html)   | 32GB | | | 1IPMI, 4x1Gig |
 | - | Gigabyte                                                                                         | Core [i5-4750](https://ark.intel.com/content/www/us/en/ark/products/75043/intel-core-i5-4570-processor-6m-cache-up-to-3-60-ghz.html) | 32GB | | | 2x1Gig |
+
+
+
+### Networks
+
+| VLAN Number | Site | Function | Subnet |
+|--------|------|----------|--------|
+| 0 | GDL | Everyday use | 192.168.0.0/24 |
+| 10 | GDL | HomeLab ILO | 192.168.10.0/24 |
+| 11 | GDL | HomeLab Servers | 192.168.12.0/24 |
+| - | GDL | Primary Metallb Pool | 192.168.20.0/24 |
+| 0 | PCS | Everyday use | 192.168.1.0/24 |
+| 10 | PCS | HomeLab ILO | 192.168.11.0/24 |
+| 11 | PCS | HomeLab Servers | 192.168.13.0/24 |
+| - | PCS | Primary Metallb Pool | 192.168.21.0/24 |
+| - | ZT | ZT Net | 192.168.192.0/24 |
