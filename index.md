@@ -22,7 +22,7 @@ This is the repo for my homelab
 | SM1 | [X11SCL-F](https://www.supermicro.com/en/products/motherboard/X11SCL-F) | Core [i5-9400](https://ark.intel.com/content/www/us/en/ark/products/134898/intel-core-i59400-processor-9m-cache-up-to-4-10-ghz.html)  | 128GB  | 120GB SataDOM | 500GB NVMe 2x1TB SSD | 1IPMI, 2x1Gig, 2x100Gig |
 | SM2 | [X11SCL-F](https://www.supermicro.com/en/products/motherboard/X11SCL-F) | Core [i5-9400F](https://ark.intel.com/content/www/us/en/ark/products/190883/intel-core-i59400f-processor-9m-cache-up-to-4-10-ghz.html) | 128GB | 120GB SataDOM | 500GB NVMe 2x1TB SSD | 1IPMI, 2x1Gig, 2x100Gig |
 | SM3 | [X11SCL-IF](https://www.supermicro.com/en/products/motherboard/X11SCL-IF) | Core [i3-8100T](https://ark.intel.com/content/www/us/en/ark/products/129944/intel-core-i38100t-processor-6m-cache-3-10-ghz.html)     | 64GB | 120GB SataDOM | 500GB NVMe 2x1TB SSD | 1IPMI, 2x1Gig, 2x100Gig |
-| SM4 | [X10SDV-6C+-TLN4F](https://www.supermicro.com/en/products/motherboard/X10SDV-6C+-TLN4F) | Xeon [D-1528](https://ark.intel.com/content/www/us/en/ark/products/91198/intel-xeon-processor-d1528-9m-cache-1-90-ghz.html) | 128GB | 256GB Sata SSD | 500GB NVMe + 1TB SSD ZFS + 4X4TB HDD ZFS RaidZ1 | 1IPMI, 2x1Gig, 2x10Gig |
+| SM4 | [X10SDV-6C+-TLN4F](https://www.supermicro.com/en/products/motherboard/X10SDV-6C+-TLN4F) | Xeon [D-1528](https://ark.intel.com/content/www/us/en/ark/products/91198/intel-xeon-processor-d1528-9m-cache-1-90-ghz.html) | 64GB | 256GB Sata SSD | 500GB NVMe + 1TB SSD ZFS + 4X4TB HDD ZFS RaidZ1 | 1IPMI, 2x1Gig, 2x10Gig |
 | NUC01 | [NUC11PAHi5](https://www.intel.com/content/www/us/en/products/sku/205040/intel-nuc-11-performance-kit-nuc11pahi5/specifications.html) | Core [i5-1135G7](https://www.intel.com/content/www/us/en/products/sku/208658/intel-core-i51135g7-processor-8m-cache-up-to-4-20-ghz/specifications.html) | 64GB | 1TB SSD | 1TB NVMe | 1x2.5Gig |
 
 ### Spare
@@ -116,3 +116,19 @@ This is the repo for my homelab
 | - | [X10SLM+-LN4F](https://www.supermicro.com/en/products/motherboard/X10SLM+-LN4F)                     | Xeon [E3-1230v3](https://ark.intel.com/content/www/us/en/ark/products/75054/intel-xeon-processor-e3-1230-v3-8m-cache-3-30-ghz.html)  | 32GB | | | 1IPMI, 4x1Gig |
 | - | [X10SLM+-LN4F](https://www.supermicro.com/en/products/motherboard/X10SLM+-LN4F)                     | Xeon [E3-1231v3](https://ark.intel.com/content/www/us/en/ark/products/80910/intel-xeon-processor-e31231-v3-8m-cache-3-40-ghz.html)   | 32GB | | | 1IPMI, 4x1Gig |
 | - | Gigabyte                                                                                         | Core [i5-4750](https://ark.intel.com/content/www/us/en/ark/products/75043/intel-core-i5-4570-processor-6m-cache-up-to-3-60-ghz.html) | 32GB | | | 2x1Gig |
+
+
+
+### Networks
+
+| VLAN Number | Site | Function | Subnet |
+|--------|------|----------|--------|
+| 0 | GDL | Everyday use | 192.168.0.0/24 |
+| 10 | GDL | HomeLab ILO | 192.168.10.0/24 |
+| 11 | GDL | HomeLab Servers | 192.168.12.0/24 |
+| - | GDL | Primary Metallb Pool | 192.168.20.0/24 |
+| 0 | PCS | Everyday use | 192.168.1.0/24 |
+| 10 | PCS | HomeLab ILO | 192.168.11.0/24 |
+| 11 | PCS | HomeLab Servers | 192.168.13.0/24 |
+| - | PCS | Primary Metallb Pool | 192.168.21.0/24 |
+| - | ZT | ZT Net | 192.168.192.0/24 |
