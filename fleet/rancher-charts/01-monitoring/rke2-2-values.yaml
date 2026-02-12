@@ -54,4 +54,4 @@ prometheus:
 grafana:
   image:
     repository: grafana/grafana
-    tag: 11.6.10
+    tag: 11.6.11
