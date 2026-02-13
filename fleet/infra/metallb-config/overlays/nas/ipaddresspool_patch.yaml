@@ -2,4 +2,4 @@ metadata:
   name: pecs-pool
 spec:
   addresses:
-  - 192.168.11.0/24
+  - 192.16820.0/24
