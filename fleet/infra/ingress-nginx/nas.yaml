@@ -3,6 +3,6 @@ controller:
     externalTrafficPolicy: "Local"
     annotations:
       metallb.universe.tf/allow-shared-ip: ingress-nginx
-      metallb.universe.tf/loadBalancerIPs: 192.168.11.1
+      metallb.universe.tf/loadBalancerIPs: 192.168.20.1
   config:
     allow-snippet-annotations: "true"
