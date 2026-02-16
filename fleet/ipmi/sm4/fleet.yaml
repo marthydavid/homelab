@@ -5,7 +5,7 @@ helm:
   releaseName: sm4-ipmi
   chart: app-template
   repo: https://bjw-s-labs.github.io/helm-charts
-  version: 1.5.1
+  version: 4.6.2
   valuesFiles:
     - default-values.yaml
     - sm4-values.yaml
