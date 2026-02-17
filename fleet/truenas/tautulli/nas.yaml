@@ -4,7 +4,7 @@ controller:
 
 image:
   repository: ghcr.io/home-operations/tautulli
-  tag: 2.16.0
+  tag: 2.16.1
 
 podSecurityContext:
   runAsUser: 568
