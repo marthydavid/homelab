@@ -5,7 +5,7 @@ helm:
   releaseName: rancher-monitoring
   chart: rancher-monitoring
   repo: https://charts.rancher.io/
-  version: "108.0.2+up77.9.1-rancher.11"
+  version: "108.0.3+up77.9.1-rancher.12"
   valuesFiles:
   - default-values.yaml
 targetCustomizations:
