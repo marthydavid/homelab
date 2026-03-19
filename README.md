@@ -19,17 +19,17 @@ This is the repo for my homelab
 
 | Name | Motherboard | CPU | Memory | Boot | Disk | NIC |
 |----|----|----|----|----|----|----|
-| SM1 | [X11SCL-F](https://www.supermicro.com/en/products/motherboard/X11SCL-F) | Core [i5-9400](https://ark.intel.com/content/www/us/en/ark/products/134898/intel-core-i59400-processor-9m-cache-up-to-4-10-ghz.html)  | 128GB  | 120GB SataDOM | 500GB NVMe 2x1TB SSD | 1IPMI, 2x1Gig, 2x100Gig |
-| SM2 | [X11SCL-F](https://www.supermicro.com/en/products/motherboard/X11SCL-F) | Core [i5-9400F](https://ark.intel.com/content/www/us/en/ark/products/190883/intel-core-i59400f-processor-9m-cache-up-to-4-10-ghz.html) | 128GB | 120GB SataDOM | 500GB NVMe 2x1TB SSD | 1IPMI, 2x1Gig, 2x100Gig |
-| SM3 | [X11SCL-IF](https://www.supermicro.com/en/products/motherboard/X11SCL-IF) | Core [i3-8100T](https://ark.intel.com/content/www/us/en/ark/products/129944/intel-core-i38100t-processor-6m-cache-3-10-ghz.html)     | 64GB | 120GB SataDOM | 500GB NVMe 2x1TB SSD | 1IPMI, 2x1Gig, 2x100Gig |
+| SM1 | [X11SCL-F](https://www.supermicro.com/en/products/motherboard/X11SCL-F) | E-[2146G](https://www.intel.com/content/www/us/en/products/sku/134866/intel-xeon-e2146g-processor-12m-cache-up-to-4-50-ghz/specifications.html)  | 128GB  | 120GB SataDOM | 500GB NVMe 2x1TB SSD | 1IPMI, 2x1Gig, 2x100Gig |
+| SM2 | [X11SCL-F](https://www.supermicro.com/en/products/motherboard/X11SCL-F) | E-[2146G](https://www.intel.com/content/www/us/en/products/sku/134866/intel-xeon-e2146g-processor-12m-cache-up-to-4-50-ghz/specifications.html) | 128GB | 120GB SataDOM | 500GB NVMe 2x1TB SSD | 1IPMI, 2x1Gig, 2x100Gig |
+| SM3 | [X11SCL-F](https://www.supermicro.com/en/products/motherboard/X11SCL-F) | E-[2146G](https://www.intel.com/content/www/us/en/products/sku/134866/intel-xeon-e2146g-processor-12m-cache-up-to-4-50-ghz/specifications.html) | 128GB | 120GB SataDOM | 500GB NVMe 2x1TB SSD | 1IPMI, 2x1Gig, 2x100Gig |
 | SM4 | [X10SDV-6C+-TLN4F](https://www.supermicro.com/en/products/motherboard/X10SDV-6C+-TLN4F) | Xeon [D-1528](https://ark.intel.com/content/www/us/en/ark/products/91198/intel-xeon-processor-d1528-9m-cache-1-90-ghz.html) | 128GB | 256GB Sata SSD | 500GB NVMe + 1TB SSD ZFS + 4X4TB HDD ZFS RaidZ1 | 1IPMI, 2x1Gig, 2x10Gig |
+| SM5 | [X11SCL-IF](https://www.supermicro.com/en/products/motherboard/X11SCL-IF) | Core [i3-8100T](https://ark.intel.com/content/www/us/en/ark/products/129944/intel-core-i38100t-processor-6m-cache-3-10-ghz.html)     | 32GB | 80GB Intel | 3x250GB SSD | 1IPMI, 2x1Gig |
 | NUC01 | [NUC11PAHi5](https://www.intel.com/content/www/us/en/products/sku/205040/intel-nuc-11-performance-kit-nuc11pahi5/specifications.html) | Core [i5-1135G7](https://www.intel.com/content/www/us/en/products/sku/208658/intel-core-i51135g7-processor-8m-cache-up-to-4-20-ghz/specifications.html) | 64GB | 1TB SSD | 1TB NVMe | 1x2.5Gig |
 
 ### Spare
 
 | Name | Motherboard | CPU | Memory | Boot | Disk | NIC |
 |----|----|----|----|----|----|----|
-| Spare | [X11SCL-F](https://www.supermicro.com/en/products/motherboard/X11SCL-F) | | | | | |
 | HP  | [Z2G4](https://support.hp.com/us-en/product/hp-z2-tower-g4-workstation/20063240/document/c06100744) | Core [G5400](https://ark.intel.com/content/www/us/en/ark/products/129951/intel-pentium-gold-g5400-processor-4m-cache-3-70-ghz.html) | 32GB | 250GB SSD     |                                | 1x1Gig |
 | HP  | [Z2G4](https://support.hp.com/us-en/product/hp-z2-tower-g4-workstation/20063240/document/c06100744) | Core [G5400](https://ark.intel.com/content/www/us/en/ark/products/129951/intel-pentium-gold-g5400-processor-4m-cache-3-70-ghz.html) | 32GB | 250GB SSD     |                                | 1x1Gig |
 | RPi 1 |  RPi 4b 8GB  | 4core ARMv8 | 8GB | 500GB SSD | -     | 1Gig |
@@ -37,7 +37,11 @@ This is the repo for my homelab
 | RPi 3 |  RPi 4b 4GB  | 4core ARMv8 | 4GB | 500GB SSD | -     | 1Gig |
 | RPi 4 |  RPi 4b 4GB  | 4core ARMv8 | 4GB | 500GB SSD | -     | 1Gig |
 | RPi 5 |  RPi 3b+ 1GB | 4core ARMv8 | 1GB | 16GB SD   | 320GB | 1Gig |
-
+| Core [i5-9400](https://ark.intel.com/content/www/us/en/ark/products/134898/intel-core-i59400-processor-9m-cache-up-to-4-10-ghz.html) | | | | | | |
+| Core [i5-9400F](https://ark.intel.com/content/www/us/en/ark/products/190883/intel-core-i59400f-processor-9m-cache-up-to-4-10-ghz.html) | | | | | | |
+| 2x 2TB WD BLUE | | | | | | |
+| 1TB WD BLUE | | | | | | |
+| 1TB WD GREEN | | | | | | |
 
 ## Not in use
 
