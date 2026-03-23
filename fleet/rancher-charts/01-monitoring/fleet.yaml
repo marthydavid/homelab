@@ -61,7 +61,7 @@ targetCustomizations:
       topology.kubernetes.io/region: budapest
       topology.kubernetes.io/zone: rpi
   helm:
-    version: "108.0.3+up77.9.1-rancher.12"
+    version: "108.0.4+up77.9.1-rancher.14"
     valuesFiles:
       - k3s-base-values.yaml
 - name: nas
