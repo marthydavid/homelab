@@ -71,7 +71,7 @@ targetCustomizations:
       topology.kubernetes.io/region: pecs
       topology.kubernetes.io/zone: nas
   helm:
-    version: "108.0.4+up77.9.1-rancher.14"
+    version: "109.0.1+up80.9.1-rancher.7"
     valuesFiles:
       - k3s-base-values.yaml
       - nas-values.yaml
