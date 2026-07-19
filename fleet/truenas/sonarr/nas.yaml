@@ -4,7 +4,7 @@ controller:
 
 image:
   repository: ghcr.io/home-operations/sonarr
-  tag: 4.0.17.2967
+  tag: 4.0.18.2978
 
 podSecurityContext:
   runAsUser: 568
