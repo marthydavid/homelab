@@ -4,7 +4,7 @@ controller:
 
 image:
   repository: ghcr.io/home-operations/radarr
-  tag: 6.4.4.10684
+  tag: 6.4.4.10685
 
 podSecurityContext:
   runAsUser: 568
