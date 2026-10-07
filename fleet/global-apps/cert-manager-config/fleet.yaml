@@ -2,13 +2,6 @@ defaultNamespace: cert-manager
 dependsOn:
   - name: global-apps-fleet-global-apps-external-secrets-config
 targetCustomizations:
-- name: budapest
-  clusterSelector:
-    matchLabels:
-      topology.kubernetes.io/region: budapest
-  yaml:
-    overlays:
-      - budapest
 - name: pecs
   clusterSelector:
     matchLabels:

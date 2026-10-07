@@ -11,10 +11,3 @@ targetCustomizations:
   yaml:
     overlays:
       - nas
-- name: bp
-  clusterSelector:
-    matchLabels:
-      topology.kubernetes.io/region: budapest
-  yaml:
-    overlays:
-      - bp

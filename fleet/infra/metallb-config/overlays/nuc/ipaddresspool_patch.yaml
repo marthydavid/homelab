@@ -1,5 +1,0 @@
-metadata:
-  name: nuc-pool
-spec:
-  addresses:
-    - 192.168.14.1-192.168.14.10

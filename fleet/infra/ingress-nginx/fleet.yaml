@@ -27,12 +27,3 @@ targetCustomizations:
   helm:
     valuesFiles:
       - nas.yaml
-- name: nuc
-  clusterSelector:
-    matchLabels:
-      provider.cattle.io: k3s
-      topology.kubernetes.io/region: budapest
-      topology.kubernetes.io/zone: nuc
-  helm:
-    valuesFiles:
-      - nuc.yaml
