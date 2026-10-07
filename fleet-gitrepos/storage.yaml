@@ -14,20 +14,6 @@ spec:
   targets:
     - clusterSelector:
         matchLabels:
-          provider.cattle.io: rke2
-          topology.kubernetes.io/region: budapest
-          topology.kubernetes.io/zone: esxi-sm1
-          topology.kubernetes.io/cluster: rke2-1
-      name: rke2-1
-    - clusterSelector:
-        matchLabels:
-          provider.cattle.io: rke2
-          topology.kubernetes.io/region: budapest
-          topology.kubernetes.io/zone: esxi-sm4
-          topology.kubernetes.io/cluster: rke2-2
-      name: rke2-2
-    - clusterSelector:
-        matchLabels:
           provider.cattle.io: k3s
           topology.kubernetes.io/region: pecs
           topology.kubernetes.io/zone: nas

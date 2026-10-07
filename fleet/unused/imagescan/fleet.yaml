@@ -4,16 +4,6 @@ helm:
   chart: nullserv
   repo: https://geek-cookbook.github.io/charts/
   version:
-targetCustomizations:
-- name: k3s
-  clusterSelector:
-    matchLabels:
-      provider.cattle.io: k3s
-      topology.kubernetes.io/region: budapest
-      topology.kubernetes.io/zone: rpi
-  helm:
-    valuesFiles:
-      - k3s.yaml
 imageScans:
 - policy:
     semver:

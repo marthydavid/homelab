@@ -8,10 +8,3 @@ helm:
   version: "0.4.13"
   valuesFiles:
     - global.yaml
-targetCustomizations:
-  - name: rke2
-    clusterSelector:
-      matchLabels:
-        provider.cattle.io: rke2
-        topology.kubernetes.io/region: budapest
-        topology.kubernetes.io/zone: esxi-sm1

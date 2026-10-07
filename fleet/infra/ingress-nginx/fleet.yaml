@@ -18,15 +18,6 @@ targetCustomizations:
   helm:
     valuesFiles:
       - oci.yaml
-- name: sm5
-  clusterSelector:
-    matchLabels:
-      provider.cattle.io: k3s
-      topology.kubernetes.io/region: budapest
-      topology.kubernetes.io/zone: sm5
-  helm:
-    valuesFiles:
-      - sm5.yaml
 - name: nas
   clusterSelector:
     matchLabels:
@@ -45,23 +36,3 @@ targetCustomizations:
   helm:
     valuesFiles:
       - nuc.yaml
-- name: rke2-1
-  clusterSelector:
-    matchLabels:
-      provider.cattle.io: rke2
-      topology.kubernetes.io/region: budapest
-      topology.kubernetes.io/zone: esxi-sm1
-      topology.kubernetes.io/cluster: rke2-1
-  helm:
-    valuesFiles:
-      - rke2-1.yaml
-- name: rke2-2
-  clusterSelector:
-    matchLabels:
-      provider.cattle.io: rke2
-      topology.kubernetes.io/region: budapest
-      topology.kubernetes.io/zone: esxi-sm4
-      topology.kubernetes.io/cluster: rke2-2
-  helm:
-    valuesFiles:
-      - rke2-2.yaml

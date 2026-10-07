@@ -18,15 +18,6 @@ targetCustomizations:
     helm:
       valuesFiles:
         - nas.yaml
-  - name: rpi
-    clusterSelector:
-      matchLabels:
-        provider.cattle.io: k3s
-        topology.kubernetes.io/region: budapest
-        topology.kubernetes.io/zone: rpi
-    helm:
-      valuesFiles:
-        - rpi.yaml
   - name: nuc
     clusterSelector:
       matchLabels:

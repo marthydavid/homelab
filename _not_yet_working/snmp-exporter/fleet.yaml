@@ -6,34 +6,3 @@ helm:
   chart: prometheus-snmp-exporter
   version: 9.18.1
   repo: https://prometheus-community.github.io/helm-charts
-targetCustomizations:
-- name: budapest-k3s
-  helm:
-    releaseName: snmp-exporter-budapest-mikrotik
-    values:
-      serviceMonitor:
-        enabled: true
-        honorLabels: true
-        namespace: cattle-monitoring-system
-        path: /snmp
-        scrapeTimeout: 10s
-        selector:
-          release: rancher-monitoring
-        params:
-          - name: budapest-mikrotik
-            module:
-              - if_mib
-            target: 192.168.0.1
-          - name: budapest-rack-mikrotik
-            module:
-              - if_mib
-            target: 192.168.0.254
-          - name: budapest-rack-tplink
-            module:
-              - if_mib
-            target: 192.168.10.230
-  clusterSelector:
-    matchLabels:
-      provider.cattle.io: k3s
-      topology.kubernetes.io/region: budapest
-      topology.kubernetes.io/zone: rpi
