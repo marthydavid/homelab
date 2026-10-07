@@ -1,0 +1,16 @@
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: cloudflare-cred
+spec:
+  target:
+    name: cloudflare-cred
+  secretStoreRef:
+    name: vault-backend
+    kind: ClusterSecretStore
+  data:
+  # API token with Zone:Zone:Read + Zone:DNS:Edit on marthy.xyz
+  - remoteRef:
+      key: secret/cloudflare
+      property: api_token
+    secretKey: api_token

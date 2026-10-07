@@ -35,7 +35,7 @@ server:
         nginx.ingress.kubernetes.io/proxy-body-size: "0"
         cert-manager.io/cluster-issuer: letsencrypt-prod
         external-dns.alpha.kubernetes.io/target: pecs.marthy.xyz
-        external-dns.alpha.kubernetes.io/alias: "true"
+        external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
       hosts:
         - host: immich.marthy.xyz
           paths:

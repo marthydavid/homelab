@@ -1,16 +1,11 @@
-provider: aws
+provider: cloudflare
 
 serviceMonitor:
     enabled: true
 
 env:
-  - name: AWS_ACCESS_KEY_ID
+  - name: CF_API_TOKEN
     valueFrom:
       secretKeyRef:
-        name: aws-cred
-        key: aws_ak
-  - name: AWS_SECRET_KEY
-    valueFrom:
-      secretKeyRef:
-        name: aws-cred
-        key: aws_sk
+        name: cloudflare-cred
+        key: api_token

@@ -1,0 +1,11 @@
+defaultNamespace: cloudflared
+dependsOn:
+  - name: global-apps-fleet-global-apps-external-secrets-config
+# The tunnel runs on the pecs/nas cluster, which hosts ingress-nginx.
+targetCustomizations:
+- name: nas
+  clusterSelector:
+    matchLabels:
+      provider.cattle.io: k3s
+      topology.kubernetes.io/region: pecs
+      topology.kubernetes.io/zone: nas
