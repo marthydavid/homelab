@@ -20,8 +20,8 @@ server:
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
       nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-      external-dns.alpha.kubernetes.io/target: pecs.marthy.xyz
-      external-dns.alpha.kubernetes.io/alias: "true"
+    # No external-dns target: like headlamp/litellm, the record points at the
+    # ingress LB (192.168.20.1). The WAN proxy behind pecs.marthy.xyz only knows *.pecs names.
     ingressClassName: "nginx"
 
 repoServer:
