@@ -1,0 +1,14 @@
+# The hub cluster itself. No credentials: ArgoCD uses its in-cluster service account.
+# homelab/auto-sync stays "false" until the Fleet bundles on nas are cut over.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cluster-nas
+  namespace: argocd
+  labels:
+    argocd.argoproj.io/secret-type: cluster
+    homelab/cluster: nas
+    homelab/auto-sync: "false"
+stringData:
+  name: nas
+  server: https://kubernetes.default.svc
