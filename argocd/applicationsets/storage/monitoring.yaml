@@ -15,7 +15,7 @@ spec:
         - key: homelab/cluster
           operator: In
           values:
-          - metal1
+          - nas
   template:
     metadata:
       name: storage-monitoring-{{ .name }}
