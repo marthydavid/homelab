@@ -37,6 +37,12 @@ spec:
       destination:
         server: '{{ .server }}'
         namespace: monitoring
+      # The ServiceMonitor CRD defaults relabelings[].action to "replace"; the chart leaves it unset.
+      ignoreDifferences:
+      - group: monitoring.coreos.com
+        kind: ServiceMonitor
+        jqPathExpressions:
+        - .spec.endpoints[].relabelings[]?.action
       syncPolicy:
         syncOptions:
         - CreateNamespace=true
