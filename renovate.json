@@ -11,6 +11,12 @@
       "(^|/)fleet\\.yaml$"
     ]
   },
+  "argocd": {
+    "commitMessageTopic": "argocd chart {{depName}}",
+    "fileMatch": [
+      "(^|/)argocd/applicationsets/.+\\.yaml$"
+    ]
+  },
   "helm-values": {
     "commitMessageTopic": "helm values {{depName}}",
     "fileMatch": [
