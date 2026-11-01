@@ -1,4 +1,0 @@
-txtOwnerId: metal1
-extraArgs:
-  - "--zone-id-filter=ZZMVV0CZ1LNBX"
-policy: sync
