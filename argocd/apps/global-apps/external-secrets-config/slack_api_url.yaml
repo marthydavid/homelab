@@ -1,0 +1,15 @@
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: slack-api
+  namespace: cattle-monitoring-system
+spec:
+  secretStoreRef:
+    name: vault-backend
+    kind: ClusterSecretStore
+  data:
+    - secretKey: slack_api_url
+      remoteRef:
+        key: secret/general
+        property: SM4_SLACK_API_URL
+

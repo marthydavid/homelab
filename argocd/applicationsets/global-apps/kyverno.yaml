@@ -1,0 +1,59 @@
+# Migrated from fleet/global-apps/kyverno
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: kyverno
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions:
+  - missingkey=error
+  generators:
+  - clusters:
+      selector:
+        matchExpressions:
+        - key: homelab/cluster
+          operator: In
+          values:
+          - nas
+          - metal1
+  template:
+    metadata:
+      name: kyverno-{{ .name }}
+    spec:
+      project: default
+      sources:
+      - repoURL: https://kyverno.github.io/kyverno/
+        chart: kyverno
+        targetRevision: 3.9.2
+        helm:
+          releaseName: kyverno
+          ignoreMissingValueFiles: true
+          valueFiles:
+          - $values/argocd/apps/global-apps/kyverno/global-values.yaml
+          - $values/argocd/apps/global-apps/kyverno/values-{{ .name }}.yaml
+      - repoURL: https://github.com/marthydavid/homelab
+        targetRevision: main
+        ref: values
+      destination:
+        server: '{{ .server }}'
+        namespace: kyverno
+      syncPolicy:
+        syncOptions:
+        - CreateNamespace=true
+        - ServerSideApply=true
+        - SkipDryRunOnMissingResource=true
+        retry:
+          limit: 10
+          backoff:
+            duration: 30s
+            factor: 2
+            maxDuration: 10m
+  templatePatch: |
+    {{- if eq (index .metadata.labels "homelab/auto-sync") "true" }}
+    spec:
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+    {{- end }}
