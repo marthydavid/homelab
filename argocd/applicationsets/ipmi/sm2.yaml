@@ -1,0 +1,59 @@
+# Migrated from fleet/ipmi/sm2
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: ipmi-sm2
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions:
+  - missingkey=error
+  generators:
+  - clusters:
+      selector:
+        matchExpressions:
+        - key: homelab/cluster
+          operator: In
+          values:
+          - nas
+  template:
+    metadata:
+      name: ipmi-sm2-{{ .name }}
+    spec:
+      project: default
+      sources:
+      - repoURL: https://bjw-s-labs.github.io/helm-charts
+        chart: app-template
+        targetRevision: 1.5.1
+        helm:
+          releaseName: sm2-ipmi
+          ignoreMissingValueFiles: true
+          valueFiles:
+          - $values/argocd/apps/ipmi/sm2/default-values.yaml
+          - $values/argocd/apps/ipmi/sm2/sm2-values.yaml
+          - $values/argocd/apps/ipmi/sm2/values-{{ .name }}.yaml
+      - repoURL: https://github.com/marthydavid/homelab
+        targetRevision: main
+        ref: values
+      destination:
+        server: '{{ .server }}'
+        namespace: sm-ipmi
+      syncPolicy:
+        syncOptions:
+        - CreateNamespace=true
+        - ServerSideApply=true
+        - SkipDryRunOnMissingResource=true
+        retry:
+          limit: 10
+          backoff:
+            duration: 30s
+            factor: 2
+            maxDuration: 10m
+  templatePatch: |
+    {{- if eq (index .metadata.labels "homelab/auto-sync") "true" }}
+    spec:
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+    {{- end }}

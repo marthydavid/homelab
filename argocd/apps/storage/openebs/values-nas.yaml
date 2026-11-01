@@ -1,0 +1,41 @@
+analytics:
+  enabled: false
+rbac:
+  pspEnabled: false
+cstor:
+  enabled: false
+openebs-ndm:
+  enabled: true
+  ndm:
+    tolerations:
+      - key: node-role.kubernetes.io/storage
+        operator: Exists
+      - key: CriticalAddonsOnly
+        operator: Exists
+  ndmExporter:
+    enabled: true
+    tolerations:
+      - key: node-role.kubernetes.io/storage
+        operator: Exists
+      - key: CriticalAddonsOnly
+        operator: Exists
+  ndmOperator:
+    tolerations:
+      - key: node-role.kubernetes.io/storage
+        operator: Exists
+      - key: CriticalAddonsOnly
+        operator: Exists
+zfs-localpv:
+  analytics:
+    enabled: false
+  enabled: true
+  zfsController:
+    tolerations:
+      - key: node-role.kubernetes.io/storage
+        operator: Exists
+      - key: CriticalAddonsOnly
+        operator: Exists
+  zfsNode:
+    tolerations:
+      - key: node-role.kubernetes.io/storage
+        operator: Exists

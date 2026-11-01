@@ -1,0 +1,58 @@
+# Migrated from fleet/gpu/nvidia/nvdp
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: nvidia-nvdp
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions:
+  - missingkey=error
+  generators:
+  - clusters:
+      selector:
+        matchExpressions:
+        - key: homelab/cluster
+          operator: In
+          values:
+          - nas
+  template:
+    metadata:
+      name: nvidia-nvdp-{{ .name }}
+    spec:
+      project: default
+      sources:
+      - repoURL: https://nvidia.github.io/k8s-device-plugin
+        chart: nvidia-device-plugin
+        targetRevision: 0.20.1
+        helm:
+          releaseName: nvidia-device-plugin
+          ignoreMissingValueFiles: true
+          valueFiles:
+          - $values/argocd/apps/nvidia/nvdp/values.yaml
+          - $values/argocd/apps/nvidia/nvdp/values-{{ .name }}.yaml
+      - repoURL: https://github.com/marthydavid/homelab
+        targetRevision: main
+        ref: values
+      destination:
+        server: '{{ .server }}'
+        namespace: nvidia-device-plugin
+      syncPolicy:
+        syncOptions:
+        - CreateNamespace=true
+        - ServerSideApply=true
+        - SkipDryRunOnMissingResource=true
+        retry:
+          limit: 10
+          backoff:
+            duration: 30s
+            factor: 2
+            maxDuration: 10m
+  templatePatch: |
+    {{- if eq (index .metadata.labels "homelab/auto-sync") "true" }}
+    spec:
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+    {{- end }}

@@ -1,0 +1,57 @@
+# Migrated from fleet/gpu/intel/operator
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: intel-operator
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions:
+  - missingkey=error
+  generators:
+  - clusters:
+      selector:
+        matchExpressions:
+        - key: homelab/cluster
+          operator: In
+          values:
+          - metal1
+  template:
+    metadata:
+      name: intel-operator-{{ .name }}
+    spec:
+      project: default
+      sources:
+      - repoURL: https://intel.github.io/helm-charts/
+        chart: intel-device-plugins-operator
+        targetRevision: 0.37.1
+        helm:
+          releaseName: intel-device-plugins-operator
+          ignoreMissingValueFiles: true
+          valueFiles:
+          - $values/argocd/apps/intel/operator/values-{{ .name }}.yaml
+      - repoURL: https://github.com/marthydavid/homelab
+        targetRevision: main
+        ref: values
+      destination:
+        server: '{{ .server }}'
+        namespace: kube-system
+      syncPolicy:
+        syncOptions:
+        - CreateNamespace=true
+        - ServerSideApply=true
+        - SkipDryRunOnMissingResource=true
+        retry:
+          limit: 10
+          backoff:
+            duration: 30s
+            factor: 2
+            maxDuration: 10m
+  templatePatch: |
+    {{- if eq (index .metadata.labels "homelab/auto-sync") "true" }}
+    spec:
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+    {{- end }}
