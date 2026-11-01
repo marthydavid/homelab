@@ -38,11 +38,9 @@ spec:
         server: '{{ .server }}'
         namespace: nvidia-device-plugin
       syncPolicy:
-        # Replace instead of server-side apply: chart 0.20 changed the NFD worker readinessProbe
-        # handler, and merging it onto the live grpc probe is rejected (more than 1 handler type).
         syncOptions:
         - CreateNamespace=true
-        - Replace=true
+        - ServerSideApply=true
         - SkipDryRunOnMissingResource=true
         retry:
           limit: 10
