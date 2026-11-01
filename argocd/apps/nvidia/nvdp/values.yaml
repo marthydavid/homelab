@@ -1,0 +1,6 @@
+runtimeClassName: nvidia
+gfd:
+  enabled: true
+config:
+  name: cm-time-slicing
+  default: time-slicing
