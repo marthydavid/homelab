@@ -1,15 +1,19 @@
 # Fleet → ArgoCD migration
 
 ## Target
-The lab shrinks from ~7 Fleet-managed clusters to two:
+The lab shrinks to two clusters:
 
-| Cluster | Role | Notes |
-|---|---|---|
-| `nas` (Pécs, k3s) | Main cluster and ArgoCD hub | Runs everything it ran under Fleet, plus baby buddy |
-| `metal1` | Second cluster | global-apps, metallb, ingress-nginx, openebs, intel GPU stack |
+| Cluster | kube context | What it is | Managed by ArgoCD |
+|---|---|---|---|
+| `nas` | `sm4` | k3s on SM4 (Pécs) and the ArgoCD hub | Everything that Fleet used to deploy there |
+| `metal1` | `metal1` | OKD 4.22, three nodes (sm1–sm3) | Only apps OKD does not already provide; today just reloader |
 
-The rpi `k3s`, `nuc`, `rke2-1`, `rke2-2`, `sm5` and `oci` clusters are dropped, along with their
-values and overlays.
+metal1 gets cert-manager, external-secrets, external-dns, MetalLB, NFD and storage (LVMS) from
+OLM operators. Do **not** target it with the Helm charts for those. Use their CRs/config instead.
+
+The rpi `k3s`, `nuc`, `rke2-1`, `rke2-2`, `sm5` and `oci` clusters, Rancher and Fleet are gone.
+On nas the Fleet agent no longer runs, so the releases there are frozen at their last
+Fleet-deployed versions.
 
 ## Layout
 ```
@@ -38,33 +42,28 @@ on the ArgoCD cluster Secret. Helm apps use two sources: the upstream chart and 
 
 ### Sync policy
 Applications sync automatically only on clusters whose Secret has `homelab/auto-sync: "true"`
-(set with `templatePatch`). `metal1` is new and empty, so it gets auto-sync from day one. `nas` starts
-with `"false"`, so ArgoCD only shows diffs against what Fleet deployed there.
+(set with `templatePatch`). `nas` is `"false"`: the repo is ahead of what is deployed there, so
+syncing an app also upgrades it. Review each diff and sync by hand, then flip the label once
+everything is in sync.
 
 ## Bootstrap
-1. Apply `fleet-gitrepos/argo.yaml`. ArgoCD then moves from the rpi cluster to `nas`, reusing the
-   existing `argocd.marthy.xyz` ingress, which already points at `pecs.marthy.xyz`.
-2. `kubectl --context nas apply -k argocd/bootstrap`
-3. Register metal1:
-   ```bash
-   argocd cluster add <metal1-context> --name metal1 \
-     --label homelab/cluster=metal1 --label homelab/auto-sync=true
-   ```
-
-## Cutover on nas
-For each group:
-1. In the ArgoCD UI, check that `<app>-nas` has no unexpected diffs against the Fleet-deployed resources.
-2. Remove the bundle from Fleet without deleting its resources: set `keepResources: true` on the
-   GitRepo, then delete the bundle dir or the GitRepo.
-3. Sync the app in ArgoCD.
-Once every group is done, set `homelab/auto-sync: "true"` in `argocd/bootstrap/cluster-nas.yaml`.
+```bash
+helm --kube-context sm4 upgrade --install argocd argo-cd \
+  --repo https://argoproj.github.io/argo-helm --version 10.11.6 \
+  -n argocd --create-namespace -f argocd/apps/argocd/values.yaml
+kubectl --context sm4 apply -k argocd/bootstrap
+# metal1: run with the current kube context set to sm4 (argocd --core talks to the hub's API)
+argocd cluster add metal1 --core --name metal1 --yes \
+  --label homelab/cluster=metal1 --label homelab/auto-sync=true
+```
+After that, ArgoCD manages itself (`argocd/applicationsets/argocd/argocd.yaml`).
 
 ## Known gaps
-- **Monitoring:** `rancher-monitoring` (and its CRDs) is still Fleet/Rancher-only, and many apps
-  ship ServiceMonitors into `cattle-monitoring-system`. See the monitoring decision issue.
-- **metal1 networking:** metallb-config has no pool or peer for metal1 yet, and ingress-nginx uses
-  global values only.
-- **kube-vip:** this is a control-plane VIP, so it belongs to cluster bootstrap (k3s/rke2 static
-  manifest), not ArgoCD.
+- **Secrets backend is down.** `vault-backend` points at `vault.oci.marthy.xyz`, which went away
+  with the OCI cluster. Existing Secrets on nas still work, but no ExternalSecret can refresh,
+  and metal1 has no SecretStore.
+- **Monitoring:** there is no Prometheus on nas. `prometheus-operator-crds` is installed so
+  ServiceMonitors apply, but nothing scrapes them yet.
 - **immich:** chart 0.12 removed the bundled postgres subchart, but `values-nas.yaml` still
-  configures `postgresql:`. It fails to render under Fleet today too.
+  configures `postgresql:`, so it does not render.
+- **kube-vip:** this is a control-plane VIP, so it belongs to cluster bootstrap, not ArgoCD.
