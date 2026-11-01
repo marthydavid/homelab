@@ -1,0 +1,59 @@
+# Migrated from fleet/infra/ingress-nginx
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: infra-ingress-nginx
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions:
+  - missingkey=error
+  generators:
+  - clusters:
+      selector:
+        matchExpressions:
+        - key: homelab/cluster
+          operator: In
+          values:
+          - nas
+          - metal1
+  template:
+    metadata:
+      name: infra-ingress-nginx-{{ .name }}
+    spec:
+      project: default
+      sources:
+      - repoURL: https://kubernetes.github.io/ingress-nginx
+        chart: ingress-nginx
+        targetRevision: 4.15.1
+        helm:
+          releaseName: ingress-nginx
+          ignoreMissingValueFiles: true
+          valueFiles:
+          - $values/argocd/apps/infra/ingress-nginx/global-values.yaml
+          - $values/argocd/apps/infra/ingress-nginx/values-{{ .name }}.yaml
+      - repoURL: https://github.com/marthydavid/homelab
+        targetRevision: main
+        ref: values
+      destination:
+        server: '{{ .server }}'
+        namespace: ingress-nginx
+      syncPolicy:
+        syncOptions:
+        - CreateNamespace=true
+        - ServerSideApply=true
+        - SkipDryRunOnMissingResource=true
+        retry:
+          limit: 10
+          backoff:
+            duration: 30s
+            factor: 2
+            maxDuration: 10m
+  templatePatch: |
+    {{- if eq (index .metadata.labels "homelab/auto-sync") "true" }}
+    spec:
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+    {{- end }}

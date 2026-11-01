@@ -1,0 +1,29 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- ../../base
+patches:
+- path: bgpadvertisement_patch.yaml
+  target:
+    group: metallb.io
+    version: v1beta1
+    kind: BGPAdvertisement
+    name: bgp
+  options:
+    allowNameChange: true
+- path: bgppeer_patch.yaml
+  target:
+    group: metallb.io
+    version: v1beta2
+    kind: BGPPeer
+    name: bgp
+  options:
+    allowNameChange: true
+- path: ipaddresspool_patch.yaml
+  target:
+    group: metallb.io
+    version: v1beta1
+    kind: IPAddressPool
+    name: pool
+  options:
+    allowNameChange: true

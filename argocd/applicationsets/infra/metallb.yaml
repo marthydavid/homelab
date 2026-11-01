@@ -1,0 +1,66 @@
+# Migrated from fleet/infra/metallb
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: infra-metallb
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions:
+  - missingkey=error
+  generators:
+  - clusters:
+      selector:
+        matchExpressions:
+        - key: homelab/cluster
+          operator: In
+          values:
+          - nas
+          - metal1
+  template:
+    metadata:
+      name: infra-metallb-{{ .name }}
+    spec:
+      project: default
+      sources:
+      - repoURL: https://metallb.github.io/metallb
+        chart: metallb
+        targetRevision: 0.16.1
+        helm:
+          releaseName: metallb
+          ignoreMissingValueFiles: true
+          valueFiles:
+          - $values/argocd/apps/infra/metallb/global-values.yaml
+          - $values/argocd/apps/infra/metallb/values-{{ .name }}.yaml
+      - repoURL: https://github.com/marthydavid/homelab
+        targetRevision: main
+        ref: values
+      destination:
+        server: '{{ .server }}'
+        namespace: metallb-system
+      syncPolicy:
+        syncOptions:
+        - CreateNamespace=true
+        - ServerSideApply=true
+        - SkipDryRunOnMissingResource=true
+        retry:
+          limit: 10
+          backoff:
+            duration: 30s
+            factor: 2
+            maxDuration: 10m
+      ignoreDifferences:
+      - group: apiextensions.k8s.io
+        kind: CustomResourceDefinition
+        name: bgppeers.metallb.io
+        jsonPointers:
+        - /spec/conversion/webhook/clientConfig/caBundle
+        - /spec/conversion/webhook
+  templatePatch: |
+    {{- if eq (index .metadata.labels "homelab/auto-sync") "true" }}
+    spec:
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+    {{- end }}

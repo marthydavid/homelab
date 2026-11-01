@@ -1,0 +1,14 @@
+prometheus:
+  serviceAccount: rancher-monitoring-prometheus
+  namespace: cattle-monitoring-system
+  podMonitor:
+    enabled: true
+  prometheusRule:
+    enabled: true
+speaker:
+  frr:
+    enabled: true
+
+# metallb >=0.16 enables frrk8s by default; it is mutually exclusive with speaker.frr
+frrk8s:
+  enabled: false
