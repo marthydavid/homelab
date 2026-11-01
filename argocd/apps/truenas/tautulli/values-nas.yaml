@@ -1,0 +1,52 @@
+controller:
+  annotations:
+    reloader.stakater.com/auto: "true"
+
+image:
+  repository: ghcr.io/home-operations/tautulli
+  tag: 2.18.2
+
+podSecurityContext:
+  runAsUser: 568
+  runAsGroup: 568
+  fsGroup: 568
+  fsGroupChangePolicy: "OnRootMismatch"
+  supplementalGroups:
+    - 65539
+
+service:
+  main:
+    ports:
+      http:
+        port: 8181
+
+ingress:
+  main:
+    enabled: true
+    ingressClassName: "nginx"
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      external-dns.alpha.kubernetes.io/target: pecs.marthy.xyz
+      external-dns.alpha.kubernetes.io/alias: "true"
+    hosts:
+      - host: "tautulli.pecs.marthy.xyz"
+        paths:
+          - path: /
+    tls:
+      - hosts:
+          - tautulli.pecs.marthy.xyz
+        secretName: tautulli-tls
+
+persistence:
+  config:
+    enabled: true
+    type: hostPath
+    mountPath: /config
+    hostPath: /zfs/k3s/configs/tautulli-config
+
+resources:
+  requests:
+    cpu: 5m
+    memory: 323M
+  limits:
+    memory: 323M

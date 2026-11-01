@@ -1,0 +1,58 @@
+# Migrated from fleet/truenas/nut-exporter
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: truenas-nut-exporter
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions:
+  - missingkey=error
+  generators:
+  - clusters:
+      selector:
+        matchExpressions:
+        - key: homelab/cluster
+          operator: In
+          values:
+          - nas
+  template:
+    metadata:
+      name: truenas-nut-exporter-{{ .name }}
+    spec:
+      project: default
+      sources:
+      - repoURL: https://geek-cookbook.github.io/charts/
+        chart: prometheus-nut-exporter
+        targetRevision: 5.4.2
+        helm:
+          releaseName: prometheus-nut-exporter
+          ignoreMissingValueFiles: true
+          valueFiles:
+          - $values/argocd/apps/truenas/nut-exporter/values.yaml
+          - $values/argocd/apps/truenas/nut-exporter/values-{{ .name }}.yaml
+      - repoURL: https://github.com/marthydavid/homelab
+        targetRevision: main
+        ref: values
+      destination:
+        server: '{{ .server }}'
+        namespace: monitoring
+      syncPolicy:
+        syncOptions:
+        - CreateNamespace=true
+        - ServerSideApply=true
+        - SkipDryRunOnMissingResource=true
+        retry:
+          limit: 10
+          backoff:
+            duration: 30s
+            factor: 2
+            maxDuration: 10m
+  templatePatch: |
+    {{- if eq (index .metadata.labels "homelab/auto-sync") "true" }}
+    spec:
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+    {{- end }}
