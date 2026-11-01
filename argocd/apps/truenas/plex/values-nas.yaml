@@ -1,0 +1,82 @@
+controller:
+  type: statefulset
+image:
+  repository: ghcr.io/home-operations/plex
+  tag: rolling@sha256:06ef0fc23e9af9bbaf284c3f27972f94e703d13d6f745edeb6818fcbebf6c673
+env:
+  TZ: Europe/Budapest
+service:
+  main:
+    ports:
+      http:
+        port: 32400
+ingress:
+  main:
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    hosts:
+      - host: plex.pecs.marthy.xyz
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - hosts:
+          - plex.pecs.marthy.xyz
+        secretName: plex-tls
+hostNetwork: true
+podSecurityContext:
+  runAsUser: 568
+  runAsGroup: 568
+  fsGroup: 568
+  fsGroupChangePolicy: OnRootMismatch
+  supplementalGroups: [44, 109, 10000]
+persistence:
+  config:
+    enabled: true
+    hostPath: /zfs/k3s/configs/plex-config
+    mountPath: /config
+    type: hostPath
+  pal-config:
+    enabled: true
+    hostPath: /zfs/k3s/configs/plex-auto-languages-config
+    mountPath: /pal-config
+    type: hostPath
+  media:
+    enabled: true
+    hostPath: /zfs/media
+    mountPath: /zfs/media
+    type: hostPath
+  transcode:
+    enabled: true
+    type: emptyDir
+  local:
+    enabled: true
+    type: emptyDir
+    mountPath: /.local
+nodeSelector:
+  nvidia.com/gpu.count: "1"
+resources:
+  requests:
+    nvidia.com/gpu: 1
+    cpu: 100m
+    memory: 2000Mi
+  limits:
+    nvidia.com/gpu: 1
+    memory: 10000Mi
+sidecars:
+  auto-languages:
+    image: docker.io/remirigal/plex-auto-languages:v1.2.3
+    imagePullPolicy: IfNotPresent
+    env:
+      - { name: PLEX_URL, value: "http://localhost:32400" }
+      - { name: REFRESH_LIBRARY_ON_SCAN, value: "false" }
+      - { name: TZ, value: "Europe/Budapest" }
+    envFrom:
+      - secretRef:
+          name: plex-token
+    volumeMounts:
+      - { name: pal-config, mountPath: /config }
+      - { name: local, mountPath: /.local }
