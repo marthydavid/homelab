@@ -1,0 +1,59 @@
+# Migrated from fleet/global-apps/external-dns
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: external-dns
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions:
+  - missingkey=error
+  generators:
+  - clusters:
+      selector:
+        matchExpressions:
+        - key: homelab/cluster
+          operator: In
+          values:
+          - nas
+          - metal1
+  template:
+    metadata:
+      name: external-dns-{{ .name }}
+    spec:
+      project: default
+      sources:
+      - repoURL: https://kubernetes-sigs.github.io/external-dns/
+        chart: external-dns
+        targetRevision: 1.23.0
+        helm:
+          releaseName: external-dns
+          ignoreMissingValueFiles: true
+          valueFiles:
+          - $values/argocd/apps/global-apps/external-dns/global-values.yaml
+          - $values/argocd/apps/global-apps/external-dns/values-{{ .name }}.yaml
+      - repoURL: https://github.com/marthydavid/homelab
+        targetRevision: main
+        ref: values
+      destination:
+        server: '{{ .server }}'
+        namespace: external-dns
+      syncPolicy:
+        syncOptions:
+        - CreateNamespace=true
+        - ServerSideApply=true
+        - SkipDryRunOnMissingResource=true
+        retry:
+          limit: 10
+          backoff:
+            duration: 30s
+            factor: 2
+            maxDuration: 10m
+  templatePatch: |
+    {{- if eq (index .metadata.labels "homelab/auto-sync") "true" }}
+    spec:
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+    {{- end }}

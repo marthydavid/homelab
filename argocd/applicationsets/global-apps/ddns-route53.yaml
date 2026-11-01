@@ -1,0 +1,59 @@
+# Migrated from fleet/global-apps/ddns-route53
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: ddns-route53
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions:
+  - missingkey=error
+  generators:
+  - clusters:
+      selector:
+        matchExpressions:
+        - key: homelab/cluster
+          operator: In
+          values:
+          - nas
+          - metal1
+  template:
+    metadata:
+      name: ddns-route53-{{ .name }}
+    spec:
+      project: default
+      sources:
+      - repoURL: https://geek-cookbook.github.io/charts/
+        chart: kah-common-chart
+        targetRevision: 1.2.2
+        helm:
+          releaseName: ddns-route53
+          ignoreMissingValueFiles: true
+          valueFiles:
+          - $values/argocd/apps/global-apps/ddns-route53/default.yaml
+          - $values/argocd/apps/global-apps/ddns-route53/values-{{ .name }}.yaml
+      - repoURL: https://github.com/marthydavid/homelab
+        targetRevision: main
+        ref: values
+      destination:
+        server: '{{ .server }}'
+        namespace: ddns-route53
+      syncPolicy:
+        syncOptions:
+        - CreateNamespace=true
+        - ServerSideApply=true
+        - SkipDryRunOnMissingResource=true
+        retry:
+          limit: 10
+          backoff:
+            duration: 30s
+            factor: 2
+            maxDuration: 10m
+  templatePatch: |
+    {{- if eq (index .metadata.labels "homelab/auto-sync") "true" }}
+    spec:
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+    {{- end }}

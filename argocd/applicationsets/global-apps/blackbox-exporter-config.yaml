@@ -1,0 +1,50 @@
+# Migrated from fleet/global-apps/blackbox-exporter-config
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: blackbox-exporter-config
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions:
+  - missingkey=error
+  generators:
+  - clusters:
+      selector:
+        matchExpressions:
+        - key: homelab/cluster
+          operator: In
+          values:
+          - nas
+          - metal1
+  template:
+    metadata:
+      name: blackbox-exporter-config-{{ .name }}
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/marthydavid/homelab
+        targetRevision: main
+        path: argocd/apps/global-apps/blackbox-exporter-config
+      destination:
+        server: '{{ .server }}'
+        namespace: cattle-monitoring-system
+      syncPolicy:
+        syncOptions:
+        - CreateNamespace=true
+        - ServerSideApply=true
+        - SkipDryRunOnMissingResource=true
+        retry:
+          limit: 10
+          backoff:
+            duration: 30s
+            factor: 2
+            maxDuration: 10m
+  templatePatch: |
+    {{- if eq (index .metadata.labels "homelab/auto-sync") "true" }}
+    spec:
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+    {{- end }}
