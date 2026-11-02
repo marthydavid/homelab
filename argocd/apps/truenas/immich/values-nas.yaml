@@ -1,20 +1,39 @@
-image:
-  repository: ghcr.io/immich-app/immich-server
-  tag: v3.3.5
+# chart 0.12: bjw-s common layout, external Postgres (CNPG cluster immich-postgres from immich-postgres/), valkey instead of redis
+controllers:
+  main:
+    containers:
+      main:
+        image:
+          tag: v3.3.5
+        env:
+          DB_HOSTNAME:
+            valueFrom:
+              secretKeyRef:
+                name: immich-postgres-app
+                key: host
+          DB_PORT:
+            valueFrom:
+              secretKeyRef:
+                name: immich-postgres-app
+                key: port
+          DB_DATABASE_NAME:
+            valueFrom:
+              secretKeyRef:
+                name: immich-postgres-app
+                key: dbname
+          DB_USERNAME:
+            valueFrom:
+              secretKeyRef:
+                name: immich-postgres-app
+                key: user
+          DB_PASSWORD:
+            valueFrom:
+              secretKeyRef:
+                name: immich-postgres-app
+                key: password
 
-postgresql:
+valkey:
   enabled: true
-  image:
-    # after upgrade read README.md
-    registry: ghcr.io
-    repository: marthydavid/bitnami-postgres-pgvecto-rs
-    tag: pg14-v0.3.0-amd64
-
-redis:
-  enabled: true
-  architecture: standalone
-  auth:
-    enabled: false
 
 immich:
   persistence:
@@ -23,10 +42,17 @@ immich:
 
 server:
   enabled: true
-  image:
-    repository: ghcr.io/immich-app/immich-server
-    pullPolicy: IfNotPresent
-
+  controllers:
+    main:
+      pod:
+        runtimeClassName: nvidia
+      containers:
+        main:
+          resources:
+            requests:
+              nvidia.com/gpu: 1
+            limits:
+              nvidia.com/gpu: 1
   ingress:
     main:
       enabled: true
@@ -40,36 +66,25 @@ server:
         - host: immich.marthy.xyz
           paths:
             - path: "/"
+              service:
+                identifier: main
       tls:
         - hosts:
             - immich.marthy.xyz
           secretName: immich-tls
 
-  runtimeClassName: nvidia
-  resources:
-    requests:
-      nvidia.com/gpu: 1
-    limits:
-      nvidia.com/gpu: 1
-
 machine-learning:
   enabled: true
-  image:
-    repository: ghcr.io/immich-app/immich-machine-learning
-    pullPolicy: IfNotPresent
-    tag: v3.3.5-cuda
-  env:
-    TRANSFORMERS_CACHE: /cache
-  persistence:
-    cache:
-      enabled: true
-      size: 10Gi
-      # Optional: Set this to pvc to avoid downloading the ML models every start.
-      type: emptyDir
-      accessMode: ReadWriteOnce
-  runtimeClassName: nvidia
-  resources:
-    requests:
-      nvidia.com/gpu: 1
-    limits:
-      nvidia.com/gpu: 1
+  controllers:
+    main:
+      pod:
+        runtimeClassName: nvidia
+      containers:
+        main:
+          image:
+            tag: v3.3.5-cuda
+          resources:
+            requests:
+              nvidia.com/gpu: 1
+            limits:
+              nvidia.com/gpu: 1

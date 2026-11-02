@@ -5,6 +5,8 @@ metadata:
   namespace: mediarr
 spec:
   storageClassName: openebs-zfspv
+  # re-bind the retained 400Gi library PV (clear its claimRef first, see README)
+  volumeName: pvc-e8b89821-362b-4aad-af8c-c980c31d17dc
   accessModes:
     - ReadWriteMany
   resources:
