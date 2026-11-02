@@ -37,3 +37,8 @@ configs:
   cm:
     create: true
     url: "https://argocd.marthy.xyz"
+  params:
+    # Diff against a server-side apply dry-run, so fields the API server / CRDs default
+    # (ExternalSecret remoteRef policies, ServiceMonitor relabeling action, ...) are not
+    # reported as OutOfSync.
+    controller.diff.server.side: true
