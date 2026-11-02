@@ -1,0 +1,109 @@
+# Replaces the Fleet rancher-monitoring bundle on nas (fleet/rancher-charts/01-monitoring).
+# fullnameOverride + releaseName "rancher-monitoring" keep every object name the other apps
+# rely on (ServiceMonitor `release: rancher-monitoring` selectors, `rancher-monitoring-prometheus`
+# service account, and the PVC name of the retained Prometheus volume).
+fullnameOverride: rancher-monitoring
+
+# CRDs come from the prometheus-operator-crds app (argocd/applicationsets/argocd).
+crds:
+  enabled: false
+
+defaultRules:
+  create: true
+
+# k3s runs the control-plane components inside one process bound to localhost, so the
+# upstream scrape targets for them cannot work (Rancher used pushprox for this).
+kubeControllerManager:
+  enabled: false
+kubeScheduler:
+  enabled: false
+kubeProxy:
+  enabled: false
+kubeEtcd:
+  enabled: false
+
+nodeExporter:
+  enabled: true
+kubeStateMetrics:
+  enabled: true
+
+alertmanager:
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - alert.pecs.marthy.xyz
+    tls:
+      - secretName: alertmanager-tls-secret
+        hosts:
+          - alert.pecs.marthy.xyz
+  config:
+    route:
+      receiver: "null"
+      group_by: [job, alertname, stage, severity, app]
+    # The slack receiver (api_url_file from the slack-api Secret) is left out until the secrets
+    # backend is back: that Secret cannot be created while vault-backend is down (#1909),
+    # and Alertmanager will not start with a missing secret mount.
+    receivers:
+      - name: "null"
+
+prometheus:
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - prom.pecs.marthy.xyz
+    tls:
+      - secretName: prometheus-tls-secret
+        hosts:
+          - prom.pecs.marthy.xyz
+  prometheusSpec:
+    # Pick up every ServiceMonitor / PodMonitor / PrometheusRule / Probe in the cluster,
+    # not only the ones labelled with this release.
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+    ruleSelectorNilUsesHelmValues: false
+    probeSelectorNilUsesHelmValues: false
+    resources:
+      requests:
+        cpu: 100m
+        memory: 100Mi
+      limits:
+        memory: 4Gi
+    retention: 15d
+    retentionSize: 95GiB
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: openebs-zfspv
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 100Gi
+
+grafana:
+  # Create this Secret (keys admin-user, admin-password) before the first sync:
+  #   kubectl -n cattle-monitoring-system create secret generic grafana-admin \
+  #     --from-literal=admin-user=admin --from-literal=admin-password=<password>
+  admin:
+    existingSecret: grafana-admin
+    userKey: admin-user
+    passwordKey: admin-password
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - grafana.pecs.marthy.xyz
+    tls:
+      - secretName: grafana-tls-secret
+        hosts:
+          - grafana.pecs.marthy.xyz
+  sidecar:
+    dashboards:
+      searchNamespace: ALL
