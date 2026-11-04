@@ -1,0 +1,56 @@
+# Barman Cloud CNPG-I plugin (backups/WAL archiving to object storage).
+# Must live in the operator's namespace (cnpg-system); needs CNPG >= 1.26 and cert-manager
+# (it creates its own selfsigned Issuer + client/server Certificates).
+# https://cloudnative-pg.io/plugin-barman-cloud/docs/installation/
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: database-barman-cloud-plugin
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions:
+  - missingkey=error
+  generators:
+  - clusters:
+      selector:
+        matchExpressions:
+        - key: homelab/cluster
+          operator: In
+          values:
+          - nas
+  template:
+    metadata:
+      name: database-barman-cloud-plugin-{{ .name }}
+    spec:
+      project: default
+      source:
+        repoURL: https://cloudnative-pg.github.io/charts
+        chart: plugin-barman-cloud
+        targetRevision: 0.8.1
+        helm:
+          releaseName: plugin-barman-cloud
+      destination:
+        server: '{{ .server }}'
+        namespace: cnpg-system
+      syncPolicy:
+        syncOptions:
+        - CreateNamespace=true
+        - ServerSideApply=true
+        - SkipDryRunOnMissingResource=true
+        retry:
+          limit: 10
+          backoff:
+            duration: 30s
+            factor: 2
+            maxDuration: 10m
+  templatePatch: |
+    {{- if eq (index .metadata.labels "homelab/auto-sync") "true" }}
+    spec:
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+    {{- end }}
