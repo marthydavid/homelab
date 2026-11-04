@@ -1,6 +1,8 @@
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
   name: slack-api
   namespace: cattle-monitoring-system
 spec:
