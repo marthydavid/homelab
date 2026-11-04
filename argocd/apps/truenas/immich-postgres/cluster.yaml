@@ -1,0 +1,28 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: immich-postgres
+  namespace: mediarr
+spec:
+  instances: 1
+  # VectorChord build of CNPG's postgres image; immich >= 1.133 requires vchord (pgvecto.rs is gone)
+  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16.15-1.1.1
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 20Gi
+    storageClass: openebs-zfspv
+  postgresql:
+    shared_preload_libraries:
+      - "vchord.so"
+    parameters:
+      timezone: "Europe/Budapest"
+  bootstrap:
+    initdb:
+      database: immich
+      owner: immich
+      # CNPG generates the immich-postgres-app secret (username/password/host/...) itself, no Vault needed
+      postInitApplicationSQL:
+        - CREATE EXTENSION IF NOT EXISTS vchord CASCADE;
+        - CREATE EXTENSION IF NOT EXISTS earthdistance CASCADE;
+  monitoring:
+    enablePodMonitor: true
