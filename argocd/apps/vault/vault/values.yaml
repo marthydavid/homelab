@@ -21,13 +21,15 @@ server:
         cluster_address = "[::]:8201"
       }
 
-      # OCI Object Storage. Credentials: API key from ~/.oci/config (mounted below).
-      storage "oracle" {
+      # OCI Object Storage (community-supported backend, buckets must already exist).
+      # Credentials: API key from ~/.oci/config (mounted below) instead of instance principals.
+      storage "oci" {
+        region            = "eu-frankfurt-1"
         namespace_name    = "fr8ipbv8ozqv"
         bucket_name       = "vault"
         ha_enabled        = "true"
         lock_bucket_name  = "vault-lock"
-        auth_type_api_key = true
+        auth_type_api_key = "true"
       }
 
       # Auto-unseal with the OCI KMS key "vault" in KMS vault "test" (eu-frankfurt-1).
