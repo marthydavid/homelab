@@ -27,4 +27,4 @@ If the old server's data is still in the `vault` bucket, Vault starts with it as
 `kubectl -n vault exec vault-0 -- vault operator init` (prints recovery keys, store them offline).
 
 Then point the ClusterSecretStore (`argocd/apps/global-apps/external-secrets-config`) at
-`https://vault.marthy.xyz`; it still has `vault.oci.marthy.xyz`.
+`http://vault.vault.svc.cluster.local:8200` (done).
