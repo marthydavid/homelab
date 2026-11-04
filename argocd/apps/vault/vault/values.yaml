@@ -1,0 +1,74 @@
+global:
+  enabled: true
+  tlsDisable: true
+
+injector:
+  enabled: false
+
+server:
+  image:
+    tag: "2.0.4"
+  # One replica, but HA mode so the lock bucket is used and a second replica can be added later.
+  ha:
+    enabled: true
+    replicas: 1
+    config: |
+      ui = true
+
+      listener "tcp" {
+        tls_disable     = 1
+        address         = "[::]:8200"
+        cluster_address = "[::]:8201"
+      }
+
+      # OCI Object Storage. Credentials: API key from ~/.oci/config (mounted below).
+      storage "oracle" {
+        namespace_name    = "fr8ipbv8ozqv"
+        bucket_name       = "vault"
+        ha_enabled        = "true"
+        lock_bucket_name  = "vault-lock"
+        auth_type_api_key = true
+      }
+
+      # Auto-unseal with the OCI KMS key "vault" in KMS vault "test" (eu-frankfurt-1).
+      seal "ocikms" {
+        key_id              = "ocid1.key.oc1.eu-frankfurt-1.cbrltjvcaaa32.abtheljt336dqxmssq3jpzjwvnkr4b6qv4oxlpxj3tsewbise5kjkueqsswa"
+        crypto_endpoint     = "https://cbrltjvcaaa32-crypto.kms.eu-frankfurt-1.oraclecloud.com"
+        management_endpoint = "https://cbrltjvcaaa32-management.kms.eu-frankfurt-1.oraclecloud.com"
+        auth_type_api_key   = true
+      }
+
+      service_registration "kubernetes" {}
+
+  # Secret vault-oci (created by hand): keys `config` (key_file=/home/vault/.oci/key.pem) and `key.pem`.
+  volumes:
+    - name: oci
+      secret:
+        secretName: vault-oci
+        defaultMode: 0400
+  volumeMounts:
+    - name: oci
+      mountPath: /home/vault/.oci
+      readOnly: true
+
+  # No local data: everything lives in the bucket.
+  dataStorage:
+    enabled: false
+  auditStorage:
+    enabled: false
+
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - host: vault.marthy.xyz
+        paths: []
+    tls:
+      - secretName: vault-tls
+        hosts:
+          - vault.marthy.xyz
+
+ui:
+  enabled: true
