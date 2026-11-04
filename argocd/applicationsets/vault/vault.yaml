@@ -1,8 +1,13 @@
-# Migrated from fleet/database/cluster
+# Replaces the OCI-hosted Vault (vault.oci.marthy.xyz, down, see #1909) with HashiCorp Vault on nas.
+# Storage: OCI Object Storage (buckets vault + vault-lock), auto-unseal: OCI KMS (vault key).
+# OpenBao is not an option here: it has no OCI Object Storage backend.
+# Bootstrap: the vault-oci Secret is created by hand, see argocd/apps/vault/vault/README.md.
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: database-cluster
+  name: vault
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
   namespace: argocd
 spec:
   goTemplate: true
@@ -18,21 +23,27 @@ spec:
           - nas
   template:
     metadata:
-      name: database-cluster-{{ .name }}
+      name: vault-{{ .name }}
     spec:
       project: default
-      source:
-        repoURL: https://github.com/marthydavid/homelab
+      sources:
+      - repoURL: https://helm.releases.hashicorp.com
+        chart: vault
+        targetRevision: 0.34.1
+        helm:
+          releaseName: vault
+          valueFiles:
+          - $values/argocd/apps/vault/vault/values.yaml
+      - repoURL: https://github.com/marthydavid/homelab
         targetRevision: main
-        path: argocd/apps/database/cluster
+        ref: values
       destination:
         server: '{{ .server }}'
-        namespace: database
+        namespace: vault
       syncPolicy:
         syncOptions:
         - CreateNamespace=true
         - ServerSideApply=true
-        - SkipDryRunOnMissingResource=true
         retry:
           limit: 10
           backoff:

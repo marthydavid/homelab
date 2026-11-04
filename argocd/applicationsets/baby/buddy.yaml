@@ -3,6 +3,8 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: baby-buddy
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
   namespace: argocd
 spec:
   goTemplate: true

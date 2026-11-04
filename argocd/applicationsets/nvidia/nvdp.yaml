@@ -3,6 +3,8 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: nvidia-nvdp
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
   namespace: argocd
 spec:
   goTemplate: true

@@ -36,7 +36,7 @@ on the ArgoCD cluster Secret. Helm apps use two sources: the upstream chart and 
 | `GitRepo.targets` / `clusterSelector` | `homelab/cluster In [...]` on the ApplicationSet |
 | `targetCustomizations[].helm.valuesFiles` | `values-<cluster>.yaml` |
 | `targetCustomizations[].yaml.overlays` | `overlays/<cluster>/` kustomization (patches target the base object, `allowNameChange` keeps Fleet renames) |
-| `dependsOn` | No hard ordering: `SkipDryRunOnMissingResource` + sync retry with backoff until CRDs/secrets exist |
+| `dependsOn` | Chains inside one app use sync-waves (external-secrets -> store/secrets, cnpg operator -> database secrets -> cluster). Dependencies between separate apps are not ordered: `SkipDryRunOnMissingResource` + sync retry with backoff until CRDs/secrets exist (see #1925) |
 | `diff.comparePatches` | `ignoreDifferences` |
 | `defaultNamespace` | `destination.namespace` + `CreateNamespace=true` |
 

@@ -4,13 +4,15 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
   namespace: argocd
 spec:
   project: default
   sources:
     - repoURL: https://argoproj.github.io/argo-helm
       chart: argo-cd
-      targetRevision: 10.11.6
+      targetRevision: 10.12.0
       helm:
         releaseName: argocd
         valueFiles:

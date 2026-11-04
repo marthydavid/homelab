@@ -3,6 +3,8 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: database-operator
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
   namespace: argocd
 spec:
   goTemplate: true
@@ -34,6 +36,13 @@ spec:
       - repoURL: https://github.com/marthydavid/homelab
         targetRevision: main
         ref: values
+      # waves: operator (0) -> namespace (0) -> secrets (1) -> cluster (2); was database-secrets / database-cluster
+      - repoURL: https://github.com/marthydavid/homelab
+        targetRevision: main
+        path: argocd/apps/database/secrets
+      - repoURL: https://github.com/marthydavid/homelab
+        targetRevision: main
+        path: argocd/apps/database/cluster
       destination:
         server: '{{ .server }}'
         namespace: cnpg-system

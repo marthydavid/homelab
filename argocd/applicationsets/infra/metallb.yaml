@@ -3,6 +3,8 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: infra-metallb
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
   namespace: argocd
 spec:
   goTemplate: true
@@ -24,7 +26,7 @@ spec:
       sources:
       - repoURL: https://metallb.github.io/metallb
         chart: metallb
-        targetRevision: 0.16.1
+        targetRevision: 0.16.2
         helm:
           releaseName: metallb
           ignoreMissingValueFiles: true
