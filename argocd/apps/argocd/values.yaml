@@ -9,6 +9,32 @@ controller:
   replicas: 1
 
 server:
+  # Custom rules REPLACE the chart's defaults, so these are the argo-cd 10.12.0 defaults
+  # plus pods/exec (needed by the web terminal, configs.cm exec.enabled).
+  clusterRoleRules:
+    enabled: true
+    rules:
+      - apiGroups: ["*"]
+        resources: ["*"]
+        verbs: [delete, get, patch]
+      - apiGroups: [""]
+        resources: [events]
+        verbs: [list, create]
+      - apiGroups: [""]
+        resources: [pods, pods/log]
+        verbs: [get]
+      - apiGroups: [""]
+        resources: [pods/exec]
+        verbs: [create]
+      - apiGroups: [argoproj.io]
+        resources: [applications, applicationsets]
+        verbs: [get, list, update, watch]
+      - apiGroups: [batch]
+        resources: [jobs]
+        verbs: [create]
+      - apiGroups: [argoproj.io]
+        resources: [workflows]
+        verbs: [create]
   autoscaling:
     enabled: false
     minReplicas: 1
@@ -37,6 +63,9 @@ configs:
   cm:
     create: true
     url: "https://argocd.marthy.xyz"
+    # Web-based terminal in the pod view. The built-in role:admin already has `exec, create`;
+    # the argocd-server ClusterRole gets pods/exec via server.clusterRoleRules above.
+    exec.enabled: "true"
   params:
     # Diff against a server-side apply dry-run, so fields the API server / CRDs default
     # (ExternalSecret remoteRef policies, ServiceMonitor relabeling action, ...) are not
