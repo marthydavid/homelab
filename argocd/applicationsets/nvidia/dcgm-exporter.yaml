@@ -26,7 +26,7 @@ spec:
       sources:
       - repoURL: https://nvidia.github.io/dcgm-exporter/helm-charts
         chart: dcgm-exporter
-        targetRevision: 4.8.4
+        targetRevision: 4.9.0
         helm:
           releaseName: dcgm-exporter
           ignoreMissingValueFiles: true
