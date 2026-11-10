@@ -15,6 +15,9 @@ region=eu-frankfurt-1
 key_file=/home/vault/.oci/key.pem"
 ```
 
+Currently this is the dedicated OCI user `vault-service` (group `vault-service`, API key only, no console
+access), limited by the policy `vault-service` below. Don't use a personal key here.
+
 Policy for that user's group:
 
 ```
