@@ -1,3 +1,0 @@
-deployment:
-  servicemonitor:
-    enabled: true

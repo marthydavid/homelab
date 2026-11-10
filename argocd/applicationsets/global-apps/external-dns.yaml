@@ -1,4 +1,4 @@
-# Migrated from fleet/global-apps/external-dns
+# Migrated from former Fleet bundle global-apps/external-dns
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:

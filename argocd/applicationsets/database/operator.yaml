@@ -1,4 +1,4 @@
-# Migrated from fleet/database/operator
+# Migrated from former Fleet bundle database/operator
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:

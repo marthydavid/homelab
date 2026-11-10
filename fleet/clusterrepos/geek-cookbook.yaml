@@ -1,6 +1,0 @@
-apiVersion: catalog.cattle.io/v1
-kind: ClusterRepo
-metadata:
-  name: geek-cookbook
-spec:
-  url: https://geek-cookbook.github.io/charts

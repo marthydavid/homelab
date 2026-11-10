@@ -1,4 +1,4 @@
-# Migrated from fleet/global-apps/descheduler
+# Migrated from former Fleet bundle global-apps/descheduler
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:

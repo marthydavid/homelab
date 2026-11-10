@@ -1,4 +1,4 @@
-# Migrated from fleet/gpu/nvidia/nvdp
+# Migrated from former Fleet bundle gpu/nvidia/nvdp
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:

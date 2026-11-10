@@ -1,4 +1,4 @@
-# Migrated from fleet/truenas/grafana-dashboards
+# Migrated from former Fleet bundle truenas/grafana-dashboards
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:

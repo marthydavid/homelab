@@ -1,4 +1,4 @@
-# Migrated from fleet/infra/metallb
+# Migrated from former Fleet bundle infra/metallb
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:

@@ -1,6 +1,0 @@
-apiVersion: catalog.cattle.io/v1
-kind: ClusterRepo
-metadata:
-  name: oauth2-proxy
-spec:
-  url: https://oauth2-proxy.github.io/manifests

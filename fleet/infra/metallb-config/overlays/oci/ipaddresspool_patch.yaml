@@ -1,5 +1,0 @@
-metadata:
-  name: oci-pool
-spec:
-  addresses:
-    - 192.168.70.2-192.168.70.10

@@ -1,4 +1,4 @@
-# Migrated from fleet/truenas/immich; Postgres is the CNPG cluster in immich-postgres
+# Migrated from former Fleet bundle truenas/immich; Postgres is the CNPG cluster in immich-postgres
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:

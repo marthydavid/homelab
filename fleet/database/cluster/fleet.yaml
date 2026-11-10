@@ -1,4 +1,0 @@
-defaultNamespace: database
-dependsOn:
-  - name: database-fleet-database-secrets
-  - name: database-fleet-database-operator

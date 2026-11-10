@@ -1,4 +1,4 @@
-# Migrated from fleet/truenas/tautulli
+# Migrated from former Fleet bundle truenas/tautulli
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:

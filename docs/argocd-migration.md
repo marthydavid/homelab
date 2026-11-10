@@ -1,19 +1,20 @@
-# Fleet → ArgoCD migration
+# ArgoCD (replaced Rancher Fleet)
+
+ArgoCD is the only GitOps path in this repo. Fleet and Rancher were removed after the migration;
+the old `fleet/` and `fleet-gitrepos/` trees live only in git history.
 
 ## Target
 The lab shrinks to two clusters:
 
 | Cluster | kube context | What it is | Managed by ArgoCD |
 |---|---|---|---|
-| `nas` | `sm4` | k3s on SM4 (Pécs) and the ArgoCD hub | Everything that Fleet used to deploy there |
+| `nas` | `sm4` | k3s on SM4 (Pécs) and the ArgoCD hub | Everything (formerly deployed by Fleet) |
 | `metal1` | `metal1` | OKD 4.22, three nodes (sm1–sm3) | Only apps OKD does not already provide; today just reloader |
 
 metal1 gets cert-manager, external-secrets, external-dns, MetalLB, NFD and storage (LVMS) from
 OLM operators. Do **not** target it with the Helm charts for those. Use their CRs/config instead.
 
 The rpi `k3s`, `nuc`, `rke2-1`, `rke2-2`, `sm5` and `oci` clusters, Rancher and Fleet are gone.
-On nas the Fleet agent no longer runs, so the releases there are frozen at their last
-Fleet-deployed versions.
 
 ## Layout
 ```
@@ -30,7 +31,7 @@ argocd/
 Each ApplicationSet uses the cluster generator and selects clusters by the `homelab/cluster` label
 on the ArgoCD cluster Secret. Helm apps use two sources: the upstream chart and this repo as `$values`.
 
-### Mapping from Fleet
+### Mapping from Fleet (historical)
 | Fleet | ArgoCD |
 |---|---|
 | `GitRepo.targets` / `clusterSelector` | `homelab/cluster In [...]` on the ApplicationSet |
@@ -43,8 +44,8 @@ on the ArgoCD cluster Secret. Helm apps use two sources: the upstream chart and 
 ### Sync policy
 Applications sync automatically only on clusters whose Secret has `homelab/auto-sync: "true"`
 (set with `templatePatch`). `nas` is `"false"`: the repo is ahead of what is deployed there, so
-syncing an app also upgrades it. Review each diff and sync by hand, then flip the label once
-everything is in sync.
+syncing an app also upgrades it. Review each diff and sync by hand, then flip the label to
+`"true"` if you want automatic sync.
 
 ## Bootstrap
 ```bash
@@ -67,3 +68,11 @@ After that, ArgoCD manages itself (`argocd/applicationsets/argocd/argocd.yaml`).
 - **immich:** chart 0.12 removed the bundled postgres subchart, but `values-nas.yaml` still
   configures `postgresql:`, so it does not render.
 - **kube-vip:** this is a control-plane VIP, so it belongs to cluster bootstrap, not ArgoCD.
+  The manifests stay in `kube-vip/` and are applied by hand.
+
+## Rancher leftovers on the cluster
+Rancher left `wrangler.cattle.io/auth-prov-v2-crole*` finalizers on ClusterRoles and
+ClusterRoleBindings, so objects with a `deletionTimestamp` never go away. The dead ones
+(chaos-mesh, capi, provisioning-rke, prometheus-adapter) can have the finalizer stripped.
+`argocd-repo-server` and `external-dns-external-dns` are still in use: check that ArgoCD
+recreates them before touching them.

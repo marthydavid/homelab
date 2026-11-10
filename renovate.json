@@ -5,12 +5,6 @@
   "commitMessageExtra": "to {{newVersion}}",
   "rebaseWhen": "conflicted",
   "prConcurrentLimit": 25,
-  "fleet": {
-    "commitMessageTopic": "fleet release {{packageName}} {{depName}}",
-    "fileMatch": [
-      "(^|/)fleet\\.yaml$"
-    ]
-  },
   "argocd": {
     "commitMessageTopic": "argocd chart {{depName}}",
     "fileMatch": [

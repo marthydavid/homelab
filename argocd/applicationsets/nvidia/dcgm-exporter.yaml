@@ -1,4 +1,4 @@
-# Migrated from fleet/gpu/nvidia/dcgm-exporter
+# Migrated from former Fleet bundle gpu/nvidia/dcgm-exporter
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:

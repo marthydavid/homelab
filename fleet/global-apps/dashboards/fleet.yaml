@@ -1,3 +1,0 @@
-defaultNamespace: cattle-dashboards
-dependsOn:
-  - name: rancher-charts-fleet-rancher-charts-01-crd-monitoring

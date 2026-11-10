@@ -1,4 +1,4 @@
-# Migrated from fleet/truenas/prowlarr
+# Migrated from former Fleet bundle truenas/prowlarr
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:

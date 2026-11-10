@@ -1,4 +1,4 @@
-# Migrated from fleet/truenas/overseerr
+# Migrated from former Fleet bundle truenas/overseerr
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:

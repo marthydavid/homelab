@@ -1,4 +1,4 @@
-# Migrated from fleet/global-apps/kyverno
+# Migrated from former Fleet bundle global-apps/kyverno
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:

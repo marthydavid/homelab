@@ -1,4 +1,4 @@
-# Migrated from fleet/truenas/nut-exporter
+# Migrated from former Fleet bundle truenas/nut-exporter
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
