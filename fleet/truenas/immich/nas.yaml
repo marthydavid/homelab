@@ -1,6 +1,6 @@
 image:
   repository: ghcr.io/immich-app/immich-server
-  tag: v3.3.6
+  tag: v3.4.0
 
 postgresql:
   enabled: true
