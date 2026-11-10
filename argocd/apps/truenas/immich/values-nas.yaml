@@ -4,7 +4,7 @@ controllers:
     containers:
       main:
         image:
-          tag: v3.3.6
+          tag: v3.4.0
         env:
           DB_HOSTNAME:
             valueFrom:
@@ -82,7 +82,7 @@ machine-learning:
       containers:
         main:
           image:
-            tag: v3.3.6-cuda
+            tag: v3.4.0-cuda
           resources:
             requests:
               nvidia.com/gpu: 1
