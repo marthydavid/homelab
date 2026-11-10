@@ -1,4 +1,4 @@
-# Migrated from fleet/ipmi/sm4
+# Migrated from former Fleet bundle ipmi/sm4
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:

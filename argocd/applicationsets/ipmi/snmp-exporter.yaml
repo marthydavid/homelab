@@ -1,4 +1,4 @@
-# Migrated from fleet/ipmi/snmp-exporter
+# Migrated from former Fleet bundle ipmi/snmp-exporter
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:

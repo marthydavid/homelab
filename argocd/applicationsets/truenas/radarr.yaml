@@ -1,4 +1,4 @@
-# Migrated from fleet/truenas/radarr
+# Migrated from former Fleet bundle truenas/radarr
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:

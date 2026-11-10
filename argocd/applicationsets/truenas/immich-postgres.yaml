@@ -1,4 +1,4 @@
-# immich storage prerequisites (migrated from fleet/truenas/immich-prereq)
+# immich storage prerequisites (migrated from former Fleet bundle truenas/immich-prereq)
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:

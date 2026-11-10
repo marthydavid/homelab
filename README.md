@@ -83,16 +83,9 @@ This is the repo for my homelab
 | SM4 | Ubuntu 22.04 |
 
 
-### OCI K8s Cluster
+### GitOps
 
-* [rancher](https://rancher.com)
-* [cert-manager](https://cert-manager.io)
-* [ingress-nginx](https://kubernetes.github.io/ingress-nginx)
-* [fleet](https://fleet.rancher.io/)
-* [vault](https://vaultproject.io)
-* [external-secrets](https://external-secrets.io)
-
-
+Everything is deployed with [ArgoCD](https://argo-cd.readthedocs.io) from `argocd/` (hub: k3s on SM4, kube context `sm4`; `root` app-of-apps tracks `argocd/applicationsets`). See [docs/argocd-migration.md](docs/argocd-migration.md). Rancher and Fleet are gone.
 
 ### Main K8s cluster
 

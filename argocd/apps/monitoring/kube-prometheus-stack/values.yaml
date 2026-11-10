@@ -1,4 +1,4 @@
-# Replaces the Fleet rancher-monitoring bundle on nas (fleet/rancher-charts/01-monitoring).
+# Replaces the Fleet rancher-monitoring bundle on nas (former rancher-charts/01-monitoring bundle).
 # fullnameOverride + releaseName "rancher-monitoring" keep every object name the other apps
 # rely on (ServiceMonitor `release: rancher-monitoring` selectors, `rancher-monitoring-prometheus`
 # service account, and the PVC name of the retained Prometheus volume).

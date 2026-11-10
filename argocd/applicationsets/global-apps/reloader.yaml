@@ -1,4 +1,4 @@
-# Migrated from fleet/global-apps/reloader
+# Migrated from former Fleet bundle global-apps/reloader
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:

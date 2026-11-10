@@ -1,7 +1,0 @@
-apiVersion: catalog.cattle.io/v1
-kind: ClusterRepo
-metadata:
-  name: rancher-latest
-spec:
-  url: https://releases.rancher.com/server-charts/latest
-

@@ -1,4 +1,4 @@
-# Migrated from fleet/storage/02-monitoring
+# Migrated from former Fleet bundle storage/02-monitoring
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:

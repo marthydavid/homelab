@@ -1,7 +1,0 @@
-apiVersion: catalog.cattle.io/v1
-kind: ClusterRepo
-metadata:
-  name: vmware-tanzu
-spec:
-  url: https://vmware-tanzu.github.io/helm-charts
-

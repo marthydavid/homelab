@@ -1,3 +1,0 @@
-image:
-  repository: ghcr.io/marthydavid/testing # { "$imagescan": "testing:name" }
-  tag: v1.3.2 # { "$imagescan": "testing:tag" }

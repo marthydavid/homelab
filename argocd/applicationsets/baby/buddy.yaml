@@ -1,4 +1,4 @@
-# Migrated from fleet/baby/buddy
+# Migrated from former Fleet bundle baby/buddy
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:

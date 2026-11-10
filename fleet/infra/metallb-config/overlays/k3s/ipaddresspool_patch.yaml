@@ -1,5 +1,0 @@
-metadata:
-  name: rpi-pool
-spec:
-  addresses:
-    - 192.168.12.2-192.168.12.10

@@ -1,4 +1,4 @@
-# Migrated from fleet/global-apps/cert-manager-config
+# Migrated from former Fleet bundle global-apps/cert-manager-config
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:

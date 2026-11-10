@@ -1,4 +1,4 @@
-# Migrated from fleet/storage/00-openebs
+# Migrated from former Fleet bundle storage/00-openebs
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:

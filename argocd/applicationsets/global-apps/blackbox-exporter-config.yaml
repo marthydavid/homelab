@@ -1,4 +1,4 @@
-# Migrated from fleet/global-apps/blackbox-exporter-config
+# Migrated from former Fleet bundle global-apps/blackbox-exporter-config
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:

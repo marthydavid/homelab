@@ -1,5 +1,5 @@
 # The hub cluster itself. No credentials: ArgoCD uses its in-cluster service account.
-# homelab/auto-sync stays "false" until the Fleet bundles on nas are cut over.
+# homelab/auto-sync is "false": review each diff and sync by hand. Flip it to "true" for automatic sync.
 apiVersion: v1
 kind: Secret
 metadata:

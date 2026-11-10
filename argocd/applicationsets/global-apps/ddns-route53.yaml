@@ -1,4 +1,4 @@
-# Migrated from fleet/global-apps/ddns-route53
+# Migrated from former Fleet bundle global-apps/ddns-route53
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:

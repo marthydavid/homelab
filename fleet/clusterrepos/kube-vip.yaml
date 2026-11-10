@@ -1,6 +1,0 @@
-apiVersion: catalog.cattle.io/v1
-kind: ClusterRepo
-metadata:
-  name: kube-vip
-spec:
-  url: https://kube-vip.github.io/helm-charts
