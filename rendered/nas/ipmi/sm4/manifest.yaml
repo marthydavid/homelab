@@ -1,0 +1,65 @@
+apiVersion: v1
+data:
+  AWS_DEFAULT_REGION: eu-central-1
+  IPMI_DOMAIN: sm4.ipmi.marthy.xyz
+  IPMI_USERNAME: ADMIN
+  LE_EMAIL: marthy.david+ipmi@gmail.com
+  MODEL: X10
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/instance: sm4-ipmi
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: sm4-ipmi
+    helm.sh/chart: app-template-1.5.1
+  name: sm4-ipmi-config
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  labels:
+    app.kubernetes.io/instance: sm4-ipmi
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: sm4-ipmi
+    helm.sh/chart: app-template-1.5.1
+  name: sm4-ipmi
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      backoffLimit: 6
+      template:
+        metadata:
+          annotations:
+            checksum/config: 357ce8abe1572146e2052df946f24340e174bb8ea1800f07e737c2baf4fe9a74
+          labels:
+            app.kubernetes.io/instance: sm4-ipmi
+            app.kubernetes.io/name: sm4-ipmi
+        spec:
+          automountServiceAccountToken: true
+          containers:
+            - envFrom:
+                - configMapRef:
+                    name: sm4-ipmi-config
+                - secretRef:
+                    name: ipmi-secret
+              image: ghcr.io/marthydavid/supermicro-letsencrypt:v0.4.1
+              imagePullPolicy: IfNotPresent
+              name: sm4-ipmi
+              securityContext:
+                runAsUser: 1000
+              volumeMounts:
+                - mountPath: /home/lego/.lego
+                  name: lego
+          dnsPolicy: ClusterFirst
+          enableServiceLinks: true
+          restartPolicy: Never
+          serviceAccountName: default
+          volumes:
+            - hostPath:
+                path: /zfs/k3s/configs/sm-lego
+              name: lego
+  schedule: 10 */2 * * *
+  startingDeadlineSeconds: 30
+  successfulJobsHistoryLimit: 1

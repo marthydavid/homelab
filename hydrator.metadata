@@ -1,8 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "e7d89c4e883b369a87e7ed0b9f53a33131d92d5f",
+  "drySha": "93699344442f75f34d60954ff5e2eda05c77aa0b",
   "author": "David Marthy <marthy.david@gmail.com>",
-  "date": "2026-11-11T17:05:13Z",
-  "subject": "feat(argocd): hydrate Helm apps, group 4 (external-dns, ipmi sm1-sm4) (#1997)",
-  "body": "Render verified identical. external-dns stays on chart 1.20.0 (#1908). openebs not converted: kustomize rejects its duplicate CRDs (#1922). Also the follow-up commit for group 3.\n\nCo-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
+  "date": "2026-11-11T17:06:55Z",
+  "subject": "feat(argocd): hydrate Helm apps, group 5 (cert-manager, kyverno, ingress-nginx, metallb) (#1998)",
+  "body": "Render verified identical. Also the follow-up commit for group 4.\n\nCo-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
 }
