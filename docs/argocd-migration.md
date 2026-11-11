@@ -43,9 +43,9 @@ on the ArgoCD cluster Secret. Helm apps use two sources: the upstream chart and 
 
 ### Sync policy
 Applications sync automatically only on clusters whose Secret has `homelab/auto-sync: "true"`
-(set with `templatePatch`). `nas` is `"false"`: the repo is ahead of what is deployed there, so
-syncing an app also upgrades it. Review each diff and sync by hand, then flip the label to
-`"true"` if you want automatic sync.
+(set with `templatePatch`). `nas` is `"true"` (prune + selfHeal). With the Source Hydrator, the `rendered` branch diff is what gets
+reviewed; set the label to `"false"` to go back to syncing by hand. The label lives in
+`argocd/bootstrap/cluster-nas.yaml`, which is applied with `kubectl apply -k argocd/bootstrap`, not by ArgoCD.
 
 ## Bootstrap
 ```bash
