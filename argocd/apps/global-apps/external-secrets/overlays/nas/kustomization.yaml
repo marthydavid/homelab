@@ -13,3 +13,6 @@ helmCharts:
   valuesFile: ../../global-values.yaml
   apiVersions:
   - monitoring.coreos.com/v1
+  - monitoring.coreos.com/v1/ServiceMonitor
+  - monitoring.coreos.com/v1/PodMonitor
+  - monitoring.coreos.com/v1/PrometheusRule
