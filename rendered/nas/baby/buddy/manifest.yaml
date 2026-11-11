@@ -1,0 +1,133 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: babybuddy
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: babybuddy
+    app.kubernetes.io/service: babybuddy
+    helm.sh/chart: app-template-1.5.1
+  name: babybuddy
+spec:
+  ports:
+    - name: http
+      port: 8000
+      protocol: TCP
+      targetPort: http
+  selector:
+    app.kubernetes.io/instance: babybuddy
+    app.kubernetes.io/name: babybuddy
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    reloader.stakater.com/auto: "true"
+  labels:
+    app.kubernetes.io/instance: babybuddy
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: babybuddy
+    helm.sh/chart: app-template-1.5.1
+  name: babybuddy
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: babybuddy
+      app.kubernetes.io/name: babybuddy
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: babybuddy
+        app.kubernetes.io/name: babybuddy
+    spec:
+      automountServiceAccountToken: true
+      containers:
+        - env:
+            - name: LOG_LEVEL
+              value: info
+            - name: PGID
+              value: "1000"
+            - name: PUID
+              value: "1000"
+            - name: TZ
+              value: Europe/Budapest
+          image: ghcr.io/linuxserver/babybuddy:2.11.0
+          imagePullPolicy: null
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            tcpSocket:
+              port: 8000
+            timeoutSeconds: 1
+          name: babybuddy
+          ports:
+            - containerPort: 8000
+              name: http
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            tcpSocket:
+              port: 8000
+            timeoutSeconds: 1
+          resources:
+            limits:
+              memory: 323M
+            requests:
+              cpu: 50m
+              memory: 323M
+          startupProbe:
+            failureThreshold: 30
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            tcpSocket:
+              port: 8000
+            timeoutSeconds: 1
+          volumeMounts:
+            - mountPath: /config
+              name: config
+      dnsPolicy: ClusterFirst
+      enableServiceLinks: true
+      serviceAccountName: default
+      volumes:
+        - hostPath:
+            path: /zfs/k3s/configs/babybuddy-config
+          name: config
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    external-dns.alpha.kubernetes.io/alias: "true"
+    external-dns.alpha.kubernetes.io/target: pecs.marthy.xyz
+  labels:
+    app.kubernetes.io/instance: babybuddy
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: babybuddy
+    helm.sh/chart: app-template-1.5.1
+  name: babybuddy
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: baby.pecs.marthy.xyz
+      http:
+        paths:
+          - backend:
+              service:
+                name: babybuddy
+                port:
+                  number: 8000
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - baby.pecs.marthy.xyz
+      secretName: baby-tls

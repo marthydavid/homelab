@@ -1,0 +1,89 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: prometheus-ipmi-exporter
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: prometheus-ipmi-exporter
+    app.kubernetes.io/version: v1.10.1
+    helm.sh/chart: prometheus-ipmi-exporter-0.8.2
+  name: prometheus-ipmi-exporter
+spec:
+  ports:
+    - name: http
+      port: 9290
+      protocol: TCP
+      targetPort: http
+  selector:
+    app.kubernetes.io/instance: prometheus-ipmi-exporter
+    app.kubernetes.io/name: prometheus-ipmi-exporter
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/instance: prometheus-ipmi-exporter
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: prometheus-ipmi-exporter
+    app.kubernetes.io/version: v1.10.1
+    helm.sh/chart: prometheus-ipmi-exporter-0.8.2
+  name: prometheus-ipmi-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: prometheus-ipmi-exporter
+      app.kubernetes.io/name: prometheus-ipmi-exporter
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: prometheus-ipmi-exporter
+        app.kubernetes.io/name: prometheus-ipmi-exporter
+    spec:
+      containers:
+        - args:
+            - --config.file
+            - /config.yml
+          image: registry.hub.docker.com/prometheuscommunity/ipmi-exporter:v1.8.0
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /
+              port: http
+            timeoutSeconds: 10
+          name: ipmi-exporter
+          ports:
+            - containerPort: 9290
+              name: http
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            timeoutSeconds: 10
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          volumeMounts:
+            - mountPath: /config.yml
+              name: config-volume
+              readOnly: true
+              subPath: config.yml
+      volumes:
+        - name: config-volume
+          secret:
+            items:
+              - key: config.yml
+                path: config.yml
+            secretName: ipmi-exporter-secret

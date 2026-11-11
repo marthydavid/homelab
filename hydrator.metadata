@@ -1,8 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "86b53acf1d86bdbec22cfa42fabc1d12c9ad2970",
-  "author": "renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>",
-  "date": "2026-11-11T16:27:09Z",
-  "subject": "chore(deps): update helm release reloader to 2.2.20 (#1987)",
-  "body": "Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>\n"
+  "drySha": "2a405ee7a9461c3e48f5f079400b022031e34d59",
+  "author": "David Marthy <marthy.david@gmail.com>",
+  "date": "2026-11-11T16:58:24Z",
+  "subject": "docs: the hydrator follow-up commit must come after the apps exist on the cluster (#1993)",
+  "body": "Co-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
 }

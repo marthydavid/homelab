@@ -1,0 +1,154 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: qbittorrent
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: qbittorrent
+    app.kubernetes.io/service: qbittorrent
+    helm.sh/chart: app-template-1.5.1
+  name: qbittorrent
+spec:
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: http
+  selector:
+    app.kubernetes.io/instance: qbittorrent
+    app.kubernetes.io/name: qbittorrent
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    reloader.stakater.com/auto: "true"
+  labels:
+    app.kubernetes.io/instance: qbittorrent
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: qbittorrent
+    helm.sh/chart: app-template-1.5.1
+  name: qbittorrent
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: qbittorrent
+      app.kubernetes.io/name: qbittorrent
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        setGateway: "true"
+      labels:
+        app.kubernetes.io/instance: qbittorrent
+        app.kubernetes.io/name: qbittorrent
+    spec:
+      automountServiceAccountToken: true
+      containers:
+        - env:
+            - name: QBITTORRENT__PORT
+              value: "8080"
+            - name: QBITTORRENT__USE_PROFILE
+              value: "true"
+            - name: UMASK
+              value: "022"
+          image: ghcr.io/onedr0p/qbittorrent:4
+          imagePullPolicy: null
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            tcpSocket:
+              port: 8080
+            timeoutSeconds: 1
+          name: qbittorrent
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            tcpSocket:
+              port: 8080
+            timeoutSeconds: 1
+          resources:
+            limits:
+              memory: 4Gi
+            requests:
+              cpu: 100m
+          startupProbe:
+            failureThreshold: 30
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            tcpSocket:
+              port: 8080
+            timeoutSeconds: 1
+          volumeMounts:
+            - mountPath: /config/qBittorrent/cache
+              name: cache
+            - mountPath: /config/qBittorrent/config
+              name: config
+            - mountPath: /config/qBittorrent/data
+              name: data
+            - mountPath: /zfs/media
+              name: media
+      dnsPolicy: ClusterFirst
+      enableServiceLinks: true
+      hostname: qbittorrent
+      securityContext:
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 568
+        runAsUser: 568
+        supplementalGroups:
+          - 10000
+      serviceAccountName: default
+      volumes:
+        - emptyDir: {}
+          name: cache
+        - hostPath:
+            path: /zfs/k3s/configs/qbittorrent-config
+          name: config
+        - hostPath:
+            path: /zfs/k3s/configs/qbittorrent-data
+          name: data
+        - hostPath:
+            path: /zfs/media
+          name: media
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    external-dns.alpha.kubernetes.io/alias: "true"
+    external-dns.alpha.kubernetes.io/target: pecs.marthy.xyz
+  labels:
+    app.kubernetes.io/instance: qbittorrent
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: qbittorrent
+    helm.sh/chart: app-template-1.5.1
+  name: qbittorrent
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: qbit.pecs.marthy.xyz
+      http:
+        paths:
+          - backend:
+              service:
+                name: qbittorrent
+                port:
+                  number: 8080
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - qbit.pecs.marthy.xyz
+      secretName: qbit-tls

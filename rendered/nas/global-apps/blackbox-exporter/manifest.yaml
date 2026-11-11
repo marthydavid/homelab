@@ -1,0 +1,159 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/instance: prometheus-blackbox-exporter
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: prometheus-blackbox-exporter
+    app.kubernetes.io/version: v0.29.1
+    helm.sh/chart: prometheus-blackbox-exporter-11.21.2
+  name: prometheus-blackbox-exporter
+  namespace: cattle-monitoring-system
+---
+apiVersion: v1
+data:
+  blackbox.yaml: |
+    modules:
+      http_2xx:
+        http:
+          follow_redirects: true
+          preferred_ip_protocol: ip4
+          valid_http_versions:
+          - HTTP/1.1
+          - HTTP/2.0
+        prober: http
+        timeout: 5s
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/instance: prometheus-blackbox-exporter
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: prometheus-blackbox-exporter
+    app.kubernetes.io/version: v0.29.1
+    helm.sh/chart: prometheus-blackbox-exporter-11.21.2
+  name: prometheus-blackbox-exporter
+  namespace: cattle-monitoring-system
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: prometheus-blackbox-exporter
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: prometheus-blackbox-exporter
+    app.kubernetes.io/version: v0.29.1
+    helm.sh/chart: prometheus-blackbox-exporter-11.21.2
+  name: prometheus-blackbox-exporter
+  namespace: cattle-monitoring-system
+spec:
+  ports:
+    - name: http
+      port: 9115
+      protocol: TCP
+      targetPort: http
+  selector:
+    app.kubernetes.io/instance: prometheus-blackbox-exporter
+    app.kubernetes.io/name: prometheus-blackbox-exporter
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/instance: prometheus-blackbox-exporter
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: prometheus-blackbox-exporter
+    app.kubernetes.io/version: v0.29.1
+    helm.sh/chart: prometheus-blackbox-exporter-11.21.2
+  name: prometheus-blackbox-exporter
+  namespace: cattle-monitoring-system
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: prometheus-blackbox-exporter
+      app.kubernetes.io/name: prometheus-blackbox-exporter
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        checksum/config: f43e733459690a84886aec93596a01748c2f936776a534eeaeb9f084e62ebb91
+      labels:
+        app.kubernetes.io/instance: prometheus-blackbox-exporter
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: prometheus-blackbox-exporter
+        app.kubernetes.io/version: v0.29.1
+        helm.sh/chart: prometheus-blackbox-exporter-11.21.2
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - args:
+            - --config.file=/config/blackbox.yaml
+          image: quay.io/prometheus/blackbox-exporter:v0.29.1
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /-/healthy
+              port: http
+          name: blackbox-exporter
+          ports:
+            - containerPort: 9115
+              name: http
+          readinessProbe:
+            httpGet:
+              path: /-/healthy
+              port: http
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              add:
+                - NET_RAW
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
+          volumeMounts:
+            - mountPath: /config
+              name: config
+      hostNetwork: false
+      restartPolicy: Always
+      serviceAccountName: prometheus-blackbox-exporter
+      volumes:
+        - configMap:
+            name: prometheus-blackbox-exporter
+          name: config
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app.kubernetes.io/instance: prometheus-blackbox-exporter
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: prometheus-blackbox-exporter
+    app.kubernetes.io/version: v0.29.1
+    helm.sh/chart: prometheus-blackbox-exporter-11.21.2
+  name: prometheus-blackbox-exporter
+  namespace: cattle-monitoring-system
+spec:
+  endpoints:
+    - interval: 30s
+      path: /metrics
+      port: http
+      scheme: http
+      scrapeTimeout: 30s
+  jobLabel: prometheus-blackbox-exporter
+  namespaceSelector:
+    matchNames:
+      - cattle-monitoring-system
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: prometheus-blackbox-exporter
+      app.kubernetes.io/name: prometheus-blackbox-exporter
