@@ -1,31 +1,60 @@
-controller:
+controllers:
+  main:
+    strategy: Recreate
+    annotations:
+      reloader.stakater.com/auto: "true"
+    containers:
+      main:
+        image:
+          repository: ghcr.io/onedr0p/qbittorrent
+          tag: 4
+        env:
+          UMASK: "022"
+          QBITTORRENT__PORT: 8080
+          QBITTORRENT__USE_PROFILE: "true"
+        probes:
+          liveness: &probe
+            enabled: true
+            custom: true
+            spec:
+              tcpSocket:
+                port: 8080
+              initialDelaySeconds: 0
+              periodSeconds: 10
+              timeoutSeconds: 1
+              failureThreshold: 3
+          readiness: *probe
+          startup:
+            enabled: true
+            custom: true
+            spec:
+              tcpSocket:
+                port: 8080
+              initialDelaySeconds: 0
+              periodSeconds: 5
+              timeoutSeconds: 1
+              failureThreshold: 30
+        resources:
+          requests:
+            cpu: 100m
+          limits:
+            memory: 4Gi
+
+defaultPodOptions:
+  hostname: qbittorrent
   annotations:
-    reloader.stakater.com/auto: "true"
-
-image:
-  repository: ghcr.io/onedr0p/qbittorrent
-  tag: 4
-
-podAnnotations:
-  setGateway: "true"
-
-podSecurityContext:
-  runAsUser: 568
-  runAsGroup: 568
-  fsGroup: 568
-  fsGroupChangePolicy: "OnRootMismatch"
-  supplementalGroups:
-    - 10000
-
-env:
-  UMASK: "022"
-  QBITTORRENT__PORT: 8080
-  QBITTORRENT__USE_PROFILE: "true"
-
-hostname: qbittorrent
+    setGateway: "true"
+  securityContext:
+    runAsUser: 568
+    runAsGroup: 568
+    fsGroup: 568
+    fsGroupChangePolicy: "OnRootMismatch"
+    supplementalGroups:
+      - 10000
 
 service:
   main:
+    controller: main
     ports:
       http:
         port: 8080
@@ -33,7 +62,7 @@ service:
 ingress:
   main:
     enabled: true
-    ingressClassName: "nginx"
+    className: "nginx"
     annotations:
       external-dns.alpha.kubernetes.io/alias: "true"
       external-dns.alpha.kubernetes.io/target: pecs.marthy.xyz
@@ -42,6 +71,9 @@ ingress:
       - host: "qbit.pecs.marthy.xyz"
         paths:
           - path: /
+            service:
+              identifier: main
+              port: http
     tls:
       - hosts:
           - qbit.pecs.marthy.xyz
@@ -52,27 +84,22 @@ persistence:
     enabled: true
     type: hostPath
     hostPath: /zfs/k3s/configs/qbittorrent-config
-    mountPath: /config/qBittorrent/config
-
+    globalMounts:
+      - path: /config/qBittorrent/config
   cache:
     enabled: true
     type: emptyDir
-    mountPath: /config/qBittorrent/cache
-
+    globalMounts:
+      - path: /config/qBittorrent/cache
   data:
     enabled: true
     type: hostPath
     hostPath: /zfs/k3s/configs/qbittorrent-data
-    mountPath: /config/qBittorrent/data
-
+    globalMounts:
+      - path: /config/qBittorrent/data
   media:
     enabled: true
     type: hostPath
     hostPath: /zfs/media
-    mountPath: /zfs/media
-
-resources:
-  requests:
-    cpu: 100m
-  limits:
-    memory: 4Gi
+    globalMounts:
+      - path: /zfs/media
