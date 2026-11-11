@@ -15,7 +15,6 @@ The commit-server pushes to `rendered`, so ArgoCD needs repo credentials **with 
 (a GitHub App or PAT with `contents: write`), registered as a repository or `repo-creds` Secret
 for `https://github.com/marthydavid/homelab`. Credentials are not stored in this repo.
 Do not protect `rendered` against pushes by ArgoCD, and do not edit it by hand.
-Hydrator commits are made with `[skip ci]`-style notes, so Renovate and Actions can ignore the branch.
 
 ## Constraint: single source only
 `sourceHydrator` replaces `source`. It does **not** support `sources:`. Today most apps here are
