@@ -23,10 +23,14 @@ spec:
       name: ipmi-exporter-targets-{{ .name }}
     spec:
       project: default
-      source:
-        repoURL: https://github.com/marthydavid/homelab
-        targetRevision: main
-        path: argocd/apps/global-apps/ipmi-exporter-targets
+      sourceHydrator:
+        drySource:
+          repoURL: https://github.com/marthydavid/homelab
+          targetRevision: main
+          path: argocd/apps/global-apps/ipmi-exporter-targets
+        syncSource:
+          targetBranch: rendered
+          path: rendered/{{ .name }}/global-apps/ipmi-exporter-targets
       destination:
         server: '{{ .server }}'
         namespace: cattle-monitoring-system
