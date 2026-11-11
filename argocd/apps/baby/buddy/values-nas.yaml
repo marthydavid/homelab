@@ -11,9 +11,6 @@ env:
   PGID: 1000
   TZ: Europe/Budapest
   LOG_LEVEL: "info"
-envFrom:
-  - secretRef:
-      name: babybuddy-db
 service:
   main:
     ports:
