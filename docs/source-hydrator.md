@@ -73,6 +73,24 @@ conversion is too early). So: merge the conversion, wait until `kubectl -n argoc
 jsonpath='{.spec.sourceHydrator}'` is set, **then** merge any further commit to `main` (a docs fix is
 enough), and check that `rendered/<cluster>/<group>/<app>/manifest.yaml` exists and the app is Synced.
 
+## Current state (nas)
+Hydrated to `rendered`: all plain-manifest/kustomize apps, and the Helm apps wrapped with kustomize
+`helmCharts` (`argocd/apps/<group>/<app>/overlays/nas/kustomization.yaml`; the chart version lives there and
+Renovate bumps it).
+
+Still on multi-source Helm (not hydrated):
+- `storage/openebs`: kustomize rejects the chart's duplicate CRDs (issue #1922).
+- `monitoring/kube-prometheus-stack`: very large CRDs, a single `manifest.yaml` may hit size limits.
+- `argocd`: manages the hydrator itself, left as is.
+- `prometheus-operator-crds`, `database/barman-cloud-plugin`: chart straight from a Helm repo, no values from
+  this repo (the hydrator needs a git dry source).
+
+Gotcha when wrapping a chart: kustomize does not tell the chart which API versions the cluster has, so charts that
+gate objects on `.Capabilities.APIVersions` (ServiceMonitors, ...) render less than ArgoCD's own Helm. Declare them
+in `helmCharts.apiVersions` (`monitoring.coreos.com/v1` and its `ServiceMonitor`/`PodMonitor`/`PrometheusRule`
+kinds are set everywhere). An app that shows OutOfSync right after conversion is the signal; do not sync it before
+the output matches live.
+
 ## Rollout plan
 1. Merge the enablement PR, sync the `argocd` app by hand, check `argocd-commit-server` is Running.
 2. Add write credentials (see above).
