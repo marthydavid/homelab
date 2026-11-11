@@ -1,8 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "6cd48afb2e1f9e070b012262d1e3dbadc8433eb9",
-  "author": "David Marthy <marthy.david@gmail.com>",
-  "date": "2026-11-11T16:24:59Z",
-  "subject": "test: pin reloader chart to 2.2.19 so Renovate has to bump it (canary for helmCharts) (#1986)",
-  "body": "Not deployed: nas auto-sync is off, so only the rendered branch changes. Expect a Renovate PR bumping base/kustomization.yaml to 2.2.20.\n\nCo-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
+  "drySha": "86b53acf1d86bdbec22cfa42fabc1d12c9ad2970",
+  "author": "renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>",
+  "date": "2026-11-11T16:27:09Z",
+  "subject": "chore(deps): update helm release reloader to 2.2.20 (#1987)",
+  "body": "Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>\n"
 }
