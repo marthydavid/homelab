@@ -1,0 +1,7 @@
+{
+  "repoURL": "https://github.com/marthydavid/homelab",
+  "drySha": "7f8db8bb343397871f88b944fb14c1a8dac58e95",
+  "commands": [
+    "kustomize build ./argocd/apps/infra/metallb/overlays/nas --enable-helm --load-restrictor LoadRestrictionsNone"
+  ]
+}
