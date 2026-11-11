@@ -23,10 +23,14 @@ spec:
       name: infra-metallb-config-{{ .name }}
     spec:
       project: default
-      source:
-        repoURL: https://github.com/marthydavid/homelab
-        targetRevision: main
-        path: argocd/apps/infra/metallb-config/overlays/{{ .name }}
+      sourceHydrator:
+        drySource:
+          repoURL: https://github.com/marthydavid/homelab
+          targetRevision: main
+          path: argocd/apps/infra/metallb-config/overlays/{{ .name }}
+        syncSource:
+          targetBranch: rendered
+          path: rendered/{{ .name }}/infra/metallb-config
       destination:
         server: '{{ .server }}'
         namespace: metallb-system
