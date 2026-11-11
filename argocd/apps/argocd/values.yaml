@@ -59,6 +59,11 @@ applicationSet:
   replicaCount: 1
 
 
+# Source Hydrator: renders manifests from the dry source and pushes them to the `rendered` branch.
+# See docs/source-hydrator.md. Nothing uses it until an Application sets spec.sourceHydrator.
+commitServer:
+  enabled: true
+
 configs:
   cm:
     create: true
@@ -71,3 +76,4 @@ configs:
     # (ExternalSecret remoteRef policies, ServiceMonitor relabeling action, ...) are not
     # reported as OutOfSync.
     controller.diff.server.side: true
+    hydrator.enabled: true

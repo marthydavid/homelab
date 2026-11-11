@@ -1,0 +1,53 @@
+# ArgoCD Source Hydrator (`rendered` branch)
+
+The Source Hydrator renders manifests from a *dry* source (this repo, `main`) and commits the
+result to a *hydrated* branch, `rendered`. ArgoCD then syncs from `rendered`, so every change
+shows up as a reviewable manifest diff in git, and what is applied no longer depends on the
+repo-server's Helm/Kustomize at sync time.
+
+## What is enabled
+- `commitServer.enabled: true` and `configs.params.hydrator.enabled: true` in
+  `argocd/apps/argocd/values.yaml` (ArgoCD v3.6.x, chart 10.17).
+- No Application uses it yet. Enabling it changes nothing until one sets `spec.sourceHydrator`.
+
+## One manual step: write access for `rendered`
+The commit-server pushes to `rendered`, so ArgoCD needs repo credentials **with write access**
+(a GitHub App or PAT with `contents: write`), registered as a repository or `repo-creds` Secret
+for `https://github.com/marthydavid/homelab`. Credentials are not stored in this repo.
+Do not protect `rendered` against pushes by ArgoCD, and do not edit it by hand.
+
+## Constraint: single source only
+`sourceHydrator` replaces `source`. It does **not** support `sources:`. Today most apps here are
+multi-source Helm (upstream chart plus `$values/...` from this repo): 35 of the 51
+ApplicationSets. Those cannot be switched directly. The 16 single-source ones (plain manifests
+and kustomize overlays) can.
+
+Options for the multi-source Helm apps, in order of preference:
+1. Wrap the chart in a kustomize dir with `helmCharts:` + `valuesFile` next to it (needs
+   `kustomize.buildOptions: --enable-helm` in `argocd-cm`).
+2. Wrap it in a local Helm chart that depends on the upstream chart (values go under the
+   dependency name; Renovate understands `Chart.yaml` dependencies).
+
+## Shape of a hydrated Application
+```yaml
+spec:
+  sourceHydrator:
+    drySource:
+      repoURL: https://github.com/marthydavid/homelab
+      targetRevision: main
+      path: argocd/apps/global-apps/dashboards
+    syncSource:
+      targetBranch: rendered
+      path: rendered/{{ .name }}/global-apps/dashboards   # one dir per app and cluster
+    # hydrateTo: rendered-next    # optional staging branch for review before promotion
+```
+Use a distinct `syncSource.path` per Application, otherwise they overwrite each other.
+`rendered` is an orphan branch that holds only generated manifests.
+
+## Rollout plan
+1. Merge the enablement PR, sync the `argocd` app by hand, check `argocd-commit-server` is Running.
+2. Add write credentials (see above).
+3. Pilot one single-source app, e.g. `global-apps/dashboards`, on `nas`.
+4. Convert the kustomize-based apps, then wrap and convert the Helm apps one group at a time.
+5. Only then consider `homelab/auto-sync: "true"`, since reviewing the `rendered` diff replaces
+   reviewing each app's diff in the UI.
