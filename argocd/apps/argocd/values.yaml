@@ -73,7 +73,7 @@ configs:
     exec.enabled: "true"
     # Lets kustomize inflate Helm charts (helmCharts:), which is how multi-source Helm apps get
     # wrapped into a single source for the Source Hydrator (docs/source-hydrator.md).
-    kustomize.buildOptions: --enable-helm
+    kustomize.buildOptions: --enable-helm --load-restrictor LoadRestrictionsNone
   params:
     # Diff against a server-side apply dry-run, so fields the API server / CRDs default
     # (ExternalSecret remoteRef policies, ServiceMonitor relabeling action, ...) are not
