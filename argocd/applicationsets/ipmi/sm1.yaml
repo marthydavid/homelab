@@ -23,20 +23,14 @@ spec:
       name: ipmi-sm1-{{ .name }}
     spec:
       project: default
-      sources:
-      - repoURL: https://bjw-s-labs.github.io/helm-charts
-        chart: app-template
-        targetRevision: 1.5.1
-        helm:
-          releaseName: sm1-ipmi
-          ignoreMissingValueFiles: true
-          valueFiles:
-          - $values/argocd/apps/ipmi/sm1/default-values.yaml
-          - $values/argocd/apps/ipmi/sm1/sm1-values.yaml
-          - $values/argocd/apps/ipmi/sm1/values-{{ .name }}.yaml
-      - repoURL: https://github.com/marthydavid/homelab
-        targetRevision: main
-        ref: values
+      sourceHydrator:
+        drySource:
+          repoURL: https://github.com/marthydavid/homelab
+          targetRevision: main
+          path: argocd/apps/ipmi/sm1/overlays/{{ .name }}
+        syncSource:
+          targetBranch: rendered
+          path: rendered/{{ .name }}/ipmi/sm1
       destination:
         server: '{{ .server }}'
         namespace: sm-ipmi

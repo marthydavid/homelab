@@ -1,0 +1,12 @@
+helmCharts:
+- name: app-template
+  repo: https://bjw-s-labs.github.io/helm-charts
+  version: 1.5.1
+  releaseName: sm4-ipmi
+  namespace: sm-ipmi
+  includeCRDs: true
+  valuesFile: ../../default-values.yaml
+  additionalValuesFiles:
+  - ../../sm4-values.yaml
+  apiVersions:
+  - monitoring.coreos.com/v1
