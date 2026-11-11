@@ -23,19 +23,14 @@ spec:
       name: storage-monitoring-{{ .name }}
     spec:
       project: default
-      sources:
-      - repoURL: https://openebs.github.io/monitoring
-        chart: openebs-monitoring
-        targetRevision: 0.4.13
-        helm:
-          releaseName: openebs-monitoring
-          ignoreMissingValueFiles: true
-          valueFiles:
-          - $values/argocd/apps/storage/monitoring/global.yaml
-          - $values/argocd/apps/storage/monitoring/values-{{ .name }}.yaml
-      - repoURL: https://github.com/marthydavid/homelab
-        targetRevision: main
-        ref: values
+      sourceHydrator:
+        drySource:
+          repoURL: https://github.com/marthydavid/homelab
+          targetRevision: main
+          path: argocd/apps/storage/monitoring/overlays/{{ .name }}
+        syncSource:
+          targetBranch: rendered
+          path: rendered/{{ .name }}/storage/monitoring
       destination:
         server: '{{ .server }}'
         namespace: openebs

@@ -1,0 +1,10 @@
+helmCharts:
+- name: prometheus-snmp-exporter
+  repo: https://prometheus-community.github.io/helm-charts
+  version: 9.21.1
+  releaseName: prometheus-snmp-exporter
+  namespace: cattle-monitoring-system
+  includeCRDs: true
+  valuesFile: ../../values.yaml
+  apiVersions:
+  - monitoring.coreos.com/v1

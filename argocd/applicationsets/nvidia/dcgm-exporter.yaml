@@ -23,19 +23,14 @@ spec:
       name: nvidia-dcgm-exporter-{{ .name }}
     spec:
       project: default
-      sources:
-      - repoURL: https://nvidia.github.io/dcgm-exporter/helm-charts
-        chart: dcgm-exporter
-        targetRevision: 4.9.0
-        helm:
-          releaseName: dcgm-exporter
-          ignoreMissingValueFiles: true
-          valueFiles:
-          - $values/argocd/apps/nvidia/dcgm-exporter/values.yaml
-          - $values/argocd/apps/nvidia/dcgm-exporter/values-{{ .name }}.yaml
-      - repoURL: https://github.com/marthydavid/homelab
-        targetRevision: main
-        ref: values
+      sourceHydrator:
+        drySource:
+          repoURL: https://github.com/marthydavid/homelab
+          targetRevision: main
+          path: argocd/apps/nvidia/dcgm-exporter/overlays/{{ .name }}
+        syncSource:
+          targetBranch: rendered
+          path: rendered/{{ .name }}/nvidia/dcgm-exporter
       destination:
         server: '{{ .server }}'
         namespace: nvidia-device-plugin
