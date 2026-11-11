@@ -5,10 +5,31 @@ prometheus:
     enabled: true
   prometheusRule:
     enabled: true
+
+# BGP backend: the frr-k8s subchart (metallb >=0.16 default). MetalLB translates its
+# BGPPeer/BGPAdvertisement/IPAddressPool CRs into FRRConfiguration objects for it.
+# Mutually exclusive with speaker.frr (the old bundled FRR sidecar).
 speaker:
   frr:
-    enabled: true
-
-# metallb >=0.16 enables frrk8s by default; it is mutually exclusive with speaker.frr
+    enabled: false
 frrk8s:
-  enabled: false
+  enabled: true
+
+# frr-k8s metrics (BGP/BFD) replace the old frrmetricshttps endpoint of the bundled FRR.
+# Relabel to the legacy metallb_ prefix so existing dashboards and alerts keep working.
+frr-k8s:
+  prometheus:
+    rbacPrometheus: true
+    serviceAccount: rancher-monitoring-prometheus
+    namespace: cattle-monitoring-system
+    serviceMonitor:
+      enabled: true
+      metricRelabelings:
+      - sourceLabels: [__name__]
+        regex: "frrk8s_bgp_(.*)"
+        targetLabel: "__name__"
+        replacement: "metallb_bgp_$1"
+      - sourceLabels: [__name__]
+        regex: "frrk8s_bfd_(.*)"
+        targetLabel: "__name__"
+        replacement: "metallb_bfd_$1"
