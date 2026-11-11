@@ -20,6 +20,12 @@
   },
   "packageRules": [
     {
+      "description": "Hold external-dns: v0.23 rewrites target/alias A ALIAS records to plain A (issue #1908)",
+      "matchPackageNames": ["external-dns"],
+      "matchDatasources": ["helm"],
+      "enabled": false
+    },
+    {
       "description": "Hold external-dns at chart 1.20.x until #1908 is solved (v0.23 rewrites ALIAS records to A)",
       "matchDatasources": ["helm"],
       "matchDepNames": ["external-dns"],
