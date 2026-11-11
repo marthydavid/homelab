@@ -23,14 +23,10 @@ spec:
       name: truenas-grafana-dashboards-{{ .name }}
     spec:
       project: default
-      sourceHydrator:
-        drySource:
-          repoURL: https://github.com/marthydavid/homelab
-          targetRevision: main
-          path: argocd/apps/truenas/grafana-dashboards
-        syncSource:
-          targetBranch: rendered
-          path: rendered/{{ .name }}/truenas/grafana-dashboards
+      source:
+        repoURL: https://github.com/marthydavid/homelab
+        targetRevision: main
+        path: argocd/apps/truenas/grafana-dashboards
       destination:
         server: '{{ .server }}'
         namespace: cattle-dashboards
