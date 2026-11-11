@@ -23,18 +23,14 @@ spec:
       name: truenas-prowlarr-{{ .name }}
     spec:
       project: default
-      sources:
-      - repoURL: https://bjw-s-labs.github.io/helm-charts
-        chart: app-template
-        targetRevision: 1.5.1
-        helm:
-          releaseName: prowlarr
-          ignoreMissingValueFiles: true
-          valueFiles:
-          - $values/argocd/apps/truenas/prowlarr/values-{{ .name }}.yaml
-      - repoURL: https://github.com/marthydavid/homelab
-        targetRevision: main
-        ref: values
+      sourceHydrator:
+        drySource:
+          repoURL: https://github.com/marthydavid/homelab
+          targetRevision: main
+          path: argocd/apps/truenas/prowlarr/overlays/{{ .name }}
+        syncSource:
+          targetBranch: rendered
+          path: rendered/{{ .name }}/truenas/prowlarr
       destination:
         server: '{{ .server }}'
         namespace: mediarr

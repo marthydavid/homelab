@@ -23,18 +23,14 @@ spec:
       name: baby-buddy-{{ .name }}
     spec:
       project: default
-      sources:
-      - repoURL: https://bjw-s-labs.github.io/helm-charts
-        chart: app-template
-        targetRevision: 1.5.1
-        helm:
-          releaseName: babybuddy
-          ignoreMissingValueFiles: true
-          valueFiles:
-          - $values/argocd/apps/baby/buddy/values-{{ .name }}.yaml
-      - repoURL: https://github.com/marthydavid/homelab
-        targetRevision: main
-        ref: values
+      sourceHydrator:
+        drySource:
+          repoURL: https://github.com/marthydavid/homelab
+          targetRevision: main
+          path: argocd/apps/baby/buddy/overlays/{{ .name }}
+        syncSource:
+          targetBranch: rendered
+          path: rendered/{{ .name }}/baby/buddy
       destination:
         server: '{{ .server }}'
         namespace: baby
