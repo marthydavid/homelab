@@ -1,4 +1,15 @@
 apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/instance: tautulli
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: tautulli
+    helm.sh/chart: app-template-5.3.0
+  name: tautulli
+  namespace: mediarr
+---
+apiVersion: v1
 kind: Service
 metadata:
   labels:
@@ -6,15 +17,17 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: tautulli
     app.kubernetes.io/service: tautulli
-    helm.sh/chart: app-template-1.5.1
+    helm.sh/chart: app-template-5.3.0
   name: tautulli
+  namespace: mediarr
 spec:
   ports:
     - name: http
       port: 8181
       protocol: TCP
-      targetPort: http
+      targetPort: 8181
   selector:
+    app.kubernetes.io/controller: main
     app.kubernetes.io/instance: tautulli
     app.kubernetes.io/name: tautulli
   type: ClusterIP
@@ -25,16 +38,19 @@ metadata:
   annotations:
     reloader.stakater.com/auto: "true"
   labels:
+    app.kubernetes.io/controller: main
     app.kubernetes.io/instance: tautulli
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: tautulli
-    helm.sh/chart: app-template-1.5.1
+    helm.sh/chart: app-template-5.3.0
   name: tautulli
+  namespace: mediarr
 spec:
   replicas: 1
   revisionHistoryLimit: 3
   selector:
     matchLabels:
+      app.kubernetes.io/controller: main
       app.kubernetes.io/instance: tautulli
       app.kubernetes.io/name: tautulli
   strategy:
@@ -42,13 +58,13 @@ spec:
   template:
     metadata:
       labels:
+        app.kubernetes.io/controller: main
         app.kubernetes.io/instance: tautulli
         app.kubernetes.io/name: tautulli
     spec:
-      automountServiceAccountToken: true
+      automountServiceAccountToken: false
       containers:
         - image: ghcr.io/home-operations/tautulli:2.19.1
-          imagePullPolicy: null
           livenessProbe:
             failureThreshold: 3
             initialDelaySeconds: 0
@@ -56,11 +72,7 @@ spec:
             tcpSocket:
               port: 8181
             timeoutSeconds: 1
-          name: tautulli
-          ports:
-            - containerPort: 8181
-              name: http
-              protocol: TCP
+          name: main
           readinessProbe:
             failureThreshold: 3
             initialDelaySeconds: 0
@@ -85,7 +97,10 @@ spec:
             - mountPath: /config
               name: config
       dnsPolicy: ClusterFirst
-      enableServiceLinks: true
+      enableServiceLinks: false
+      hostIPC: false
+      hostNetwork: false
+      hostPID: false
       securityContext:
         fsGroup: 568
         fsGroupChangePolicy: OnRootMismatch
@@ -93,7 +108,7 @@ spec:
         runAsUser: 568
         supplementalGroups:
           - 65539
-      serviceAccountName: default
+      serviceAccountName: tautulli
       volumes:
         - hostPath:
             path: /zfs/k3s/configs/tautulli-config
@@ -110,8 +125,9 @@ metadata:
     app.kubernetes.io/instance: tautulli
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: tautulli
-    helm.sh/chart: app-template-1.5.1
+    helm.sh/chart: app-template-5.3.0
   name: tautulli
+  namespace: mediarr
 spec:
   ingressClassName: nginx
   rules:
