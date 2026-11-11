@@ -1,21 +1,54 @@
-controller:
-  annotations:
-    reloader.stakater.com/auto: "true"
+controllers:
+  main:
+    strategy: Recreate
+    annotations:
+      reloader.stakater.com/auto: "true"
+    containers:
+      main:
+        image:
+          repository: ghcr.io/home-operations/tautulli
+          tag: 2.19.1
+        probes:
+          liveness: &probe
+            enabled: true
+            custom: true
+            spec:
+              tcpSocket:
+                port: 8181
+              initialDelaySeconds: 0
+              periodSeconds: 10
+              timeoutSeconds: 1
+              failureThreshold: 3
+          readiness: *probe
+          startup:
+            enabled: true
+            custom: true
+            spec:
+              tcpSocket:
+                port: 8181
+              initialDelaySeconds: 0
+              periodSeconds: 5
+              timeoutSeconds: 1
+              failureThreshold: 30
+        resources:
+          requests:
+            cpu: 5m
+            memory: 323M
+          limits:
+            memory: 323M
 
-image:
-  repository: ghcr.io/home-operations/tautulli
-  tag: 2.19.1
-
-podSecurityContext:
-  runAsUser: 568
-  runAsGroup: 568
-  fsGroup: 568
-  fsGroupChangePolicy: "OnRootMismatch"
-  supplementalGroups:
-    - 65539
+defaultPodOptions:
+  securityContext:
+    runAsUser: 568
+    runAsGroup: 568
+    fsGroup: 568
+    fsGroupChangePolicy: "OnRootMismatch"
+    supplementalGroups:
+      - 65539
 
 service:
   main:
+    controller: main
     ports:
       http:
         port: 8181
@@ -23,7 +56,7 @@ service:
 ingress:
   main:
     enabled: true
-    ingressClassName: "nginx"
+    className: "nginx"
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
       external-dns.alpha.kubernetes.io/target: pecs.marthy.xyz
@@ -32,6 +65,9 @@ ingress:
       - host: "tautulli.pecs.marthy.xyz"
         paths:
           - path: /
+            service:
+              identifier: main
+              port: http
     tls:
       - hosts:
           - tautulli.pecs.marthy.xyz
@@ -41,12 +77,6 @@ persistence:
   config:
     enabled: true
     type: hostPath
-    mountPath: /config
     hostPath: /zfs/k3s/configs/tautulli-config
-
-resources:
-  requests:
-    cpu: 5m
-    memory: 323M
-  limits:
-    memory: 323M
+    globalMounts:
+      - path: /config
