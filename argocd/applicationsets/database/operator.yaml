@@ -23,26 +23,14 @@ spec:
       name: database-operator-{{ .name }}
     spec:
       project: default
-      sources:
-      - repoURL: https://cloudnative-pg.github.io/charts
-        chart: cloudnative-pg
-        targetRevision: 0.29.1
-        helm:
-          releaseName: cloudnative-pg
-          ignoreMissingValueFiles: true
-          valueFiles:
-          - $values/argocd/apps/database/operator/global-values.yaml
-          - $values/argocd/apps/database/operator/values-{{ .name }}.yaml
-      - repoURL: https://github.com/marthydavid/homelab
-        targetRevision: main
-        ref: values
-      # waves: operator (0) -> namespace (0) -> secrets (1) -> cluster (2); was database-secrets / database-cluster
-      - repoURL: https://github.com/marthydavid/homelab
-        targetRevision: main
-        path: argocd/apps/database/secrets
-      - repoURL: https://github.com/marthydavid/homelab
-        targetRevision: main
-        path: argocd/apps/database/cluster
+      sourceHydrator:
+        drySource:
+          repoURL: https://github.com/marthydavid/homelab
+          targetRevision: main
+          path: argocd/apps/database/operator/overlays/{{ .name }}
+        syncSource:
+          targetBranch: rendered
+          path: rendered/{{ .name }}/database/operator
       destination:
         server: '{{ .server }}'
         namespace: cnpg-system

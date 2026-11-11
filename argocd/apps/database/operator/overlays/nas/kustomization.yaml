@@ -1,0 +1,15 @@
+resources:
+- ../../../secrets/db-secret.yaml
+- ../../../secrets/namespace.yaml
+- ../../../cluster/cluster.yaml
+
+helmCharts:
+- name: cloudnative-pg
+  repo: https://cloudnative-pg.github.io/charts
+  version: 0.29.1
+  releaseName: cloudnative-pg
+  namespace: cnpg-system
+  includeCRDs: true
+  valuesFile: ../../global-values.yaml
+  apiVersions:
+  - monitoring.coreos.com/v1
