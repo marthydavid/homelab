@@ -6,3 +6,5 @@ helmCharts:
   namespace: cattle-monitoring-system
   includeCRDs: true
   valuesFile: ../../default.yml
+  apiVersions:
+  - monitoring.coreos.com/v1
