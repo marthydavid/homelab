@@ -28,7 +28,7 @@ spec:
         chart: external-dns
         # Pinned: external-dns v0.23 rewrote the target/alias A ALIAS records to plain A
         # records pointing at the ingress LB (2026-11-01). Investigate before bumping.
-        targetRevision: 1.23.0
+        targetRevision: 1.20.0
         helm:
           releaseName: external-dns
           ignoreMissingValueFiles: true
