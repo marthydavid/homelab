@@ -1,8 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "2a405ee7a9461c3e48f5f079400b022031e34d59",
+  "drySha": "6c8c8ca487ebadfdd5ffcc4c9a9ecdc10e0aea69",
   "author": "David Marthy <marthy.david@gmail.com>",
-  "date": "2026-11-11T16:58:24Z",
-  "subject": "docs: the hydrator follow-up commit must come after the apps exist on the cluster (#1993)",
-  "body": "Co-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
+  "date": "2026-11-11T17:01:29Z",
+  "subject": "fix(argocd): ipmi-exporter hydrated output was missing its ServiceMonitor (#1994)",
+  "body": "ArgoCD's own Helm render passes the cluster's API versions; kustomize helmCharts does not, so the chart's\nCapabilities check for monitoring.coreos.com/v1 failed. Declare it via helmCharts.apiVersions.\n\nCo-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
 }

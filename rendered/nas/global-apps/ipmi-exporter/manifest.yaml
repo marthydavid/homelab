@@ -87,3 +87,19 @@ spec:
               - key: config.yml
                 path: config.yml
             secretName: ipmi-exporter-secret
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: prometheus-ipmi-exporter
+spec:
+  endpoints:
+    - targetPort: 9290
+  jobLabel: prometheus-ipmi-exporter
+  namespaceSelector:
+    matchNames:
+      - cattle-monitoring-system
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: prometheus-ipmi-exporter
+      app.kubernetes.io/name: prometheus-ipmi-exporter
