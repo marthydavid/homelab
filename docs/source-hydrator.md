@@ -66,9 +66,12 @@ An app that is switched to `sourceHydrator` can come up `Hydrated` with sync sta
 manifest on `rendered` (`rendered/...: app path does not exist`). Hydration is batched per commit on
 `main`: an app that joins after the batch for that commit was handled gets marked done without being
 pushed (seen with the 11-app bulk change and with reloader). A hard hydrate annotation does not fix it.
-A **new commit on `main`** re-hydrates every hydrated app in one batch and fills the gap. So after
-merging an app's conversion, merge any further commit to `main` (a docs fix is enough), then check that
-`rendered/<cluster>/<group>/<app>/manifest.yaml` exists and the app is Synced. Convert in small batches.
+A **new commit on `main`** re-hydrates every hydrated app in one batch and fills the gap, but only if
+the converted apps already exist on the cluster with `sourceHydrator` when that commit lands (the root
+app has to have applied the ApplicationSet change first; a follow-up merged straight after the
+conversion is too early). So: merge the conversion, wait until `kubectl -n argocd get app <app> -o
+jsonpath='{.spec.sourceHydrator}'` is set, **then** merge any further commit to `main` (a docs fix is
+enough), and check that `rendered/<cluster>/<group>/<app>/manifest.yaml` exists and the app is Synced.
 
 ## Rollout plan
 1. Merge the enablement PR, sync the `argocd` app by hand, check `argocd-commit-server` is Running.
