@@ -23,18 +23,14 @@ spec:
       name: truenas-tautulli-{{ .name }}
     spec:
       project: default
-      sources:
-      - repoURL: https://bjw-s-labs.github.io/helm-charts
-        chart: app-template
-        targetRevision: 1.5.1
-        helm:
-          releaseName: tautulli
-          ignoreMissingValueFiles: true
-          valueFiles:
-          - $values/argocd/apps/truenas/tautulli/values-{{ .name }}.yaml
-      - repoURL: https://github.com/marthydavid/homelab
-        targetRevision: main
-        ref: values
+      sourceHydrator:
+        drySource:
+          repoURL: https://github.com/marthydavid/homelab
+          targetRevision: main
+          path: argocd/apps/truenas/tautulli/overlays/{{ .name }}
+        syncSource:
+          targetBranch: rendered
+          path: rendered/{{ .name }}/truenas/tautulli
       destination:
         server: '{{ .server }}'
         namespace: mediarr

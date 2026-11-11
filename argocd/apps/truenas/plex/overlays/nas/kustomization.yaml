@@ -1,0 +1,8 @@
+helmCharts:
+- name: app-template
+  repo: https://bjw-s-labs.github.io/helm-charts
+  version: 1.5.1
+  releaseName: plex
+  namespace: mediarr
+  includeCRDs: true
+  valuesFile: ../../values-nas.yaml
