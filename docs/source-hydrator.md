@@ -61,6 +61,15 @@ spec:
 Use a distinct `syncSource.path` per Application, otherwise they overwrite each other.
 `rendered` is an orphan branch that holds only generated manifests.
 
+## Converting an app: needs a second commit
+An app that is switched to `sourceHydrator` can come up `Hydrated` with sync status `Unknown` and no
+manifest on `rendered` (`rendered/...: app path does not exist`). Hydration is batched per commit on
+`main`: an app that joins after the batch for that commit was handled gets marked done without being
+pushed (seen with the 11-app bulk change and with reloader). A hard hydrate annotation does not fix it.
+A **new commit on `main`** re-hydrates every hydrated app in one batch and fills the gap. So after
+merging an app's conversion, merge any further commit to `main` (a docs fix is enough), then check that
+`rendered/<cluster>/<group>/<app>/manifest.yaml` exists and the app is Synced. Convert in small batches.
+
 ## Rollout plan
 1. Merge the enablement PR, sync the `argocd` app by hand, check `argocd-commit-server` is Running.
 2. Add write credentials (see above).
