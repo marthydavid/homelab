@@ -1,25 +1,58 @@
-controller:
-  annotations:
-    reloader.stakater.com/auto: "true"
+controllers:
+  main:
+    strategy: Recreate
+    annotations:
+      reloader.stakater.com/auto: "true"
+    containers:
+      main:
+        image:
+          repository: ghcr.io/sct/overseerr
+          tag: 1.35.0
+        env:
+          PORT: 80
+          TZ: Europe/Budapest
+          LOG_LEVEL: "info"
+        probes:
+          liveness: &probe
+            enabled: true
+            custom: true
+            spec:
+              tcpSocket:
+                port: 80
+              initialDelaySeconds: 0
+              periodSeconds: 10
+              timeoutSeconds: 1
+              failureThreshold: 3
+          readiness: *probe
+          startup:
+            enabled: true
+            custom: true
+            spec:
+              tcpSocket:
+                port: 80
+              initialDelaySeconds: 0
+              periodSeconds: 5
+              timeoutSeconds: 1
+              failureThreshold: 30
+        resources:
+          requests:
+            cpu: 5m
+            memory: 323M
+          limits:
+            memory: 323M
 
-image:
-  repository: ghcr.io/sct/overseerr
-  tag: 1.35.0
+defaultPodOptions:
+  securityContext:
+    runAsUser: 568
+    runAsGroup: 568
+    fsGroup: 568
+    fsGroupChangePolicy: "OnRootMismatch"
+    supplementalGroups:
+      - 65539
 
-podSecurityContext:
-  runAsUser: 568
-  runAsGroup: 568
-  fsGroup: 568
-  fsGroupChangePolicy: "OnRootMismatch"
-  supplementalGroups:
-    - 65539
-
-env:
-  PORT: 80
-  TZ: Europe/Budapest
-  LOG_LEVEL: "info"
 service:
   main:
+    controller: main
     ports:
       http:
         port: 80
@@ -27,7 +60,7 @@ service:
 ingress:
   main:
     enabled: true
-    ingressClassName: "nginx"
+    className: "nginx"
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
       external-dns.alpha.kubernetes.io/target: pecs.marthy.xyz
@@ -36,6 +69,9 @@ ingress:
       - host: "overseerr.pecs.marthy.xyz"
         paths:
           - path: /
+            service:
+              identifier: main
+              port: http
     tls:
       - hosts:
           - overseerr.pecs.marthy.xyz
@@ -46,11 +82,5 @@ persistence:
     enabled: true
     type: hostPath
     hostPath: /zfs/k3s/configs/overseerr-config
-    mountPath: /app/config
-
-resources:
-  requests:
-    cpu: 5m
-    memory: 323M
-  limits:
-    memory: 323M
+    globalMounts:
+      - path: /app/config

@@ -1,32 +1,64 @@
-controller:
-  annotations:
-    reloader.stakater.com/auto: "true"
+controllers:
+  main:
+    strategy: Recreate
+    annotations:
+      reloader.stakater.com/auto: "true"
+    containers:
+      main:
+        image:
+          repository: ghcr.io/home-operations/radarr
+          tag: 7.0.2.10888
+        env:
+          RADARR__INSTANCE_NAME: Radarr
+          RADARR__PORT: 7878
+          RADARR__APPLICATION_URL: "https://radarr.pecs.marthy.xyz"
+          RADARR__LOG_LEVEL: info
+          RADARR__API_KEY:
+            valueFrom:
+              secretKeyRef:
+                name: radarr-secret
+                key: api_key
+        probes:
+          liveness: &probe
+            enabled: true
+            custom: true
+            spec:
+              tcpSocket:
+                port: 7878
+              initialDelaySeconds: 0
+              periodSeconds: 10
+              timeoutSeconds: 1
+              failureThreshold: 3
+          readiness: *probe
+          startup:
+            enabled: true
+            custom: true
+            spec:
+              tcpSocket:
+                port: 7878
+              initialDelaySeconds: 0
+              periodSeconds: 5
+              timeoutSeconds: 1
+              failureThreshold: 30
+        resources:
+          requests:
+            cpu: 5m
+            memory: 431M
+          limits:
+            memory: 431M
 
-image:
-  repository: ghcr.io/home-operations/radarr
-  tag: 7.0.2.10888
-
-podSecurityContext:
-  runAsUser: 568
-  runAsGroup: 568
-  fsGroup: 568
-  fsGroupChangePolicy: "OnRootMismatch"
-  supplementalGroups:
-    - 65539
-
-env:
-  RADARR__INSTANCE_NAME: Radarr
-  RADARR__PORT: 7878
-  RADARR__APPLICATION_URL: "https://radarr.pecs.marthy.xyz"
-  RADARR__LOG_LEVEL: info
-  RADARR__API_KEY:
-    valueFrom:
-      secretKeyRef:
-        name: radarr-secret
-        key: api_key
+defaultPodOptions:
+  securityContext:
+    runAsUser: 568
+    runAsGroup: 568
+    fsGroup: 568
+    fsGroupChangePolicy: "OnRootMismatch"
+    supplementalGroups:
+      - 65539
 
 service:
   main:
+    controller: main
     ports:
       http:
         port: 7878
@@ -34,7 +66,7 @@ service:
 ingress:
   main:
     enabled: true
-    ingressClassName: "nginx"
+    className: "nginx"
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
       external-dns.alpha.kubernetes.io/target: pecs.marthy.xyz
@@ -43,26 +75,24 @@ ingress:
       - host: "radarr.pecs.marthy.xyz"
         paths:
           - path: /
+            service:
+              identifier: main
+              port: http
     tls:
       - hosts:
           - radarr.pecs.marthy.xyz
         secretName: radarr-tls
+
 persistence:
   config:
     enabled: true
     type: hostPath
-    mountPath: /config
     hostPath: /zfs/k3s/configs/radarr-config
-
+    globalMounts:
+      - path: /config
   media:
     enabled: true
     type: hostPath
     hostPath: /zfs/media
-    mountPath: /zfs/media
-
-resources:
-  requests:
-    cpu: 5m
-    memory: 431M
-  limits:
-    memory: 431M
+    globalMounts:
+      - path: /zfs/media

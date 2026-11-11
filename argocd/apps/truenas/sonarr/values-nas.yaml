@@ -1,32 +1,64 @@
-controller:
-  annotations:
-    reloader.stakater.com/auto: "true"
+controllers:
+  main:
+    strategy: Recreate
+    annotations:
+      reloader.stakater.com/auto: "true"
+    containers:
+      main:
+        image:
+          repository: ghcr.io/home-operations/sonarr
+          tag: 5.0.0.2941
+        env:
+          SONARR__INSTANCE_NAME: Sonarr
+          SONARR__PORT: 8989
+          SONARR__APPLICATION_URL: "https://sonarr.pecs.marthy.xyz"
+          SONARR__LOG_LEVEL: info
+          SONARR__API_KEY:
+            valueFrom:
+              secretKeyRef:
+                name: sonarr-secret
+                key: api_key
+        probes:
+          liveness: &probe
+            enabled: true
+            custom: true
+            spec:
+              tcpSocket:
+                port: 8989
+              initialDelaySeconds: 0
+              periodSeconds: 10
+              timeoutSeconds: 1
+              failureThreshold: 3
+          readiness: *probe
+          startup:
+            enabled: true
+            custom: true
+            spec:
+              tcpSocket:
+                port: 8989
+              initialDelaySeconds: 0
+              periodSeconds: 5
+              timeoutSeconds: 1
+              failureThreshold: 30
+        resources:
+          requests:
+            cpu: 5m
+            memory: 323M
+          limits:
+            memory: 323M
 
-image:
-  repository: ghcr.io/home-operations/sonarr
-  tag: 5.0.0.2941
-
-podSecurityContext:
-  runAsUser: 568
-  runAsGroup: 568
-  fsGroup: 568
-  fsGroupChangePolicy: "OnRootMismatch"
-  supplementalGroups:
-    - 65539
-
-env:
-  SONARR__INSTANCE_NAME: Sonarr
-  SONARR__PORT: 8989
-  SONARR__APPLICATION_URL: "https://sonarr.pecs.marthy.xyz"
-  SONARR__LOG_LEVEL: info
-  SONARR__API_KEY:
-    valueFrom:
-      secretKeyRef:
-        name: sonarr-secret
-        key: api_key
+defaultPodOptions:
+  securityContext:
+    runAsUser: 568
+    runAsGroup: 568
+    fsGroup: 568
+    fsGroupChangePolicy: "OnRootMismatch"
+    supplementalGroups:
+      - 65539
 
 service:
   main:
+    controller: main
     ports:
       http:
         port: 8989
@@ -34,7 +66,7 @@ service:
 ingress:
   main:
     enabled: true
-    ingressClassName: "nginx"
+    className: "nginx"
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
       external-dns.alpha.kubernetes.io/target: pecs.marthy.xyz
@@ -43,6 +75,9 @@ ingress:
       - host: "sonarr.pecs.marthy.xyz"
         paths:
           - path: /
+            service:
+              identifier: main
+              port: http
     tls:
       - hosts:
           - sonarr.pecs.marthy.xyz
@@ -52,18 +87,12 @@ persistence:
   config:
     enabled: true
     type: hostPath
-    mountPath: /config
     hostPath: /zfs/k3s/configs/sonarr-config
-
+    globalMounts:
+      - path: /config
   media:
     enabled: true
     type: hostPath
     hostPath: /zfs/media
-    mountPath: /zfs/media
-
-resources:
-  requests:
-    cpu: 5m
-    memory: 323M
-  limits:
-    memory: 323M
+    globalMounts:
+      - path: /zfs/media
