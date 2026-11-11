@@ -21,10 +21,14 @@ spec:
       name: truenas-immich-postgres-{{ .name }}
     spec:
       project: default
-      source:
-        repoURL: https://github.com/marthydavid/homelab
-        targetRevision: main
-        path: argocd/apps/truenas/immich-postgres
+      sourceHydrator:
+        drySource:
+          repoURL: https://github.com/marthydavid/homelab
+          targetRevision: main
+          path: argocd/apps/truenas/immich-postgres
+        syncSource:
+          targetBranch: rendered
+          path: rendered/{{ .name }}/truenas/immich-postgres
       destination:
         server: '{{ .server }}'
         namespace: mediarr
