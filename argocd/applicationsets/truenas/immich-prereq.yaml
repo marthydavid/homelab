@@ -21,10 +21,14 @@ spec:
       name: truenas-immich-prereq-{{ .name }}
     spec:
       project: default
-      source:
-        repoURL: https://github.com/marthydavid/homelab
-        targetRevision: main
-        path: argocd/apps/truenas/immich-prereq
+      sourceHydrator:
+        drySource:
+          repoURL: https://github.com/marthydavid/homelab
+          targetRevision: main
+          path: argocd/apps/truenas/immich-prereq
+        syncSource:
+          targetBranch: rendered
+          path: rendered/{{ .name }}/truenas/immich-prereq
       destination:
         server: '{{ .server }}'
         namespace: mediarr

@@ -23,10 +23,14 @@ spec:
       name: nvidia-prereq-{{ .name }}
     spec:
       project: default
-      source:
-        repoURL: https://github.com/marthydavid/homelab
-        targetRevision: main
-        path: argocd/apps/nvidia/prereq
+      sourceHydrator:
+        drySource:
+          repoURL: https://github.com/marthydavid/homelab
+          targetRevision: main
+          path: argocd/apps/nvidia/prereq
+        syncSource:
+          targetBranch: rendered
+          path: rendered/{{ .name }}/nvidia/prereq
       destination:
         server: '{{ .server }}'
         namespace: nvidia-device-plugin
