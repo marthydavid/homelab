@@ -21,18 +21,14 @@ spec:
       name: truenas-immich-{{ .name }}
     spec:
       project: default
-      sources:
-      - repoURL: https://immich-app.github.io/immich-charts
-        chart: immich
-        targetRevision: 0.12.0
-        helm:
-          releaseName: immich
-          ignoreMissingValueFiles: true
-          valueFiles:
-          - $values/argocd/apps/truenas/immich/values-{{ .name }}.yaml
-      - repoURL: https://github.com/marthydavid/homelab
-        targetRevision: main
-        ref: values
+      sourceHydrator:
+        drySource:
+          repoURL: https://github.com/marthydavid/homelab
+          targetRevision: main
+          path: argocd/apps/truenas/immich/overlays/{{ .name }}
+        syncSource:
+          targetBranch: rendered
+          path: rendered/{{ .name }}/truenas/immich
       destination:
         server: '{{ .server }}'
         namespace: mediarr

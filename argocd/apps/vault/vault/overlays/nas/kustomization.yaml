@@ -1,0 +1,13 @@
+helmCharts:
+- name: vault
+  repo: https://helm.releases.hashicorp.com
+  version: 0.34.1
+  releaseName: vault
+  namespace: vault
+  includeCRDs: true
+  valuesFile: ../../values.yaml
+  apiVersions:
+  - monitoring.coreos.com/v1
+  - monitoring.coreos.com/v1/ServiceMonitor
+  - monitoring.coreos.com/v1/PodMonitor
+  - monitoring.coreos.com/v1/PrometheusRule

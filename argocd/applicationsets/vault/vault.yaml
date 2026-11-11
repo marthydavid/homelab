@@ -26,17 +26,14 @@ spec:
       name: vault-{{ .name }}
     spec:
       project: default
-      sources:
-      - repoURL: https://helm.releases.hashicorp.com
-        chart: vault
-        targetRevision: 0.34.1
-        helm:
-          releaseName: vault
-          valueFiles:
-          - $values/argocd/apps/vault/vault/values.yaml
-      - repoURL: https://github.com/marthydavid/homelab
-        targetRevision: main
-        ref: values
+      sourceHydrator:
+        drySource:
+          repoURL: https://github.com/marthydavid/homelab
+          targetRevision: main
+          path: argocd/apps/vault/vault/overlays/{{ .name }}
+        syncSource:
+          targetBranch: rendered
+          path: rendered/{{ .name }}/vault/vault
       destination:
         server: '{{ .server }}'
         namespace: vault

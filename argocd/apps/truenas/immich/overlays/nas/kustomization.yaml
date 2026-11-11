@@ -1,0 +1,13 @@
+helmCharts:
+- name: immich
+  repo: https://immich-app.github.io/immich-charts
+  version: 0.12.0
+  releaseName: immich
+  namespace: mediarr
+  includeCRDs: true
+  valuesFile: ../../values-nas.yaml
+  apiVersions:
+  - monitoring.coreos.com/v1
+  - monitoring.coreos.com/v1/ServiceMonitor
+  - monitoring.coreos.com/v1/PodMonitor
+  - monitoring.coreos.com/v1/PrometheusRule
