@@ -9,9 +9,9 @@ metadata:
     app.kubernetes.io/instance: reloader
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: reloader
-    app.kubernetes.io/version: v1.4.24
-    chart: reloader-2.2.20
-    helm.sh/chart: reloader-2.2.20
+    app.kubernetes.io/version: v1.4.23
+    chart: reloader-2.2.19
+    helm.sh/chart: reloader-2.2.19
     heritage: Helm
     release: reloader
   name: reloader-reloader
@@ -28,9 +28,9 @@ metadata:
     app.kubernetes.io/instance: reloader
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: reloader
-    app.kubernetes.io/version: v1.4.24
-    chart: reloader-2.2.20
-    helm.sh/chart: reloader-2.2.20
+    app.kubernetes.io/version: v1.4.23
+    chart: reloader-2.2.19
+    helm.sh/chart: reloader-2.2.19
     heritage: Helm
     release: reloader
   name: reloader-reloader-metadata-role
@@ -58,9 +58,9 @@ metadata:
     app.kubernetes.io/instance: reloader
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: reloader
-    app.kubernetes.io/version: v1.4.24
-    chart: reloader-2.2.20
-    helm.sh/chart: reloader-2.2.20
+    app.kubernetes.io/version: v1.4.23
+    chart: reloader-2.2.19
+    helm.sh/chart: reloader-2.2.19
     heritage: Helm
     release: reloader
   name: reloader-reloader-role
@@ -120,9 +120,9 @@ metadata:
     app.kubernetes.io/instance: reloader
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: reloader
-    app.kubernetes.io/version: v1.4.24
-    chart: reloader-2.2.20
-    helm.sh/chart: reloader-2.2.20
+    app.kubernetes.io/version: v1.4.23
+    chart: reloader-2.2.19
+    helm.sh/chart: reloader-2.2.19
     heritage: Helm
     release: reloader
   name: reloader-reloader-metadata-role-binding
@@ -147,9 +147,9 @@ metadata:
     app.kubernetes.io/instance: reloader
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: reloader
-    app.kubernetes.io/version: v1.4.24
-    chart: reloader-2.2.20
-    helm.sh/chart: reloader-2.2.20
+    app.kubernetes.io/version: v1.4.23
+    chart: reloader-2.2.19
+    helm.sh/chart: reloader-2.2.19
     heritage: Helm
     release: reloader
   name: reloader-reloader-role-binding
@@ -173,14 +173,14 @@ metadata:
     app.kubernetes.io/instance: reloader
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: reloader
-    app.kubernetes.io/version: v1.4.24
-    chart: reloader-2.2.20
+    app.kubernetes.io/version: v1.4.23
+    chart: reloader-2.2.19
     group: com.stakater.platform
-    helm.sh/chart: reloader-2.2.20
+    helm.sh/chart: reloader-2.2.19
     heritage: Helm
     provider: stakater
     release: reloader
-    version: v1.4.24
+    version: v1.4.23
   name: reloader-reloader
   namespace: reloader-system
 spec:
@@ -197,14 +197,14 @@ spec:
         app.kubernetes.io/instance: reloader
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: reloader
-        app.kubernetes.io/version: v1.4.24
-        chart: reloader-2.2.20
+        app.kubernetes.io/version: v1.4.23
+        chart: reloader-2.2.19
         group: com.stakater.platform
-        helm.sh/chart: reloader-2.2.20
+        helm.sh/chart: reloader-2.2.19
         heritage: Helm
         provider: stakater
         release: reloader
-        version: v1.4.24
+        version: v1.4.23
     spec:
       containers:
         - args:
@@ -226,7 +226,7 @@ spec:
                   fieldPath: metadata.namespace
             - name: RELOADER_DEPLOYMENT_NAME
               value: reloader-reloader
-          image: ghcr.io/stakater/reloader:v1.4.24
+          image: ghcr.io/stakater/reloader:v1.4.23
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 5
