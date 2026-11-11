@@ -7,7 +7,7 @@ controllers:
       main:
         image:
           repository: ghcr.io/home-operations/prowlarr
-          tag: 2.7.0.5723
+          tag: 3.0.1.5752
         env:
           PROWLARR__INSTANCE_NAME: prowlarr
           PROWLARR__PORT: 9696
