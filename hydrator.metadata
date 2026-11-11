@@ -1,8 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "71f11b828d6e534fa9a2a0405ddc7a325ab08d59",
+  "drySha": "17078c3a44674c1b170d208644e8284ddc37fc93",
   "author": "David Marthy <marthy.david@gmail.com>",
-  "date": "2026-11-11T15:05:37Z",
-  "subject": "feat(argocd): hydrate the single-source plain/kustomize apps to the rendered branch (#1974)",
-  "body": "Converts 12 more ApplicationSets from source to sourceHydrator (drySource main, syncSource rendered/<cluster>/<group>/<app>). Helm-repo single-source apps (prometheus-operator-crds, barman-cloud-plugin) and the multi-source Helm apps are not converted yet.\n\nCo-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
+  "date": "2026-11-11T15:14:07Z",
+  "subject": "fix(argocd): roll back the hydrator for the 11 apps whose output was never pushed (#1975)",
+  "body": "Only dashboards, immich-postgres and immich-prereq got manifests on the rendered branch; the other 11 hydrated with no output and their sync status went Unknown (rendered/...: app path does not exist). Back to plain source until the cause is found.\n\nCo-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
 }

@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  labels:
+    release: rancher-monitoring
+  name: ipmi-exporter
+spec:
+  interval: 60s
+  module: default
+  prober:
+    path: /ipmi
+    url: prometheus-ipmi-exporter.cattle-monitoring-system.svc.cluster.local:9290
+  targets:
+    staticConfig:
+      static:
+        - sm1.ipmi.marthy.xyz
+        - sm2.ipmi.marthy.xyz
+        - sm3.ipmi.marthy.xyz
+        - sm4.ipmi.marthy.xyz

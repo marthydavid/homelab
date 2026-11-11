@@ -1,0 +1,19 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: aws-cred
+spec:
+  data:
+    - remoteRef:
+        key: secret/cert-manager-pecs
+        property: aws_ak
+      secretKey: aws_ak
+    - remoteRef:
+        key: secret/cert-manager-pecs
+        property: aws_sk
+      secretKey: aws_sk
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: vault-backend
+  target:
+    name: aws-cred

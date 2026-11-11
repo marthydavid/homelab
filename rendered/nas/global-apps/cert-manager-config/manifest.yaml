@@ -1,0 +1,41 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    email: marthy.david@gmail.com
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    server: https://acme-v02.api.letsencrypt.org/directory
+    solvers:
+      - dns01:
+          route53:
+            accessKeyIDSecretRef:
+              key: aws_ak
+              name: route53-awssecret
+            region: eu-west-1
+            secretAccessKeySecretRef:
+              key: aws_sk
+              name: route53-awssecret
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: route53-awssecret
+  namespace: cert-manager
+spec:
+  data:
+    - remoteRef:
+        key: secret/cert-manager-pecs
+        property: aws_ak
+      secretKey: aws_ak
+    - remoteRef:
+        key: secret/cert-manager-pecs
+        property: aws_sk
+      secretKey: aws_sk
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: vault-backend
+  target:
+    name: route53-awssecret

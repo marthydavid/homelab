@@ -1,0 +1,7 @@
+{
+  "repoURL": "https://github.com/marthydavid/homelab",
+  "drySha": "17078c3a44674c1b170d208644e8284ddc37fc93",
+  "commands": [
+    "kustomize build ./argocd/apps/global-apps/external-dns-secrets/overlays/nas --enable-helm"
+  ]
+}

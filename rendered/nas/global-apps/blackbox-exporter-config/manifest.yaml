@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  labels:
+    release: rancher-monitoring
+  name: own-networks
+spec:
+  interval: 60s
+  module: icmp
+  prober:
+    url: prometheus-blackbox-exporter.cattle-monitoring-system.svc.cluster.local:9115
+  targets:
+    staticConfig:
+      static:
+        - 192.168.0.1
+        - 192.168.1.1
+        - 192.168.10.254

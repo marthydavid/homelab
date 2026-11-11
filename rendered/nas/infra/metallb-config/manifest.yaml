@@ -1,0 +1,28 @@
+apiVersion: metallb.io/v1beta1
+kind: BGPAdvertisement
+metadata:
+  name: bgp
+spec:
+  aggregationLength: 32
+  aggregationLengthV6: 128
+  ipAddressPools:
+    - pecs-pool
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: pecs-pool
+spec:
+  addresses:
+    - 192.168.20.0/24
+  autoAssign: true
+  avoidBuggyIPs: true
+---
+apiVersion: metallb.io/v1beta2
+kind: BGPPeer
+metadata:
+  name: bgp
+spec:
+  myASN: 65530
+  peerASN: 64501
+  peerAddress: 192.168.10.1
