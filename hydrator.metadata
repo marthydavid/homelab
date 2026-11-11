@@ -1,8 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "6c8c8ca487ebadfdd5ffcc4c9a9ecdc10e0aea69",
+  "drySha": "cfe1f40a8b9266571d1b522e825dcfa9d0598ace",
   "author": "David Marthy <marthy.david@gmail.com>",
-  "date": "2026-11-11T17:01:29Z",
-  "subject": "fix(argocd): ipmi-exporter hydrated output was missing its ServiceMonitor (#1994)",
-  "body": "ArgoCD's own Helm render passes the cluster's API versions; kustomize helmCharts does not, so the chart's\nCapabilities check for monitoring.coreos.com/v1 failed. Declare it via helmCharts.apiVersions.\n\nCo-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
+  "date": "2026-11-11T17:03:46Z",
+  "subject": "feat(argocd): hydrate Helm apps, group 3 (descheduler, ddns-route53, nut/snmp/dcgm exporters, nvdp, openebs-monitoring) (#1996)",
+  "body": "Render verified identical to the previous chart + values source.\n\nCo-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
 }
