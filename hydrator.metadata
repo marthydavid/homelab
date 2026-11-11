@@ -1,8 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "17078c3a44674c1b170d208644e8284ddc37fc93",
+  "drySha": "2c557073e104a0ee904ab44221295e5ffde8fdb7",
   "author": "David Marthy <marthy.david@gmail.com>",
-  "date": "2026-11-11T15:14:07Z",
-  "subject": "fix(argocd): roll back the hydrator for the 11 apps whose output was never pushed (#1975)",
-  "body": "Only dashboards, immich-postgres and immich-prereq got manifests on the rendered branch; the other 11 hydrated with no output and their sync status went Unknown (rendered/...: app path does not exist). Back to plain source until the cause is found.\n\nCo-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
+  "date": "2026-11-11T16:22:34Z",
+  "subject": "docs: a hydrated app needs a second commit on main to get its output (#1985)",
+  "body": "Co-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
 }
