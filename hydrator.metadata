@@ -1,8 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "106b1e0354e5078d79c0171caeaa189745b57a4f",
+  "drySha": "71f11b828d6e534fa9a2a0405ddc7a325ab08d59",
   "author": "David Marthy <marthy.david@gmail.com>",
-  "date": "2026-11-11T15:02:09Z",
-  "subject": "feat(argocd): pilot the source hydrator on global-apps/dashboards (#1971)",
-  "body": "Needs write-capable repo credentials for the rendered branch first (docs/source-hydrator.md).\n\nCo-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
+  "date": "2026-11-11T15:05:37Z",
+  "subject": "feat(argocd): hydrate the single-source plain/kustomize apps to the rendered branch (#1974)",
+  "body": "Converts 12 more ApplicationSets from source to sourceHydrator (drySource main, syncSource rendered/<cluster>/<group>/<app>). Helm-repo single-source apps (prometheus-operator-crds, barman-cloud-plugin) and the multi-source Helm apps are not converted yet.\n\nCo-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
 }

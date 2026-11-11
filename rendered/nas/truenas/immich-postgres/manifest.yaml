@@ -1,0 +1,26 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: immich-postgres
+  namespace: mediarr
+spec:
+  bootstrap:
+    initdb:
+      database: immich
+      owner: immich
+      postInitApplicationSQL:
+        - CREATE EXTENSION IF NOT EXISTS vchord CASCADE;
+        - CREATE EXTENSION IF NOT EXISTS earthdistance CASCADE;
+  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16.15-1.1.1
+  instances: 1
+  monitoring:
+    enablePodMonitor: true
+  postgresql:
+    parameters:
+      timezone: Europe/Budapest
+    shared_preload_libraries:
+      - vchord.so
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 20Gi
+    storageClass: openebs-zfspv

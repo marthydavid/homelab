@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: immich
+  namespace: mediarr
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 400Gi
+  storageClassName: openebs-zfspv
+  volumeName: pvc-e8b89821-362b-4aad-af8c-c980c31d17dc
