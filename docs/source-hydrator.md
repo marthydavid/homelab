@@ -96,5 +96,5 @@ the output matches live.
 2. Add write credentials (see above).
 3. Pilot one single-source app, e.g. `global-apps/dashboards`, on `nas`.
 4. Convert the kustomize-based apps, then wrap and convert the Helm apps one group at a time.
-5. Only then consider `homelab/auto-sync: "true"`, since reviewing the `rendered` diff replaces
-   reviewing each app's diff in the UI.
+5. `homelab/auto-sync: "true"` is on for `nas`: reviewing the `rendered` diff replaces reviewing each
+   app's diff in the UI.

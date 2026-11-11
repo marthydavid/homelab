@@ -1,5 +1,6 @@
 # The hub cluster itself. No credentials: ArgoCD uses its in-cluster service account.
-# homelab/auto-sync is "false": review each diff and sync by hand. Flip it to "true" for automatic sync.
+# homelab/auto-sync is "true": apps sync automatically (prune + selfHeal). Review the diff on the `rendered`
+# branch before merging to main; set it to "false" to go back to manual sync.
 apiVersion: v1
 kind: Secret
 metadata:
@@ -8,7 +9,7 @@ metadata:
   labels:
     argocd.argoproj.io/secret-type: cluster
     homelab/cluster: nas
-    homelab/auto-sync: "false"
+    homelab/auto-sync: "true"
 stringData:
   name: nas
   server: https://kubernetes.default.svc
