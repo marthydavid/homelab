@@ -1,0 +1,10 @@
+helmCharts:
+- name: metallb
+  repo: https://metallb.github.io/metallb
+  version: 0.16.2
+  releaseName: metallb
+  namespace: metallb-system
+  includeCRDs: true
+  valuesFile: ../../global-values.yaml
+  apiVersions:
+  - monitoring.coreos.com/v1

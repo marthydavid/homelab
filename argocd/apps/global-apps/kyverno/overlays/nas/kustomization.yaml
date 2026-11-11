@@ -1,0 +1,10 @@
+helmCharts:
+- name: kyverno
+  repo: https://kyverno.github.io/kyverno/
+  version: 3.9.2
+  releaseName: kyverno
+  namespace: kyverno
+  includeCRDs: true
+  valuesFile: ../../global-values.yaml
+  apiVersions:
+  - monitoring.coreos.com/v1
