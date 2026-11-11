@@ -1,8 +1,7 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "e87ba764d02c624d3fa9d5971d79e0a1d67080e8",
-  "author": "David Marthy <marthy.david@gmail.com>",
-  "date": "2026-11-11T17:33:14Z",
-  "subject": "docs: current hydrator state and the apiVersions gotcha (#2002)",
-  "body": "Co-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
+  "drySha": "a11d96a29fe4e2c0786fd480d55d83f2895a9063",
+  "author": "renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>",
+  "date": "2026-11-11T17:07:52Z",
+  "subject": "chore(deps): update helm release kyverno to 3.10.0"
 }
