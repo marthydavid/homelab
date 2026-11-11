@@ -23,19 +23,14 @@ spec:
       name: infra-metallb-{{ .name }}
     spec:
       project: default
-      sources:
-      - repoURL: https://metallb.github.io/metallb
-        chart: metallb
-        targetRevision: 0.16.2
-        helm:
-          releaseName: metallb
-          ignoreMissingValueFiles: true
-          valueFiles:
-          - $values/argocd/apps/infra/metallb/global-values.yaml
-          - $values/argocd/apps/infra/metallb/values-{{ .name }}.yaml
-      - repoURL: https://github.com/marthydavid/homelab
-        targetRevision: main
-        ref: values
+      sourceHydrator:
+        drySource:
+          repoURL: https://github.com/marthydavid/homelab
+          targetRevision: main
+          path: argocd/apps/infra/metallb/overlays/{{ .name }}
+        syncSource:
+          targetBranch: rendered
+          path: rendered/{{ .name }}/infra/metallb
       destination:
         server: '{{ .server }}'
         namespace: metallb-system

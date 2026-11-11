@@ -23,19 +23,14 @@ spec:
       name: infra-ingress-nginx-{{ .name }}
     spec:
       project: default
-      sources:
-      - repoURL: https://kubernetes.github.io/ingress-nginx
-        chart: ingress-nginx
-        targetRevision: 4.15.1
-        helm:
-          releaseName: ingress-nginx
-          ignoreMissingValueFiles: true
-          valueFiles:
-          - $values/argocd/apps/infra/ingress-nginx/global-values.yaml
-          - $values/argocd/apps/infra/ingress-nginx/values-{{ .name }}.yaml
-      - repoURL: https://github.com/marthydavid/homelab
-        targetRevision: main
-        ref: values
+      sourceHydrator:
+        drySource:
+          repoURL: https://github.com/marthydavid/homelab
+          targetRevision: main
+          path: argocd/apps/infra/ingress-nginx/overlays/{{ .name }}
+        syncSource:
+          targetBranch: rendered
+          path: rendered/{{ .name }}/infra/ingress-nginx
       destination:
         server: '{{ .server }}'
         namespace: ingress-nginx

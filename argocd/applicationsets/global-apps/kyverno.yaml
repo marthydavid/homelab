@@ -23,19 +23,14 @@ spec:
       name: kyverno-{{ .name }}
     spec:
       project: default
-      sources:
-      - repoURL: https://kyverno.github.io/kyverno/
-        chart: kyverno
-        targetRevision: 3.9.2
-        helm:
-          releaseName: kyverno
-          ignoreMissingValueFiles: true
-          valueFiles:
-          - $values/argocd/apps/global-apps/kyverno/global-values.yaml
-          - $values/argocd/apps/global-apps/kyverno/values-{{ .name }}.yaml
-      - repoURL: https://github.com/marthydavid/homelab
-        targetRevision: main
-        ref: values
+      sourceHydrator:
+        drySource:
+          repoURL: https://github.com/marthydavid/homelab
+          targetRevision: main
+          path: argocd/apps/global-apps/kyverno/overlays/{{ .name }}
+        syncSource:
+          targetBranch: rendered
+          path: rendered/{{ .name }}/global-apps/kyverno
       destination:
         server: '{{ .server }}'
         namespace: kyverno

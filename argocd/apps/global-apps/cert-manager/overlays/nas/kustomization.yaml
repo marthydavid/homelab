@@ -1,0 +1,10 @@
+helmCharts:
+- name: cert-manager
+  repo: https://charts.jetstack.io
+  version: v1.21.3
+  releaseName: cert-manager
+  namespace: cert-manager
+  includeCRDs: true
+  valuesFile: ../../values.yaml
+  apiVersions:
+  - monitoring.coreos.com/v1
