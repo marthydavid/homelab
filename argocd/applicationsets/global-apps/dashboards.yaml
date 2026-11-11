@@ -23,10 +23,16 @@ spec:
       name: dashboards-{{ .name }}
     spec:
       project: default
-      source:
-        repoURL: https://github.com/marthydavid/homelab
-        targetRevision: main
-        path: argocd/apps/global-apps/dashboards
+      # Pilot for the Source Hydrator (docs/source-hydrator.md): rendered from main into the
+      # `rendered` branch. Needs ArgoCD repo credentials with write access to push there.
+      sourceHydrator:
+        drySource:
+          repoURL: https://github.com/marthydavid/homelab
+          targetRevision: main
+          path: argocd/apps/global-apps/dashboards
+        syncSource:
+          targetBranch: rendered
+          path: rendered/{{ .name }}/global-apps/dashboards
       destination:
         server: '{{ .server }}'
         namespace: cattle-dashboards
