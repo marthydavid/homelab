@@ -1,6 +1,6 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "93699344442f75f34d60954ff5e2eda05c77aa0b",
+  "drySha": "44c6be56ee639bfffd029a86c1b04d06d29d0171",
   "commands": [
     "kustomize build ./argocd/apps/ipmi/sm4/overlays/nas --enable-helm --load-restrictor LoadRestrictionsNone"
   ]

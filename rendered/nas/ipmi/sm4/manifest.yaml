@@ -1,4 +1,15 @@
 apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/instance: sm4-ipmi
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: sm4-ipmi
+    helm.sh/chart: app-template-5.3.0
+  name: sm4-ipmi
+  namespace: sm-ipmi
+---
+apiVersion: v1
 data:
   AWS_DEFAULT_REGION: eu-central-1
   IPMI_DOMAIN: sm4.ipmi.marthy.xyz
@@ -11,18 +22,21 @@ metadata:
     app.kubernetes.io/instance: sm4-ipmi
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: sm4-ipmi
-    helm.sh/chart: app-template-1.5.1
-  name: sm4-ipmi-config
+    helm.sh/chart: app-template-5.3.0
+  name: sm4-ipmi
+  namespace: sm-ipmi
 ---
 apiVersion: batch/v1
 kind: CronJob
 metadata:
   labels:
+    app.kubernetes.io/controller: main
     app.kubernetes.io/instance: sm4-ipmi
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: sm4-ipmi
-    helm.sh/chart: app-template-1.5.1
+    helm.sh/chart: app-template-5.3.0
   name: sm4-ipmi
+  namespace: sm-ipmi
 spec:
   concurrencyPolicy: Forbid
   failedJobsHistoryLimit: 1
@@ -32,30 +46,34 @@ spec:
       template:
         metadata:
           annotations:
-            checksum/config: 357ce8abe1572146e2052df946f24340e174bb8ea1800f07e737c2baf4fe9a74
+            checksum/configMaps: 357ce8abe1572146e2052df946f24340e174bb8ea1800f07e737c2baf4fe9a74
           labels:
+            app.kubernetes.io/controller: main
             app.kubernetes.io/instance: sm4-ipmi
             app.kubernetes.io/name: sm4-ipmi
         spec:
-          automountServiceAccountToken: true
+          automountServiceAccountToken: false
           containers:
             - envFrom:
                 - configMapRef:
-                    name: sm4-ipmi-config
+                    name: sm4-ipmi
                 - secretRef:
                     name: ipmi-secret
               image: ghcr.io/marthydavid/supermicro-letsencrypt:v0.4.1
               imagePullPolicy: IfNotPresent
-              name: sm4-ipmi
+              name: main
               securityContext:
                 runAsUser: 1000
               volumeMounts:
                 - mountPath: /home/lego/.lego
                   name: lego
           dnsPolicy: ClusterFirst
-          enableServiceLinks: true
+          enableServiceLinks: false
+          hostIPC: false
+          hostNetwork: false
+          hostPID: false
           restartPolicy: Never
-          serviceAccountName: default
+          serviceAccountName: sm4-ipmi
           volumes:
             - hostPath:
                 path: /zfs/k3s/configs/sm-lego
@@ -63,3 +81,4 @@ spec:
   schedule: 10 */2 * * *
   startingDeadlineSeconds: 30
   successfulJobsHistoryLimit: 1
+  suspend: false

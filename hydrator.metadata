@@ -1,8 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "f5155ec8f435436ed6164dc2facef8c721f9cd77",
+  "drySha": "44c6be56ee639bfffd029a86c1b04d06d29d0171",
   "author": "David Marthy <marthy.david@gmail.com>",
-  "date": "2026-11-11T17:47:58Z",
-  "subject": "feat(arr): upgrade overseerr, prowlarr, radarr, sonarr to app-template 5.3.0 (#2003)",
-  "body": "Same migration as tautulli (#1995): v5 values schema, chart bump in the\noverlay. Env, probes, resources, ingress and hostPath volumes render\nidentical; Deployment selector gains app.kubernetes.io/controller so each\nDeployment must be deleted before its first sync (#1992).\n\nCo-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
+  "date": "2026-11-11T18:29:00Z",
+  "subject": "feat(app-template): upgrade baby-buddy and ipmi sm1-sm4 to 5.3.0 (#2004)",
+  "body": "baby-buddy: same migration as the arr apps (Deployment must be deleted\nbefore its first sync). ipmi sm1-sm4: CronJobs, so no selector issue;\nschedule, deadline, history, backoff and restartPolicy render identical.\nThe ConfigMap is now named <release> instead of <release>-config and is\nreferenced by identifier (#1992).\n\nCo-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
 }
