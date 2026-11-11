@@ -23,19 +23,14 @@ spec:
       name: blackbox-exporter-{{ .name }}
     spec:
       project: default
-      sources:
-      - repoURL: https://prometheus-community.github.io/helm-charts
-        chart: prometheus-blackbox-exporter
-        targetRevision: 11.21.2
-        helm:
-          releaseName: prometheus-blackbox-exporter
-          ignoreMissingValueFiles: true
-          valueFiles:
-          - $values/argocd/apps/global-apps/blackbox-exporter/values.yaml
-          - $values/argocd/apps/global-apps/blackbox-exporter/values-{{ .name }}.yaml
-      - repoURL: https://github.com/marthydavid/homelab
-        targetRevision: main
-        ref: values
+      sourceHydrator:
+        drySource:
+          repoURL: https://github.com/marthydavid/homelab
+          targetRevision: main
+          path: argocd/apps/global-apps/blackbox-exporter/overlays/{{ .name }}
+        syncSource:
+          targetBranch: rendered
+          path: rendered/{{ .name }}/global-apps/blackbox-exporter
       destination:
         server: '{{ .server }}'
         namespace: cattle-monitoring-system

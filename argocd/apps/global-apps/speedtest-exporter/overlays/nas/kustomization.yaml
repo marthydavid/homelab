@@ -1,0 +1,8 @@
+helmCharts:
+- name: speedtest-exporter
+  repo: https://geek-cookbook.github.io/charts/
+  version: 5.4.2
+  releaseName: speedtest-exporter
+  namespace: cattle-monitoring-system
+  includeCRDs: true
+  valuesFile: ../../global-values.yaml

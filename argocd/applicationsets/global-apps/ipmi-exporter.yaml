@@ -23,19 +23,14 @@ spec:
       name: ipmi-exporter-{{ .name }}
     spec:
       project: default
-      sources:
-      - repoURL: https://prometheus-community.github.io/helm-charts
-        chart: prometheus-ipmi-exporter
-        targetRevision: 0.8.2
-        helm:
-          releaseName: prometheus-ipmi-exporter
-          ignoreMissingValueFiles: true
-          valueFiles:
-          - $values/argocd/apps/global-apps/ipmi-exporter/default.yml
-          - $values/argocd/apps/global-apps/ipmi-exporter/values-{{ .name }}.yaml
-      - repoURL: https://github.com/marthydavid/homelab
-        targetRevision: main
-        ref: values
+      sourceHydrator:
+        drySource:
+          repoURL: https://github.com/marthydavid/homelab
+          targetRevision: main
+          path: argocd/apps/global-apps/ipmi-exporter/overlays/{{ .name }}
+        syncSource:
+          targetBranch: rendered
+          path: rendered/{{ .name }}/global-apps/ipmi-exporter
       destination:
         server: '{{ .server }}'
         namespace: cattle-monitoring-system
