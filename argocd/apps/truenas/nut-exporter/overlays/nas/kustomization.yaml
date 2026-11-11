@@ -1,0 +1,10 @@
+helmCharts:
+- name: prometheus-nut-exporter
+  repo: https://geek-cookbook.github.io/charts/
+  version: 5.4.2
+  releaseName: prometheus-nut-exporter
+  namespace: monitoring
+  includeCRDs: true
+  valuesFile: ../../values.yaml
+  apiVersions:
+  - monitoring.coreos.com/v1

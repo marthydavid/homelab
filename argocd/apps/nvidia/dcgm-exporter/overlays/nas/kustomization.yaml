@@ -1,0 +1,10 @@
+helmCharts:
+- name: dcgm-exporter
+  repo: https://nvidia.github.io/dcgm-exporter/helm-charts
+  version: 4.9.0
+  releaseName: dcgm-exporter
+  namespace: nvidia-device-plugin
+  includeCRDs: true
+  valuesFile: ../../values.yaml
+  apiVersions:
+  - monitoring.coreos.com/v1

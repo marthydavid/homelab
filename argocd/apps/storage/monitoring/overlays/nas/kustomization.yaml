@@ -1,0 +1,10 @@
+helmCharts:
+- name: openebs-monitoring
+  repo: https://openebs.github.io/monitoring
+  version: 0.4.13
+  releaseName: openebs-monitoring
+  namespace: openebs
+  includeCRDs: true
+  valuesFile: ../../global.yaml
+  apiVersions:
+  - monitoring.coreos.com/v1

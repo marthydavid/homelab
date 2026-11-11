@@ -23,19 +23,14 @@ spec:
       name: nvidia-nvdp-{{ .name }}
     spec:
       project: default
-      sources:
-      - repoURL: https://nvidia.github.io/k8s-device-plugin
-        chart: nvidia-device-plugin
-        targetRevision: 0.20.1
-        helm:
-          releaseName: nvidia-device-plugin
-          ignoreMissingValueFiles: true
-          valueFiles:
-          - $values/argocd/apps/nvidia/nvdp/values.yaml
-          - $values/argocd/apps/nvidia/nvdp/values-{{ .name }}.yaml
-      - repoURL: https://github.com/marthydavid/homelab
-        targetRevision: main
-        ref: values
+      sourceHydrator:
+        drySource:
+          repoURL: https://github.com/marthydavid/homelab
+          targetRevision: main
+          path: argocd/apps/nvidia/nvdp/overlays/{{ .name }}
+        syncSource:
+          targetBranch: rendered
+          path: rendered/{{ .name }}/nvidia/nvdp
       destination:
         server: '{{ .server }}'
         namespace: nvidia-device-plugin
