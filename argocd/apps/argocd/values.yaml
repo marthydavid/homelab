@@ -71,6 +71,9 @@ configs:
     # Web-based terminal in the pod view. The built-in role:admin already has `exec, create`;
     # the argocd-server ClusterRole gets pods/exec via server.clusterRoleRules above.
     exec.enabled: "true"
+    # Lets kustomize inflate Helm charts (helmCharts:), which is how multi-source Helm apps get
+    # wrapped into a single source for the Source Hydrator (docs/source-hydrator.md).
+    kustomize.buildOptions: --enable-helm
   params:
     # Diff against a server-side apply dry-run, so fields the API server / CRDs default
     # (ExternalSecret remoteRef policies, ServiceMonitor relabeling action, ...) are not

@@ -28,6 +28,22 @@ Options for the multi-source Helm apps, in order of preference:
 2. Wrap it in a local Helm chart that depends on the upstream chart (values go under the
    dependency name; Renovate understands `Chart.yaml` dependencies).
 
+## Verified: wrapping a Helm app with kustomize
+Checked on `global-apps/reloader` (chart 2.2.20, `global-values.yaml`): `kubectl kustomize --enable-helm`
+on this layout renders the same 6 objects, with identical content, as `helm template -f global-values.yaml`.
+```
+argocd/apps/global-apps/reloader/overlays/<cluster>/
+  kustomization.yaml   # helmCharts: name, repo, version, releaseName, namespace, includeCRDs, valuesFile
+  values.yaml          # global values (+ cluster values merged, or use additionalValuesFiles)
+```
+Caveats:
+- `valuesFile` must live inside the kustomization directory (default load restrictions), so shared
+  `global-values.yaml` has to be copied or symlinked into each overlay, or listed per overlay.
+- `includeCRDs: true` matches ArgoCD's default of installing chart CRDs.
+- Needs `kustomize.buildOptions: --enable-helm` in `argocd-cm` (set in `argocd/apps/argocd/values.yaml`).
+- The chart version moves from the ApplicationSet into `kustomization.yaml`; Renovate's kustomize
+  manager reads `helmCharts`, but check it after the first conversion.
+
 ## Shape of a hydrated Application
 ```yaml
 spec:
