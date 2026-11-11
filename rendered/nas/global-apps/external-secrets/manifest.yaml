@@ -33728,6 +33728,7 @@ metadata:
   labels:
     app.kubernetes.io/instance: external-secrets
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/metrics: cert-controller
     app.kubernetes.io/name: external-secrets-cert-controller
     app.kubernetes.io/version: v2.15.0
     helm.sh/chart: external-secrets-2.15.0
@@ -33740,6 +33741,7 @@ metadata:
   labels:
     app.kubernetes.io/instance: external-secrets
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/metrics: webhook
     app.kubernetes.io/name: external-secrets-webhook
     app.kubernetes.io/version: v2.15.0
     helm.sh/chart: external-secrets-2.15.0
@@ -33790,6 +33792,7 @@ metadata:
   labels:
     app.kubernetes.io/instance: external-secrets
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/metrics: cert-controller
     app.kubernetes.io/name: external-secrets-cert-controller
     app.kubernetes.io/version: v2.15.0
     helm.sh/chart: external-secrets-2.15.0
@@ -34190,6 +34193,7 @@ metadata:
   labels:
     app.kubernetes.io/instance: external-secrets
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/metrics: cert-controller
     app.kubernetes.io/name: external-secrets-cert-controller
     app.kubernetes.io/version: v2.15.0
     helm.sh/chart: external-secrets-2.15.0
@@ -34228,6 +34232,7 @@ metadata:
   labels:
     app.kubernetes.io/instance: external-secrets
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/metrics: webhook
     app.kubernetes.io/name: external-secrets-webhook
     app.kubernetes.io/version: v2.15.0
     external-secrets.io/component: webhook
@@ -34241,6 +34246,52 @@ metadata:
   labels:
     app.kubernetes.io/instance: external-secrets
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/metrics: cert-controller
+    app.kubernetes.io/name: external-secrets-cert-controller
+    app.kubernetes.io/version: v2.15.0
+    helm.sh/chart: external-secrets-2.15.0
+  name: external-secrets-cert-controller-metrics
+  namespace: external-secrets
+spec:
+  ports:
+    - name: metrics
+      port: 8080
+      protocol: TCP
+      targetPort: metrics
+  selector:
+    app.kubernetes.io/instance: external-secrets
+    app.kubernetes.io/name: external-secrets-cert-controller
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: external-secrets
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: external-secrets
+    app.kubernetes.io/version: v2.15.0
+    helm.sh/chart: external-secrets-2.15.0
+  name: external-secrets-metrics
+  namespace: external-secrets
+spec:
+  ports:
+    - name: metrics
+      port: 8080
+      protocol: TCP
+      targetPort: metrics
+  selector:
+    app.kubernetes.io/instance: external-secrets
+    app.kubernetes.io/name: external-secrets
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: external-secrets
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/metrics: webhook
     app.kubernetes.io/name: external-secrets-webhook
     app.kubernetes.io/version: v2.15.0
     external-secrets.io/component: webhook
@@ -34253,6 +34304,10 @@ spec:
       port: 443
       protocol: TCP
       targetPort: webhook
+    - name: metrics
+      port: 8080
+      protocol: TCP
+      targetPort: metrics
   selector:
     app.kubernetes.io/instance: external-secrets
     app.kubernetes.io/name: external-secrets-webhook
@@ -34319,6 +34374,7 @@ metadata:
   labels:
     app.kubernetes.io/instance: external-secrets
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/metrics: cert-controller
     app.kubernetes.io/name: external-secrets-cert-controller
     app.kubernetes.io/version: v2.15.0
     helm.sh/chart: external-secrets-2.15.0
@@ -34336,6 +34392,7 @@ spec:
       labels:
         app.kubernetes.io/instance: external-secrets
         app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/metrics: cert-controller
         app.kubernetes.io/name: external-secrets-cert-controller
         app.kubernetes.io/version: v2.15.0
         helm.sh/chart: external-secrets-2.15.0
@@ -34392,6 +34449,7 @@ metadata:
   labels:
     app.kubernetes.io/instance: external-secrets
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/metrics: webhook
     app.kubernetes.io/name: external-secrets-webhook
     app.kubernetes.io/version: v2.15.0
     helm.sh/chart: external-secrets-2.15.0
@@ -34409,6 +34467,7 @@ spec:
       labels:
         app.kubernetes.io/instance: external-secrets
         app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/metrics: webhook
         app.kubernetes.io/name: external-secrets-webhook
         app.kubernetes.io/version: v2.15.0
         helm.sh/chart: external-secrets-2.15.0
@@ -34545,12 +34604,92 @@ spec:
     kind: ClusterSecretStore
     name: vault-backend
 ---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app.kubernetes.io/instance: external-secrets
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/metrics: cert-controller
+    app.kubernetes.io/name: external-secrets-cert-controller
+    app.kubernetes.io/version: v2.15.0
+    helm.sh/chart: external-secrets-2.15.0
+  name: external-secrets-cert-controller-metrics
+  namespace: external-secrets
+spec:
+  endpoints:
+    - honorLabels: false
+      interval: 30s
+      port: metrics
+      scrapeTimeout: 25s
+  namespaceSelector:
+    matchNames:
+      - external-secrets
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: external-secrets
+      app.kubernetes.io/metrics: cert-controller
+      app.kubernetes.io/name: external-secrets-cert-controller
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app.kubernetes.io/instance: external-secrets
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: external-secrets
+    app.kubernetes.io/version: v2.15.0
+    helm.sh/chart: external-secrets-2.15.0
+  name: external-secrets-metrics
+  namespace: external-secrets
+spec:
+  endpoints:
+    - honorLabels: false
+      interval: 30s
+      port: metrics
+      scrapeTimeout: 25s
+  namespaceSelector:
+    matchNames:
+      - external-secrets
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: external-secrets
+      app.kubernetes.io/name: external-secrets
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app.kubernetes.io/instance: external-secrets
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/metrics: webhook
+    app.kubernetes.io/name: external-secrets-webhook
+    app.kubernetes.io/version: v2.15.0
+    helm.sh/chart: external-secrets-2.15.0
+  name: external-secrets-webhook-metrics
+  namespace: external-secrets
+spec:
+  endpoints:
+    - honorLabels: false
+      interval: 30s
+      port: metrics
+      scrapeTimeout: 25s
+  namespaceSelector:
+    matchNames:
+      - external-secrets
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: external-secrets
+      app.kubernetes.io/metrics: webhook
+      app.kubernetes.io/name: external-secrets-webhook
+---
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
   labels:
     app.kubernetes.io/instance: external-secrets
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/metrics: webhook
     app.kubernetes.io/name: external-secrets-webhook
     app.kubernetes.io/version: v2.15.0
     external-secrets.io/component: webhook
@@ -34588,6 +34727,7 @@ metadata:
   labels:
     app.kubernetes.io/instance: external-secrets
     app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/metrics: webhook
     app.kubernetes.io/name: external-secrets-webhook
     app.kubernetes.io/version: v2.15.0
     external-secrets.io/component: webhook

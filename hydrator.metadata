@@ -1,8 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "7f8db8bb343397871f88b944fb14c1a8dac58e95",
+  "drySha": "9fd0fc5400294f9a4361bc5c0030ec88de0e6150",
   "author": "David Marthy <marthy.david@gmail.com>",
-  "date": "2026-11-11T17:09:02Z",
-  "subject": "feat(argocd): hydrate Helm apps with extra sources, group 6 (external-secrets, cnpg operator) (#1999)",
-  "body": "Extra directory sources become kustomize resources next to the helmChart; render verified identical.\nAlso the follow-up commit for group 5.\n\nCo-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
+  "date": "2026-11-11T17:18:56Z",
+  "subject": "fix(argocd): external-secrets hydrated output missed its metrics Services and ServiceMonitors (#2000)",
+  "body": "The chart gates them on the monitoring.coreos.com/v1/ServiceMonitor API; declare the monitoring kinds in helmCharts.apiVersions.\n\nCo-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
 }
