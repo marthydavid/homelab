@@ -1,0 +1,481 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/instance: immich
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: machine-learning
+    app.kubernetes.io/version: v2.6.3
+    helm.sh/chart: immich-0.12.0
+  name: immich-machine-learning
+  namespace: mediarr
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/instance: immich
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: server
+    app.kubernetes.io/version: v2.6.3
+    helm.sh/chart: immich-0.12.0
+  name: immich-server
+  namespace: mediarr
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/instance: immich
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: valkey
+    app.kubernetes.io/version: v2.6.3
+    helm.sh/chart: immich-0.12.0
+  name: immich-valkey
+  namespace: mediarr
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: immich
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: machine-learning
+    app.kubernetes.io/service: immich-machine-learning
+    app.kubernetes.io/version: v2.6.3
+    helm.sh/chart: immich-0.12.0
+  name: immich-machine-learning
+  namespace: mediarr
+spec:
+  ports:
+    - name: http
+      port: 3003
+      protocol: TCP
+      targetPort: http
+  selector:
+    app.kubernetes.io/controller: main
+    app.kubernetes.io/instance: immich
+    app.kubernetes.io/name: machine-learning
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: immich
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: server
+    app.kubernetes.io/service: immich-server
+    app.kubernetes.io/version: v2.6.3
+    helm.sh/chart: immich-0.12.0
+  name: immich-server
+  namespace: mediarr
+spec:
+  ports:
+    - appProtocol: kubernetes.io/ws
+      name: http
+      port: 2283
+      protocol: TCP
+      targetPort: http
+  selector:
+    app.kubernetes.io/controller: main
+    app.kubernetes.io/instance: immich
+    app.kubernetes.io/name: server
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: immich
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: valkey
+    app.kubernetes.io/service: immich-valkey
+    app.kubernetes.io/version: v2.6.3
+    helm.sh/chart: immich-0.12.0
+  name: immich-valkey
+  namespace: mediarr
+spec:
+  ports:
+    - name: redis
+      port: 6379
+      protocol: TCP
+      targetPort: redis
+  selector:
+    app.kubernetes.io/controller: main
+    app.kubernetes.io/instance: immich
+    app.kubernetes.io/name: valkey
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/controller: main
+    app.kubernetes.io/instance: immich
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: machine-learning
+    app.kubernetes.io/version: v2.6.3
+    helm.sh/chart: immich-0.12.0
+  name: immich-machine-learning
+  namespace: mediarr
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/controller: main
+      app.kubernetes.io/instance: immich
+      app.kubernetes.io/name: machine-learning
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/controller: main
+        app.kubernetes.io/instance: immich
+        app.kubernetes.io/name: machine-learning
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - env:
+            - name: DB_DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  key: dbname
+                  name: immich-postgres-app
+            - name: DB_HOSTNAME
+              valueFrom:
+                secretKeyRef:
+                  key: host
+                  name: immich-postgres-app
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: immich-postgres-app
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  key: port
+                  name: immich-postgres-app
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: user
+                  name: immich-postgres-app
+            - name: HF_XET_CACHE
+              value: /cache/huggingface-xet
+            - name: IMMICH_MACHINE_LEARNING_URL
+              value: http://immich-machine-learning:3003
+            - name: MPLCONFIGDIR
+              value: /cache/matplotlib-config
+            - name: REDIS_HOSTNAME
+              value: immich-valkey
+            - name: TRANSFORMERS_CACHE
+              value: /cache
+          image: ghcr.io/immich-app/immich-machine-learning:v3.4.0-cuda
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ping
+              port: http
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+          name: main
+          ports:
+            - containerPort: 3003
+              name: http
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ping
+              port: http
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+            requests:
+              nvidia.com/gpu: 1
+          startupProbe:
+            failureThreshold: 60
+            httpGet:
+              path: /ping
+              port: http
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+          volumeMounts:
+            - mountPath: /cache
+              name: cache
+      dnsPolicy: ClusterFirst
+      enableServiceLinks: false
+      hostIPC: false
+      hostNetwork: false
+      hostPID: false
+      runtimeClassName: nvidia
+      serviceAccountName: immich-machine-learning
+      volumes:
+        - emptyDir: {}
+          name: cache
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/controller: main
+    app.kubernetes.io/instance: immich
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: server
+    app.kubernetes.io/version: v2.6.3
+    helm.sh/chart: immich-0.12.0
+  name: immich-server
+  namespace: mediarr
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/controller: main
+      app.kubernetes.io/instance: immich
+      app.kubernetes.io/name: server
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/controller: main
+        app.kubernetes.io/instance: immich
+        app.kubernetes.io/name: server
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - env:
+            - name: DB_DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  key: dbname
+                  name: immich-postgres-app
+            - name: DB_HOSTNAME
+              valueFrom:
+                secretKeyRef:
+                  key: host
+                  name: immich-postgres-app
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: immich-postgres-app
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  key: port
+                  name: immich-postgres-app
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: user
+                  name: immich-postgres-app
+            - name: IMMICH_MACHINE_LEARNING_URL
+              value: http://immich-machine-learning:3003
+            - name: REDIS_HOSTNAME
+              value: immich-valkey
+          image: ghcr.io/immich-app/immich-server:v3.4.0
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /api/server/ping
+              port: http
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+          name: main
+          ports:
+            - containerPort: 2283
+              name: http
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /api/server/ping
+              port: http
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+            requests:
+              nvidia.com/gpu: 1
+          startupProbe:
+            failureThreshold: 30
+            httpGet:
+              path: /api/server/ping
+              port: http
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+          volumeMounts:
+            - mountPath: /data
+              name: data
+      dnsPolicy: ClusterFirst
+      enableServiceLinks: false
+      hostIPC: false
+      hostNetwork: false
+      hostPID: false
+      runtimeClassName: nvidia
+      serviceAccountName: immich-server
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: immich
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/controller: main
+    app.kubernetes.io/instance: immich
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: valkey
+    app.kubernetes.io/version: v2.6.3
+    helm.sh/chart: immich-0.12.0
+  name: immich-valkey
+  namespace: mediarr
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/controller: main
+      app.kubernetes.io/instance: immich
+      app.kubernetes.io/name: valkey
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/controller: main
+        app.kubernetes.io/instance: immich
+        app.kubernetes.io/name: valkey
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - env:
+            - name: DB_DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  key: dbname
+                  name: immich-postgres-app
+            - name: DB_HOSTNAME
+              valueFrom:
+                secretKeyRef:
+                  key: host
+                  name: immich-postgres-app
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: immich-postgres-app
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  key: port
+                  name: immich-postgres-app
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: user
+                  name: immich-postgres-app
+            - name: IMMICH_MACHINE_LEARNING_URL
+              value: http://immich-machine-learning:3003
+            - name: REDIS_HOSTNAME
+              value: immich-valkey
+          image: docker.io/valkey/valkey:9.1-alpine@sha256:34f4f659e02a67cfdf3995d11ae432219c936005055b2cd39a042e86280e053e
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - valkey-cli ping | grep PONG
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+          name: main
+          ports:
+            - containerPort: 6379
+              name: redis
+              protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - valkey-cli ping | grep PONG
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+          startupProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - valkey-cli ping | grep PONG
+            failureThreshold: 30
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 5
+          volumeMounts:
+            - mountPath: /data
+              name: data
+      dnsPolicy: ClusterFirst
+      enableServiceLinks: false
+      hostIPC: false
+      hostNetwork: false
+      hostPID: false
+      serviceAccountName: immich-valkey
+      volumes:
+        - emptyDir: {}
+          name: data
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    external-dns.alpha.kubernetes.io/alias: "true"
+    external-dns.alpha.kubernetes.io/target: pecs.marthy.xyz
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+  labels:
+    app.kubernetes.io/instance: immich
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: server
+    app.kubernetes.io/version: v2.6.3
+    helm.sh/chart: immich-0.12.0
+  name: immich-server
+  namespace: mediarr
+spec:
+  rules:
+    - host: immich.marthy.xyz
+      http:
+        paths:
+          - backend:
+              service:
+                name: immich-server
+                port:
+                  number: 2283
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - immich.marthy.xyz
+      secretName: immich-tls

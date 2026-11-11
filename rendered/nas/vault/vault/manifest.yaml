@@ -1,0 +1,463 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vault
+    helm.sh/chart: vault-0.34.1
+  name: vault
+  namespace: vault
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  labels:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vault
+    helm.sh/chart: vault-0.34.1
+  name: vault-discovery-role
+  namespace: vault
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+    verbs:
+      - get
+      - watch
+      - list
+      - update
+      - patch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vault
+    helm.sh/chart: vault-0.34.1
+  name: vault-discovery-rolebinding
+  namespace: vault
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: vault-discovery-role
+subjects:
+  - kind: ServiceAccount
+    name: vault
+    namespace: vault
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vault
+    helm.sh/chart: vault-0.34.1
+  name: vault-server-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:auth-delegator
+subjects:
+  - kind: ServiceAccount
+    name: vault
+    namespace: vault
+---
+apiVersion: v1
+data:
+  extraconfig-from-values.hcl: |-
+    ui = true
+
+    listener "tcp" {
+      tls_disable     = 1
+      address         = "[::]:8200"
+      cluster_address = "[::]:8201"
+    }
+
+    # OCI Object Storage (community-supported backend, buckets must already exist).
+    # Credentials: API key from ~/.oci/config (mounted below) instead of instance principals.
+    storage "oci" {
+      region            = "eu-frankfurt-1"
+      namespace_name    = "fr8ipbv8ozqv"
+      bucket_name       = "vault"
+      ha_enabled        = "true"
+      lock_bucket_name  = "vault-lock"
+      auth_type_api_key = "true"
+    }
+
+    # Auto-unseal with the OCI KMS key "vault" in KMS vault "test" (eu-frankfurt-1).
+    seal "ocikms" {
+      key_id              = "ocid1.key.oc1.eu-frankfurt-1.cbrltjvcaaa32.abtheljt336dqxmssq3jpzjwvnkr4b6qv4oxlpxj3tsewbise5kjkueqsswa"
+      crypto_endpoint     = "https://cbrltjvcaaa32-crypto.kms.eu-frankfurt-1.oraclecloud.com"
+      management_endpoint = "https://cbrltjvcaaa32-management.kms.eu-frankfurt-1.oraclecloud.com"
+      auth_type_api_key   = true
+    }
+
+    service_registration "kubernetes" {}
+
+    disable_mlock = true
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vault
+    helm.sh/chart: vault-0.34.1
+  name: vault-config
+  namespace: vault
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vault
+    helm.sh/chart: vault-0.34.1
+  name: vault
+  namespace: vault
+spec:
+  ports:
+    - name: http
+      port: 8200
+      targetPort: 8200
+    - name: https-internal
+      port: 8201
+      targetPort: 8201
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/name: vault
+    component: server
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vault
+    helm.sh/chart: vault-0.34.1
+    vault-active: "true"
+  name: vault-active
+  namespace: vault
+spec:
+  ports:
+    - name: http
+      port: 8200
+      targetPort: 8200
+    - name: https-internal
+      port: 8201
+      targetPort: 8201
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/name: vault
+    component: server
+    vault-active: "true"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vault
+    helm.sh/chart: vault-0.34.1
+    vault-internal: "true"
+  name: vault-internal
+  namespace: vault
+spec:
+  clusterIP: None
+  ports:
+    - name: http
+      port: 8200
+      targetPort: 8200
+    - name: https-internal
+      port: 8201
+      targetPort: 8201
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/name: vault
+    component: server
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vault
+    helm.sh/chart: vault-0.34.1
+  name: vault-standby
+  namespace: vault
+spec:
+  ports:
+    - name: http
+      port: 8200
+      targetPort: 8200
+    - name: https-internal
+      port: 8201
+      targetPort: 8201
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/name: vault
+    component: server
+    vault-active: "false"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vault-ui
+    helm.sh/chart: vault-0.34.1
+  name: vault-ui
+  namespace: vault
+spec:
+  ports:
+    - name: http
+      port: 8200
+      targetPort: 8200
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/name: vault
+    component: server
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vault
+  name: vault
+  namespace: vault
+spec:
+  podManagementPolicy: Parallel
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: vault
+      app.kubernetes.io/name: vault
+      component: server
+  serviceName: vault-internal
+  template:
+    metadata:
+      annotations: null
+      labels:
+        app.kubernetes.io/instance: vault
+        app.kubernetes.io/name: vault
+        component: server
+        helm.sh/chart: vault-0.34.1
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: vault
+                  app.kubernetes.io/name: vault
+                  component: server
+              topologyKey: kubernetes.io/hostname
+      containers:
+        - args:
+            - "cp /vault/config/extraconfig-from-values.hcl /tmp/storageconfig.hcl;\n[ -n \"${HOST_IP}\" ] && sed -Ei \"s|HOST_IP|${HOST_IP?}|g\" /tmp/storageconfig.hcl;\n[ -n \"${POD_IP}\" ] && sed -Ei \"s|POD_IP|${POD_IP?}|g\" /tmp/storageconfig.hcl;\n[ -n \"${HOSTNAME}\" ] && sed -Ei \"s|HOSTNAME|${HOSTNAME?}|g\" /tmp/storageconfig.hcl;\n[ -n \"${API_ADDR}\" ] && sed -Ei \"s|API_ADDR|${API_ADDR?}|g\" /tmp/storageconfig.hcl;\n[ -n \"${TRANSIT_ADDR}\" ] && sed -Ei \"s|TRANSIT_ADDR|${TRANSIT_ADDR?}|g\" /tmp/storageconfig.hcl;\n[ -n \"${RAFT_ADDR}\" ] && sed -Ei \"s|RAFT_ADDR|${RAFT_ADDR?}|g\" /tmp/storageconfig.hcl;\n/usr/local/bin/docker-entrypoint.sh vault server -config=/tmp/storageconfig.hcl \n"
+          command:
+            - /bin/sh
+            - -ec
+          env:
+            - name: HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: VAULT_K8S_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: VAULT_K8S_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: VAULT_ADDR
+              value: http://127.0.0.1:8200
+            - name: VAULT_API_ADDR
+              value: http://$(POD_IP):8200
+            - name: SKIP_CHOWN
+              value: "true"
+            - name: SKIP_SETCAP
+              value: "true"
+            - name: HOSTNAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: VAULT_CLUSTER_ADDR
+              value: https://$(HOSTNAME).vault-internal:8201
+            - name: HOME
+              value: /home/vault
+          image: hashicorp/vault:2.0.4
+          imagePullPolicy: IfNotPresent
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - sleep 5 && kill -SIGTERM $(pidof vault)
+          name: vault
+          ports:
+            - containerPort: 8200
+              name: http
+            - containerPort: 8201
+              name: https-internal
+            - containerPort: 8202
+              name: http-rep
+          readinessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -ec
+                - vault status -tls-skip-verify
+            failureThreshold: 2
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+          volumeMounts:
+            - mountPath: /vault/config
+              name: config
+            - mountPath: /home/vault/.oci
+              name: oci
+              readOnly: true
+            - mountPath: /home/vault
+              name: home
+      hostNetwork: false
+      securityContext:
+        fsGroup: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 100
+      serviceAccountName: vault
+      terminationGracePeriodSeconds: 10
+      volumes:
+        - configMap:
+            name: vault-config
+          name: config
+        - name: oci
+          secret:
+            defaultMode: 256
+            secretName: vault-oci
+        - emptyDir: {}
+          name: home
+  updateStrategy:
+    type: OnDelete
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  labels:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vault
+    helm.sh/chart: vault-0.34.1
+  name: vault
+  namespace: vault
+spec:
+  maxUnavailable: 0
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: vault
+      app.kubernetes.io/name: vault
+      component: server
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  labels:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vault
+    helm.sh/chart: vault-0.34.1
+  name: vault
+  namespace: vault
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: vault.marthy.xyz
+      http:
+        paths:
+          - backend:
+              service:
+                name: vault-active
+                port:
+                  number: 8200
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - vault.marthy.xyz
+      secretName: vault-tls
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    helm.sh/hook: test
+  name: vault-server-test
+  namespace: vault
+spec:
+  containers:
+    - command:
+        - /bin/sh
+        - -c
+        - |
+          echo "Checking for sealed info in 'vault status' output"
+          ATTEMPTS=10
+          n=0
+          until [ "$n" -ge $ATTEMPTS ]
+          do
+            echo "Attempt" $n...
+            vault status -format yaml | grep -E '^sealed: (true|false)' && break
+            n=$((n+1))
+            sleep 5
+          done
+          if [ $n -ge $ATTEMPTS ]; then
+            echo "timed out looking for sealed info in 'vault status' output"
+            exit 1
+          fi
+
+          exit 0
+      env:
+        - name: VAULT_ADDR
+          value: http://vault.vault.svc:8200
+      image: hashicorp/vault:2.0.4
+      imagePullPolicy: IfNotPresent
+      name: vault-server-test
+      volumeMounts:
+        - mountPath: /home/vault/.oci
+          name: oci
+          readOnly: true
+  restartPolicy: Never
+  volumes:
+    - name: oci
+      secret:
+        defaultMode: 256
+        secretName: vault-oci

@@ -1,8 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "ff94760e25a1003af2c1373123da6a13256a6386",
-  "author": "Marthy Dávid <marthy.david@gmail.com>",
-  "date": "2026-11-11T17:03:38Z",
-  "subject": "feat(tautulli): upgrade app-template 1.5.1 -> 5.3.0",
-  "body": "Values migrated to the v5 schema (controllers/defaultPodOptions/\nglobalMounts); probes, Service, Ingress and volumes render identical to\nbefore. The Deployment selector gains app.kubernetes.io/controller, which\nis immutable, so the Deployment must be deleted before the first sync\n(Recreate strategy, hostPath data is kept). First app of #1992.\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
+  "drySha": "e87ba764d02c624d3fa9d5971d79e0a1d67080e8",
+  "author": "David Marthy <marthy.david@gmail.com>",
+  "date": "2026-11-11T17:33:14Z",
+  "subject": "docs: current hydrator state and the apiVersions gotcha (#2002)",
+  "body": "Co-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
 }
