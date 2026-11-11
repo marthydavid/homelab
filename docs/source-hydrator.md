@@ -10,11 +10,12 @@ repo-server's Helm/Kustomize at sync time.
   `argocd/apps/argocd/values.yaml` (ArgoCD v3.6.x, chart 10.17).
 - No Application uses it yet. Enabling it changes nothing until one sets `spec.sourceHydrator`.
 
-## One manual step: write access for `rendered`
-The commit-server pushes to `rendered`, so ArgoCD needs repo credentials **with write access**
-(a GitHub App or PAT with `contents: write`), registered as a repository or `repo-creds` Secret
-for `https://github.com/marthydavid/homelab`. Credentials are not stored in this repo.
-Do not protect `rendered` against pushes by ArgoCD, and do not edit it by hand.
+## Write access for `rendered`
+The commit-server pushes to `rendered`, so ArgoCD needs a `repository-write` credential for
+`https://github.com/marthydavid/homelab`. It is built by the ExternalSecret
+`argocd/apps/global-apps/external-secrets-config/argocd-repo-write.yaml` from Vault `secret/argocd`
+(keys `githubAppID`, `githubAppInstallationID`, `githubAppPrivateKey`; `url` and `type` are fixed in
+the template). The GitHub App needs `contents: write` on the repo. Do not edit `rendered` by hand.
 
 ## Constraint: single source only
 `sourceHydrator` replaces `source`. It does **not** support `sources:`. Today most apps here are
