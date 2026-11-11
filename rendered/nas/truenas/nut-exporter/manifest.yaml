@@ -1,0 +1,116 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: prometheus-nut-exporter
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: prometheus-nut-exporter
+    app.kubernetes.io/version: 1.1.1
+    helm.sh/chart: prometheus-nut-exporter-5.4.2
+  name: prometheus-nut-exporter
+spec:
+  ports:
+    - name: metrics
+      port: 9995
+      protocol: TCP
+      targetPort: metrics
+  selector:
+    app.kubernetes.io/instance: prometheus-nut-exporter
+    app.kubernetes.io/name: prometheus-nut-exporter
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/instance: prometheus-nut-exporter
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: prometheus-nut-exporter
+    app.kubernetes.io/version: 1.1.1
+    helm.sh/chart: prometheus-nut-exporter-5.4.2
+  name: prometheus-nut-exporter
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: prometheus-nut-exporter
+      app.kubernetes.io/name: prometheus-nut-exporter
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: prometheus-nut-exporter
+        app.kubernetes.io/name: prometheus-nut-exporter
+    spec:
+      automountServiceAccountToken: true
+      containers:
+        - env:
+            - name: HTTP_PATH
+              value: /metrics
+            - name: HTTP_PORT
+              value: "9995"
+            - name: RUST_LOG
+              value: info
+            - name: TZ
+              value: UTC
+          image: hon95/prometheus-nut-exporter:1.2.1
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            tcpSocket:
+              port: 9995
+            timeoutSeconds: 1
+          name: prometheus-nut-exporter
+          ports:
+            - containerPort: 9995
+              name: metrics
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            tcpSocket:
+              port: 9995
+            timeoutSeconds: 1
+          startupProbe:
+            failureThreshold: 30
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            tcpSocket:
+              port: 9995
+            timeoutSeconds: 1
+      dnsPolicy: ClusterFirst
+      enableServiceLinks: true
+      serviceAccountName: default
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app.kubernetes.io/instance: prometheus-nut-exporter
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: prometheus-nut-exporter
+    app.kubernetes.io/version: 1.1.1
+    helm.sh/chart: prometheus-nut-exporter-5.4.2
+  name: prometheus-nut-exporter
+spec:
+  endpoints:
+    - interval: 30s
+      params:
+        target:
+          - sm4.marthy.xyz:3493
+      path: /metrics
+      port: metrics
+      relabelings:
+        - sourceLabels:
+            - __param_target
+          targetLabel: target
+      scrapeTimeout: 10s
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: prometheus-nut-exporter
+      app.kubernetes.io/name: prometheus-nut-exporter
