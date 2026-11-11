@@ -20,6 +20,12 @@
   },
   "packageRules": [
     {
+      "description": "Hold external-dns at chart 1.20.x until #1908 is solved (v0.23 rewrites ALIAS records to A)",
+      "matchDatasources": ["helm"],
+      "matchDepNames": ["external-dns"],
+      "enabled": false
+    },
+    {
       "description": "Auto merge container digests",
       "matchDatasources": ["docker"],
       "automerge": true,
