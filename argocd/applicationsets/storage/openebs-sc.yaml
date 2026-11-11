@@ -23,10 +23,14 @@ spec:
       name: storage-openebs-sc-{{ .name }}
     spec:
       project: default
-      source:
-        repoURL: https://github.com/marthydavid/homelab
-        targetRevision: main
-        path: argocd/apps/storage/openebs-sc/overlays/{{ .name }}
+      sourceHydrator:
+        drySource:
+          repoURL: https://github.com/marthydavid/homelab
+          targetRevision: main
+          path: argocd/apps/storage/openebs-sc/overlays/{{ .name }}
+        syncSource:
+          targetBranch: rendered
+          path: rendered/{{ .name }}/storage/openebs-sc
       destination:
         server: '{{ .server }}'
         namespace: openebs
