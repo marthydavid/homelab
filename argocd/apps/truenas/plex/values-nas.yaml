@@ -55,6 +55,7 @@ controllers:
 defaultPodOptions:
   annotations:
     kubectl.kubernetes.io/default-container: main
+  runtimeClassName: nvidia
   hostNetwork: true
   dnsPolicy: ClusterFirstWithHostNet
   nodeSelector:
