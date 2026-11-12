@@ -1,8 +1,7 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "77fb737edc8c26c67a1e91a08041589e515a3337",
-  "author": "David Marthy <marthy.david@gmail.com>",
-  "date": "2026-11-12T09:58:15Z",
-  "subject": "chore(kyverno): drop the legacy-policies acknowledgement (#2010)",
-  "body": "The leftover rke2-coredns policies are deleted, so the flag is no longer needed.\n\nCo-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
+  "drySha": "4bccef726492261b9c568f672fe84f464e77df91",
+  "author": "renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>",
+  "date": "2026-11-11T17:48:35Z",
+  "subject": "chore(deps): update ghcr.io/home-operations/prowlarr docker tag to v3"
 }
