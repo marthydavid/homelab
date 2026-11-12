@@ -1,8 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "c1e3d9fb3e482ab2cffb8230b958e3e65b8f02a5",
-  "author": "Marthy Dávid <marthy.david@gmail.com>",
-  "date": "2026-11-12T08:24:07Z",
-  "subject": "feat(truenas): migrate overseerr to seerr",
-  "body": "Rename the app and switch the image to ghcr.io/seerr-team/seerr v3.5.1. The config hostPath is\nkept so Seerr migrates the Overseerr data in place. Both hostnames stay on the ingress.\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
+  "drySha": "951bc64fb8674e68f191426a12731d8bd5746bfb",
+  "author": "David Marthy <marthy.david@gmail.com>",
+  "date": "2026-11-12T09:02:08Z",
+  "subject": "fix(kyverno): acknowledge legacy policies so 3.10 can upgrade (#2008)",
+  "body": "* fix(kyverno): acknowledge legacy policies so 3.10 can upgrade\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\n\n* fix(kyverno): repair values file after append\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\n\n---------\n\nCo-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
 }

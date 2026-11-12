@@ -5,6 +5,6 @@ To hydrate the manifests in this repository, run the following commands:
 ```shell
 git clone https://github.com/marthydavid/homelab
 # cd into the cloned directory
-git checkout a11d96a29fe4e2c0786fd480d55d83f2895a9063
+git checkout 951bc64fb8674e68f191426a12731d8bd5746bfb
 kustomize build ./argocd/apps/global-apps/kyverno/overlays/nas --enable-helm --load-restrictor LoadRestrictionsNone
 ```
