@@ -1,9 +1,23 @@
 # Deploys the external-secrets operand (controller, webhook, cert-controller) into namespace
 # external-secrets. Without this, only the operator runs and no ExternalSecret is reconciled.
+# The operator isolates the operand with deny-all NetworkPolicies (only the API server, DNS and a
+# proxy are allowed), so egress to Vault (vault.marthy.xyz = nas ingress 192.168.20.1:443) is
+# opened here; the operator creates it as NetworkPolicy eso-user-allow-vault-egress.
 apiVersion: operator.openshift.io/v1alpha1
 kind: ExternalSecretsConfig
 metadata:
   name: cluster
   annotations:
     argocd.argoproj.io/sync-wave: "2"
-spec: {}
+spec:
+  controllerConfig:
+    networkPolicies:
+      - name: allow-vault-egress
+        componentName: ExternalSecretsCoreController
+        egress:
+          - to:
+              - ipBlock:
+                  cidr: 192.168.20.1/32
+            ports:
+              - protocol: TCP
+                port: 443
