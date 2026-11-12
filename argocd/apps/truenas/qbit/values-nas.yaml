@@ -7,7 +7,7 @@ controllers:
       main:
         image:
           repository: ghcr.io/onedr0p/qbittorrent
-          tag: 5
+          tag: 4
         env:
           UMASK: "022"
           QBITTORRENT__PORT: 8080
