@@ -3,15 +3,37 @@ controllers:
     strategy: Recreate
     annotations:
       reloader.stakater.com/auto: "true"
+    initContainers:
+      # One-off move from the v4 profile layout (two hostPaths) to the v5 layout
+      # (everything in /config/qBittorrent). Runs after the v4 pod has stopped
+      # (Recreate), skips itself once done. Remove together with the v4 mounts
+      # once v5 has run for a while (#2015).
+      migrate-v4:
+        image:
+          repository: ghcr.io/home-operations/qbittorrent
+          tag: 5.3.0
+        command:
+          - /bin/bash
+          - -c
+          - |
+            set -euo pipefail
+            dst=/config/qBittorrent
+            if [ -f "$dst/.migrated-from-v4" ]; then echo "already migrated"; exit 0; fi
+            if [ -e "$dst/qBittorrent.conf" ]; then echo "refusing: $dst already has a config"; exit 1; fi
+            mkdir -p "$dst"
+            cp -a /v4/data/. "$dst/"
+            cp -a /v4/config/. "$dst/"
+            rm -rf "$dst/.cache" "$dst/ipc-socket" "$dst/lockfile" "$dst/rss/storage.lock"
+            sed -i 's#^FileLogger\\Path=.*#FileLogger\\Path=/config/qBittorrent/logs#' "$dst/qBittorrent.conf"
+            touch "$dst/.migrated-from-v4"
+            echo "migrated, BT_backup files: $(ls "$dst/BT_backup" | wc -l)"
     containers:
       main:
         image:
-          repository: ghcr.io/onedr0p/qbittorrent
-          tag: 4.6.7
+          repository: ghcr.io/home-operations/qbittorrent
+          tag: 5.3.0
         env:
-          UMASK: "022"
-          QBITTORRENT__PORT: 8080
-          QBITTORRENT__USE_PROFILE: "true"
+          QBT_WEBUI_PORT: "8080"
         probes:
           liveness: &probe
             enabled: true
@@ -42,8 +64,6 @@ controllers:
 
 defaultPodOptions:
   hostname: qbittorrent
-  annotations:
-    setGateway: "true"
   securityContext:
     runAsUser: 568
     runAsGroup: 568
@@ -80,26 +100,40 @@ ingress:
         secretName: qbit-tls
 
 persistence:
+  # v5 layout: config and data both live in /config/qBittorrent (XDG dirs under /config)
   config:
     enabled: true
     type: hostPath
-    hostPath: /zfs/k3s/configs/qbittorrent-config
+    hostPath: /zfs/k3s/configs/qbittorrent-v5
     globalMounts:
-      - path: /config/qBittorrent/config
+      - path: /config
   cache:
     enabled: true
     type: emptyDir
     globalMounts:
-      - path: /config/qBittorrent/cache
-  data:
-    enabled: true
-    type: hostPath
-    hostPath: /zfs/k3s/configs/qbittorrent-data
-    globalMounts:
-      - path: /config/qBittorrent/data
+      - path: /config/.cache
   media:
     enabled: true
     type: hostPath
     hostPath: /zfs/media
     globalMounts:
       - path: /zfs/media
+  # v4 directories, read-only and only for the migrate-v4 init container
+  v4-config:
+    enabled: true
+    type: hostPath
+    hostPath: /zfs/k3s/configs/qbittorrent-config
+    advancedMounts:
+      main:
+        migrate-v4:
+          - path: /v4/config
+            readOnly: true
+  v4-data:
+    enabled: true
+    type: hostPath
+    hostPath: /zfs/k3s/configs/qbittorrent-data
+    advancedMounts:
+      main:
+        migrate-v4:
+          - path: /v4/data
+            readOnly: true
