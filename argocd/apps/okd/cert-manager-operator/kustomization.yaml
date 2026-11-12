@@ -3,3 +3,5 @@ resources:
 - operatorgroup.yaml
 - subscription.yaml
 - operand.yaml
+- clusterissuer.yaml
+- route-certificates.yaml
