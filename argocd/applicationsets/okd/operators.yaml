@@ -1,0 +1,63 @@
+# OLM operators (and their operands) on the OKD cluster metal1: one app per directory under
+# argocd/apps/okd. They were installed by hand first and captured into git on 2026-11-12.
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: okd-operators
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions:
+  - missingkey=error
+  generators:
+  - matrix:
+      generators:
+      - clusters:
+          selector:
+            matchExpressions:
+            - key: homelab/cluster
+              operator: In
+              values:
+              - metal1
+      - git:
+          repoURL: https://github.com/marthydavid/homelab
+          revision: main
+          directories:
+          - path: argocd/apps/okd/*
+  template:
+    metadata:
+      name: okd-{{ .path.basename }}-{{ .name }}
+    spec:
+      project: default
+      sourceHydrator:
+        drySource:
+          repoURL: https://github.com/marthydavid/homelab
+          targetRevision: main
+          path: '{{ .path.path }}'
+        syncSource:
+          targetBranch: rendered
+          path: rendered/{{ .name }}/okd/{{ .path.basename }}
+      destination:
+        server: '{{ .server }}'
+        # every manifest sets its own namespace; this is only the fallback
+        namespace: default
+      syncPolicy:
+        syncOptions:
+        - ServerSideApply=true
+        - SkipDryRunOnMissingResource=true
+        retry:
+          limit: 10
+          backoff:
+            duration: 30s
+            factor: 2
+            maxDuration: 10m
+  templatePatch: |
+    {{- if eq (index .metadata.labels "homelab/auto-sync") "true" }}
+    spec:
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+    {{- end }}

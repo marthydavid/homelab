@@ -18,6 +18,7 @@ spec:
           operator: In
           values:
           - nas
+          - metal1
   template:
     metadata:
       name: cert-manager-config-{{ .name }}

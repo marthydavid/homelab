@@ -1,0 +1,9 @@
+# Captured from metal1 (OKD) on 2026-11-12; installed by hand before ArgoCD managed it.
+# Operand: applied after the operator's CRDs exist (wave 2, SkipDryRunOnMissingResource).
+apiVersion: metallb.io/v1beta1
+kind: MetalLB
+metadata:
+  name: metallb
+  namespace: metallb-system
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"

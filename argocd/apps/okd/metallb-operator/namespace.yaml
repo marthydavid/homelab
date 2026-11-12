@@ -1,0 +1,5 @@
+# Captured from metal1 (OKD) on 2026-11-12; installed by hand before ArgoCD managed it.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: metallb-system
