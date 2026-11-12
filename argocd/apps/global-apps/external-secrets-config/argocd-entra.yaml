@@ -1,0 +1,27 @@
+# Entra ID (app registration "argocd-nas") client secret for Argo CD SSO, from Vault
+# secret/argocd-entra. argocd-cm's oidc.config references it as $argocd-entra:clientSecret,
+# which Argo CD only resolves for Secrets labelled app.kubernetes.io/part-of: argocd.
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+  name: argocd-entra
+  namespace: argocd
+spec:
+  secretStoreRef:
+    name: vault-backend
+    kind: ClusterSecretStore
+  target:
+    name: argocd-entra
+    creationPolicy: Owner
+    template:
+      type: Opaque
+      metadata:
+        labels:
+          app.kubernetes.io/part-of: argocd
+  data:
+    - secretKey: clientSecret
+      remoteRef:
+        key: secret/argocd-entra
+        property: clientSecret
