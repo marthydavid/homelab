@@ -6,10 +6,10 @@ controllers:
     containers:
       main:
         image:
-          repository: ghcr.io/sct/overseerr
-          tag: 1.35.0
+          repository: ghcr.io/seerr-team/seerr
+          tag: v3.5.1
         env:
-          PORT: 80
+          PORT: "80"
           TZ: Europe/Budapest
           LOG_LEVEL: "info"
         probes:
@@ -66,6 +66,12 @@ ingress:
       external-dns.alpha.kubernetes.io/target: pecs.marthy.xyz
       external-dns.alpha.kubernetes.io/alias: "true"
     hosts:
+      - host: "seerr.pecs.marthy.xyz"
+        paths:
+          - path: /
+            service:
+              identifier: main
+              port: http
       - host: "overseerr.pecs.marthy.xyz"
         paths:
           - path: /
@@ -74,13 +80,15 @@ ingress:
               port: http
     tls:
       - hosts:
+          - seerr.pecs.marthy.xyz
           - overseerr.pecs.marthy.xyz
-        secretName: overseerr-tls
+        secretName: seerr-tls
 
 persistence:
   config:
     enabled: true
     type: hostPath
+    # Same directory as Overseerr: Seerr migrates the Overseerr config in place on first start (one-way).
     hostPath: /zfs/k3s/configs/overseerr-config
     globalMounts:
       - path: /app/config
