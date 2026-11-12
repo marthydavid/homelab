@@ -44,5 +44,5 @@ spec:
       channels:
         - stable
       # renovate: datasource=custom.okd-operators depName=openshift-custom-metrics-autoscaler-operator
-      version: "2.19.0-3"
+      version: "2.19.0-4"
       upgradeConstraintPolicy: CatalogProvided
