@@ -11,6 +11,3 @@ reportsController:
   enabled: false
   serviceMonitor:
     enabled: true
-upgrade:
-  # Kyverno 3.10 refuses to upgrade while legacy kyverno.io policies exist (leftover rke2-coredns).
-  acknowledgeLegacyPoliciesNotEnforced: true
