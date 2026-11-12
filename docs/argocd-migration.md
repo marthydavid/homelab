@@ -53,11 +53,21 @@ helm --kube-context sm4 upgrade --install argocd argo-cd \
   --repo https://argoproj.github.io/argo-helm --version 10.11.6 \
   -n argocd --create-namespace -f argocd/apps/argocd/values.yaml
 kubectl --context sm4 apply -k argocd/bootstrap
-# metal1: run with the current kube context set to sm4 (argocd --core talks to the hub's API)
-argocd cluster add metal1 --core --name metal1 --yes \
-  --label homelab/cluster=metal1 --label homelab/auto-sync=true
 ```
 After that, ArgoCD manages itself (`argocd/applicationsets/argocd/argocd.yaml`).
+
+### Registering metal1
+metal1's cluster Secret comes from Vault, not from `argocd cluster add`:
+```bash
+kubectl --context metal1 apply -f argocd/bootstrap/spokes/metal1-argocd-manager.yaml
+# store server, the argocd-manager-token token and the API CA (base64 PEM) in Vault
+vault kv put secret/argocd-cluster-metal1 server=https://api.metal1.okd.marthy.xyz:6443 \
+  bearerToken=@token caData=@ca.b64
+```
+The ExternalSecret `cluster-metal1` (`argocd/apps/global-apps/external-secrets-config`) turns that
+into the cluster Secret with `homelab/cluster=metal1` and `homelab/auto-sync=true`. Like any new
+hydrated app, the first app on metal1 (`reloader-metal1`) only gets output on `rendered` after a
+follow-up commit on `main` (docs/source-hydrator.md).
 
 ## Known gaps
 - **Secrets backend is down.** `vault-backend` points at `vault.oci.marthy.xyz`, which went away
