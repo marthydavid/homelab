@@ -8,7 +8,9 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
 spec:
   channel: stable
-  installPlanApproval: Automatic
+  installPlanApproval: Manual
   name: nfd
   source: redhat-operators
   sourceNamespace: openshift-marketplace
+  # renovate: datasource=custom.okd-operators depName=nfd
+  startingCSV: nfd.4.21.0-202611041433

@@ -1,0 +1,88 @@
+# Daily: run stakater/operator-versions against this cluster's catalogs and push the result to the
+# operator-versions branch as metal1/<package>.json ({"releases":[{"version":"v<x>"}]}, the head
+# of every channel). Renovate reads it from
+# https://raw.githubusercontent.com/marthydavid/homelab/operator-versions/metal1/<package>.json
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: publisher
+  namespace: operator-versions
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  schedule: "17 3 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      activeDeadlineSeconds: 3600
+      template:
+        spec:
+          serviceAccountName: publisher
+          restartPolicy: Never
+          initContainers:
+            - name: get-versions
+              image: ghcr.io/stakater/operator-versions:v0.0.5
+              # the script writes ./<version>/<package>.json; -v fixes the folder name
+              args: ["-v", "metal1"]
+              workingDir: /work
+              env:
+                - name: HOME
+                  value: /tmp
+              volumeMounts:
+                - name: work
+                  mountPath: /work
+                - name: tmp
+                  mountPath: /tmp
+          containers:
+            - name: push
+              image: docker.io/alpine/k8s:1.35.10
+              workingDir: /tmp
+              env:
+                - name: HOME
+                  value: /tmp
+              command:
+                - /bin/bash
+                - -c
+                - |
+                  set -euo pipefail
+                  n=$(ls /work/metal1 | wc -l)
+                  echo "packages: $n"
+                  [ "$n" -gt 10 ] || { echo "too few packages, not publishing"; exit 1; }
+                  url="https://x-access-token:$(cat /token/token)@github.com/marthydavid/homelab.git"
+                  git config --global user.name "operator-versions publisher"
+                  git config --global user.email "operator-versions@metal1.invalid"
+                  if git clone -q --depth 1 --branch operator-versions "$url" repo 2>/dev/null; then
+                    cd repo
+                  else
+                    git init -q repo && cd repo && git checkout -q --orphan operator-versions
+                  fi
+                  rm -rf metal1 && cp -r /work/metal1 metal1
+                  cat > README.md <<'MD'
+                  Generated daily on metal1 by `argocd/apps/okd/operator-versions` (stakater/operator-versions).
+                  `metal1/<package>.json` lists the head version of every channel of each OLM package;
+                  Renovate's custom datasource `okd-operators` reads it. Do not edit by hand.
+                  MD
+                  git add -A
+                  if git diff --cached --quiet; then echo "no changes"; exit 0; fi
+                  git commit -q -m "operator-versions: metal1 catalog $(date -u +%F)"
+                  git push -q "$url" HEAD:operator-versions
+                  echo "pushed"
+              volumeMounts:
+                - name: work
+                  mountPath: /work
+                - name: tmp
+                  mountPath: /tmp
+                - name: token
+                  mountPath: /token
+                  readOnly: true
+          volumes:
+            - name: work
+              emptyDir: {}
+            - name: tmp
+              emptyDir: {}
+            - name: token
+              secret:
+                secretName: github-token

@@ -1,0 +1,98 @@
+# OLM Subscriptions on metal1 use installPlanApproval: Manual. This approves a pending InstallPlan
+# only if every CSV in it belongs to a Subscription in that namespace and is not newer than the
+# Subscription's spec.startingCSV, which is pinned in git and bumped by Renovate. So merging a
+# Renovate PR (and Argo CD syncing it) is what lets an operator upgrade. Subscriptions without a
+# startingCSV are never approved.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: approver
+  namespace: operator-versions
+data:
+  approve.py: |
+    import json, re, subprocess, sys
+
+    def kubectl(*args):
+        return subprocess.run(["kubectl", *args], check=True, capture_output=True, text=True).stdout
+
+    def split(csv):
+        # "lvms-operator.v4.21.2" -> ("lvms-operator", "4.21.2"); "nfd.4.21.0-2026..." -> ("nfd", ...)
+        m = re.match(r"^(.*?)\.v?(\d.*)$", csv)
+        return (m.group(1), m.group(2)) if m else (csv, "")
+
+    def key(version):
+        return [int(p) if p.isdigit() else p for p in re.split(r"[.\-+]", version)]
+
+    def newer(a, b):
+        ka, kb = key(a), key(b)
+        try:
+            return ka > kb
+        except TypeError:  # mixed str/int parts: fall back to string compare
+            return a > b
+
+    subs = json.loads(kubectl("get", "subscriptions.operators.coreos.com", "-A", "-o", "json"))["items"]
+    pins = {}  # namespace -> {csv prefix: pinned version}
+    for s in subs:
+        start = s["spec"].get("startingCSV")
+        if start:
+            prefix, version = split(start)
+            pins.setdefault(s["metadata"]["namespace"], {})[prefix] = version
+
+    plans = json.loads(kubectl("get", "installplans.operators.coreos.com", "-A", "-o", "json"))["items"]
+    for p in plans:
+        ns, name = p["metadata"]["namespace"], p["metadata"]["name"]
+        if p["spec"].get("approved") or p["spec"].get("approval") != "Manual":
+            continue
+        csvs = p["spec"].get("clusterServiceVersionNames", [])
+        reasons = []
+        for csv in csvs:
+            prefix, version = split(csv)
+            pin = pins.get(ns, {}).get(prefix)
+            if pin is None:
+                reasons.append(f"{csv}: no startingCSV pin")
+            elif newer(version, pin):
+                reasons.append(f"{csv}: newer than pinned {prefix}.{pin}")
+        if csvs and not reasons:
+            kubectl("patch", "installplans.operators.coreos.com", name, "-n", ns,
+                    "--type=merge", "-p", '{"spec":{"approved":true}}')
+            print(f"approved {ns}/{name}: {', '.join(csvs)}")
+        else:
+            print(f"waiting {ns}/{name}: {'; '.join(reasons) or 'no CSVs'}")
+    sys.stdout.flush()
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: approver
+  namespace: operator-versions
+spec:
+  schedule: "*/10 * * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      activeDeadlineSeconds: 300
+      template:
+        spec:
+          serviceAccountName: approver
+          restartPolicy: Never
+          containers:
+            - name: approve
+              image: docker.io/alpine/k8s:1.35.10
+              command: ["python3", "/scripts/approve.py"]
+              env:
+                - name: HOME
+                  value: /tmp
+              volumeMounts:
+                - name: scripts
+                  mountPath: /scripts
+                - name: tmp
+                  mountPath: /tmp
+          volumes:
+            - name: scripts
+              configMap:
+                name: approver
+            - name: tmp
+              emptyDir: {}

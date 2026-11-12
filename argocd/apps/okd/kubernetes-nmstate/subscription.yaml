@@ -8,7 +8,9 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
 spec:
   channel: stable
-  installPlanApproval: Automatic
+  installPlanApproval: Manual
   name: kubernetes-nmstate-operator
   source: redhat-operators
   sourceNamespace: openshift-marketplace
+  # renovate: datasource=custom.okd-operators depName=kubernetes-nmstate-operator
+  startingCSV: kubernetes-nmstate-operator.4.21.0-202611041433

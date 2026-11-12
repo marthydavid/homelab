@@ -8,10 +8,12 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
 spec:
   channel: stable
-  installPlanApproval: Automatic
+  installPlanApproval: Manual
   name: local-storage-operator
   source: redhat-operators
   sourceNamespace: openshift-marketplace
+  # renovate: datasource=custom.okd-operators depName=local-storage-operator
+  startingCSV: local-storage-operator.v4.21.0-202611041433
 ---
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
@@ -22,7 +24,9 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
 spec:
   channel: stable-4.21
-  installPlanApproval: Automatic
+  installPlanApproval: Manual
   name: lvms-operator
   source: redhat-operators
   sourceNamespace: openshift-marketplace
+  # renovate: datasource=custom.okd-operators depName=lvms-operator
+  startingCSV: lvms-operator.v4.21.2

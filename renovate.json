@@ -1,5 +1,7 @@
 {
-  "extends": ["mergeConfidence:all-badges"],
+  "extends": [
+    "mergeConfidence:all-badges"
+  ],
   "semanticCommits": "enabled",
   "commitMessageTopic": "{{packageName}}",
   "commitMessageExtra": "to {{newVersion}}",
@@ -21,45 +23,104 @@
   "packageRules": [
     {
       "description": "Hold external-dns: v0.23 rewrites target/alias A ALIAS records to plain A (issue #1908)",
-      "matchPackageNames": ["external-dns"],
-      "matchDatasources": ["helm"],
+      "matchPackageNames": [
+        "external-dns"
+      ],
+      "matchDatasources": [
+        "helm"
+      ],
       "enabled": false
     },
     {
       "description": "Hold external-dns at chart 1.20.x until #1908 is solved (v0.23 rewrites ALIAS records to A)",
-      "matchDatasources": ["helm"],
-      "matchDepNames": ["external-dns"],
+      "matchDatasources": [
+        "helm"
+      ],
+      "matchDepNames": [
+        "external-dns"
+      ],
       "enabled": false
     },
     {
       "description": "Auto merge container digests",
-      "matchDatasources": ["docker"],
+      "matchDatasources": [
+        "docker"
+      ],
       "automerge": true,
       "ignoreTests": true,
       "automergeType": "pr",
-      "matchUpdateTypes": ["patch", "minor", "digest"],
-      "matchPackagePatterns": ["ghcr.io/bjw-s", "ghcr.io/home-operations", "ghcr.io/scr", "ghcr.io/marthydavid"]
+      "matchUpdateTypes": [
+        "patch",
+        "minor",
+        "digest"
+      ],
+      "matchPackagePatterns": [
+        "ghcr.io/bjw-s",
+        "ghcr.io/home-operations",
+        "ghcr.io/scr",
+        "ghcr.io/marthydavid"
+      ]
     },
     {
       "description": "Auto merge container digests",
-      "matchDatasources": ["docker"],
+      "matchDatasources": [
+        "docker"
+      ],
       "automerge": true,
       "ignoreTests": true,
       "automergeType": "pr",
-      "matchUpdateTypes": ["patch"]
+      "matchUpdateTypes": [
+        "patch"
+      ]
     },
     {
       "description": "Auto merge helm deps",
-      "matchDatasources": ["helm","git-tags"],
+      "matchDatasources": [
+        "helm",
+        "git-tags"
+      ],
       "automerge": true,
       "ignoreTests": true,
       "automergeType": "pr",
-      "matchUpdateTypes": ["patch"]
+      "matchUpdateTypes": [
+        "patch"
+      ]
     },
     {
       "description": "Never automerge Vault (image or chart): with nas auto-sync a merge restarts the secrets root for both clusters, so bumps get a PR and a human (issue #2018)",
-      "matchDepNames": ["hashicorp/vault", "vault"],
+      "matchDepNames": [
+        "hashicorp/vault",
+        "vault"
+      ],
+      "automerge": false
+    },
+    {
+      "description": "OLM operators on metal1: versions are published as v<x>; merging the PR is what lets the approver upgrade the operator, so never automerge",
+      "matchDatasources": [
+        "custom.okd-operators"
+      ],
+      "extractVersion": "^v(?<version>.+)$",
       "automerge": false
     }
-  ]
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "OLM Subscriptions on metal1: the startingCSV pin (approved by okd/operator-versions/approver.yaml)",
+      "fileMatch": [
+        "(^|/)argocd/apps/okd/.+/subscription\\.yaml$"
+      ],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n\\s*startingCSV: \\S+?\\.v?(?<currentValue>\\d\\S*)"
+      ],
+      "versioningTemplate": "loose"
+    }
+  ],
+  "customDatasources": {
+    "okd-operators": {
+      "description": "Head version of every channel per OLM package in metal1's catalogs, published daily by okd/operator-versions/publisher.yaml (stakater/operator-versions)",
+      "defaultRegistryUrlTemplate": "https://raw.githubusercontent.com/marthydavid/homelab/operator-versions/metal1/{{packageName}}.json",
+      "format": "json"
+    }
+  }
 }

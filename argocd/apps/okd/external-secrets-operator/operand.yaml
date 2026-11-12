@@ -21,3 +21,14 @@ spec:
             ports:
               - protocol: TCP
                 port: 443
+      # GithubAccessToken generator (okd/operator-versions) calls api.github.com, whose addresses
+      # change, so HTTPS egress is open; creates NetworkPolicy eso-user-allow-https-egress.
+      - name: allow-https-egress
+        componentName: ExternalSecretsCoreController
+        egress:
+          - to:
+              - ipBlock:
+                  cidr: 0.0.0.0/0
+            ports:
+              - protocol: TCP
+                port: 443

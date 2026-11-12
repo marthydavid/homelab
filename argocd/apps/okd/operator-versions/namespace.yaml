@@ -1,0 +1,9 @@
+# Renovate for OLM operators on metal1 (docs/argocd-migration.md, "OKD operators"):
+# - publisher: stakater/operator-versions writes one JSON per catalog package to the
+#   operator-versions branch, which Renovate reads as the custom datasource okd-operators;
+# - approver: Subscriptions use Manual approval, and only InstallPlans up to the
+#   startingCSV pinned in git are approved, so a merged Renovate PR is what upgrades an operator.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: operator-versions
