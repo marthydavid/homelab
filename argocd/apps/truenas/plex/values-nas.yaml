@@ -1,19 +1,82 @@
-controller:
-  type: statefulset
-image:
-  repository: ghcr.io/home-operations/plex
-  tag: rolling@sha256:06ef0fc23e9af9bbaf284c3f27972f94e703d13d6f745edeb6818fcbebf6c673
-env:
-  TZ: Europe/Budapest
+controllers:
+  main:
+    type: statefulset
+    replicas: 1
+    containers:
+      main:
+        image:
+          repository: ghcr.io/home-operations/plex
+          tag: rolling@sha256:06ef0fc23e9af9bbaf284c3f27972f94e703d13d6f745edeb6818fcbebf6c673
+        env:
+          TZ: Europe/Budapest
+        probes:
+          liveness: &probe
+            enabled: true
+            custom: true
+            spec:
+              tcpSocket:
+                port: 32400
+              initialDelaySeconds: 0
+              periodSeconds: 10
+              timeoutSeconds: 1
+              failureThreshold: 3
+          readiness: *probe
+          startup:
+            enabled: true
+            custom: true
+            spec:
+              tcpSocket:
+                port: 32400
+              initialDelaySeconds: 0
+              periodSeconds: 5
+              timeoutSeconds: 1
+              failureThreshold: 30
+        resources:
+          requests:
+            nvidia.com/gpu: 1
+            cpu: 100m
+            memory: 2000Mi
+          limits:
+            nvidia.com/gpu: 1
+            memory: 10000Mi
+      auto-languages:
+        image:
+          repository: docker.io/remirigal/plex-auto-languages
+          tag: v1.2.3
+          pullPolicy: IfNotPresent
+        env:
+          PLEX_URL: "http://localhost:32400"
+          REFRESH_LIBRARY_ON_SCAN: "false"
+          TZ: "Europe/Budapest"
+        envFrom:
+          - secretRef:
+              name: plex-token
+
+defaultPodOptions:
+  annotations:
+    kubectl.kubernetes.io/default-container: main
+  hostNetwork: true
+  dnsPolicy: ClusterFirstWithHostNet
+  nodeSelector:
+    nvidia.com/gpu.count: "1"
+  securityContext:
+    runAsUser: 568
+    runAsGroup: 568
+    fsGroup: 568
+    fsGroupChangePolicy: OnRootMismatch
+    supplementalGroups: [44, 109, 10000]
+
 service:
   main:
+    controller: main
     ports:
       http:
         port: 32400
+
 ingress:
   main:
     enabled: true
-    ingressClassName: nginx
+    className: nginx
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
       nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
@@ -22,61 +85,54 @@ ingress:
         paths:
           - path: /
             pathType: Prefix
+            service:
+              identifier: main
+              port: http
     tls:
       - hosts:
           - plex.pecs.marthy.xyz
         secretName: plex-tls
-hostNetwork: true
-podSecurityContext:
-  runAsUser: 568
-  runAsGroup: 568
-  fsGroup: 568
-  fsGroupChangePolicy: OnRootMismatch
-  supplementalGroups: [44, 109, 10000]
+
 persistence:
   config:
     enabled: true
-    hostPath: /zfs/k3s/configs/plex-config
-    mountPath: /config
     type: hostPath
+    hostPath: /zfs/k3s/configs/plex-config
+    advancedMounts:
+      main:
+        main:
+          - path: /config
   pal-config:
     enabled: true
-    hostPath: /zfs/k3s/configs/plex-auto-languages-config
-    mountPath: /pal-config
     type: hostPath
+    hostPath: /zfs/k3s/configs/plex-auto-languages-config
+    advancedMounts:
+      main:
+        main:
+          - path: /pal-config
+        auto-languages:
+          - path: /config
   media:
     enabled: true
-    hostPath: /zfs/media
-    mountPath: /zfs/media
     type: hostPath
+    hostPath: /zfs/media
+    advancedMounts:
+      main:
+        main:
+          - path: /zfs/media
   transcode:
     enabled: true
     type: emptyDir
+    advancedMounts:
+      main:
+        main:
+          - path: /transcode
   local:
     enabled: true
     type: emptyDir
-    mountPath: /.local
-nodeSelector:
-  nvidia.com/gpu.count: "1"
-resources:
-  requests:
-    nvidia.com/gpu: 1
-    cpu: 100m
-    memory: 2000Mi
-  limits:
-    nvidia.com/gpu: 1
-    memory: 10000Mi
-sidecars:
-  auto-languages:
-    image: docker.io/remirigal/plex-auto-languages:v1.2.3
-    imagePullPolicy: IfNotPresent
-    env:
-      - { name: PLEX_URL, value: "http://localhost:32400" }
-      - { name: REFRESH_LIBRARY_ON_SCAN, value: "false" }
-      - { name: TZ, value: "Europe/Budapest" }
-    envFrom:
-      - secretRef:
-          name: plex-token
-    volumeMounts:
-      - { name: pal-config, mountPath: /config }
-      - { name: local, mountPath: /.local }
+    advancedMounts:
+      main:
+        main:
+          - path: /.local
+        auto-languages:
+          - path: /.local
