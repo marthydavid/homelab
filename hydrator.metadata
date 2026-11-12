@@ -1,8 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "ef64c463eb095601a19518b7fc80a5020cf9011c",
+  "drySha": "137fbecb325e02ad2cab7a012ccad6d36cefc78a",
   "author": "David Marthy <marthy.david@gmail.com>",
-  "date": "2026-11-12T18:06:15Z",
-  "subject": "docs: how metal1 is registered (Vault + ExternalSecret) (#2022)",
-  "body": "Also the follow-up commit the hydrator needs to render reloader-metal1.\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>\n"
+  "date": "2026-11-12T19:50:37Z",
+  "subject": "docs: OKD operators on metal1 (#2025)",
+  "body": "Also the follow-up commit the hydrator needs to render the new okd-* apps.\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>\n"
 }

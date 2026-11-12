@@ -1,0 +1,7 @@
+{
+  "repoURL": "https://github.com/marthydavid/homelab",
+  "drySha": "137fbecb325e02ad2cab7a012ccad6d36cefc78a",
+  "commands": [
+    "kustomize build ./argocd/apps/okd/external-secrets-operator --enable-helm --load-restrictor LoadRestrictionsNone"
+  ]
+}
