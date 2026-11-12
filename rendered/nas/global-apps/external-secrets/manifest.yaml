@@ -34553,6 +34553,31 @@ kind: ExternalSecret
 metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "2"
+  name: argocd-entra
+  namespace: argocd
+spec:
+  data:
+    - remoteRef:
+        key: secret/argocd-entra
+        property: clientSecret
+      secretKey: clientSecret
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: vault-backend
+  target:
+    creationPolicy: Owner
+    name: argocd-entra
+    template:
+      metadata:
+        labels:
+          app.kubernetes.io/part-of: argocd
+      type: Opaque
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
   name: argocd-repo-write
   namespace: argocd
 spec:
