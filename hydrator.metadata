@@ -1,8 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "3a8e4a83dfe562309d10fb814c60b0a1676ff5e5",
-  "author": "renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>",
-  "date": "2026-11-12T16:49:39Z",
-  "subject": "chore(deps): update ghcr.io/onedr0p/qbittorrent docker tag to v5 (#1484)",
-  "body": "Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>\n"
+  "drySha": "9170cb92f94a88f4203804778516bbc28391b88a",
+  "author": "David Marthy <marthy.david@gmail.com>",
+  "date": "2026-11-12T16:55:33Z",
+  "subject": "Revert qbittorrent v5 bump: the v5 image needs a different layout (#2013)",
+  "body": "The v5 image runs as nobody, uses /config/qBittorrent (XDG layout, no\nQBITTORRENT__USE_PROFILE) and its entrypoint writes there, so the pod crash-loops\nwith permission denied. Needs a values/volume migration, not just a tag bump.\n\nCo-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
 }

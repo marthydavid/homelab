@@ -73,7 +73,7 @@ spec:
               value: "true"
             - name: UMASK
               value: "022"
-          image: ghcr.io/onedr0p/qbittorrent:5
+          image: ghcr.io/onedr0p/qbittorrent:4
           livenessProbe:
             failureThreshold: 3
             initialDelaySeconds: 0
