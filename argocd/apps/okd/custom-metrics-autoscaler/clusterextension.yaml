@@ -1,6 +1,7 @@
 # OLM v1 pilot (2026-11-12): KEDA moves from OLM (Classic) Subscription/OperatorGroup to a
 # ClusterExtension. Pinned to the exact version that was installed by OLM (Classic), so the move
-# itself changes nothing; Renovate/humans bump spec.source.catalog.version to upgrade.
+# itself changes nothing; Renovate bumps spec.source.catalog.version to upgrade. (Renovate test:
+# pinned one release back on purpose, so Renovate proposes 2.19.0-4.)
 # OKD 4.22 still requires an installer ServiceAccount (deprecated and ignored from 5.0, where
 # OLM v1 uses its own cluster-admin account), so it gets cluster-admin here as well.
 apiVersion: v1
@@ -42,5 +43,6 @@ spec:
       packageName: openshift-custom-metrics-autoscaler-operator
       channels:
         - stable
-      version: "2.19.0-4"
+      # renovate: datasource=custom.okd-operators depName=openshift-custom-metrics-autoscaler-operator
+      version: "2.19.0-3"
       upgradeConstraintPolicy: CatalogProvided
