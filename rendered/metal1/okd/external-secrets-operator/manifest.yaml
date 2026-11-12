@@ -3,6 +3,14 @@ kind: Namespace
 metadata:
   name: external-secrets-operator
 ---
+apiVersion: operator.openshift.io/v1alpha1
+kind: ExternalSecretsConfig
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+  name: cluster
+spec: {}
+---
 apiVersion: operators.coreos.com/v1
 kind: OperatorGroup
 metadata:

@@ -3,6 +3,64 @@ kind: Namespace
 metadata:
   name: cert-manager-operator
 ---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+  name: console-routes
+  namespace: openshift-config
+spec:
+  commonName: console.apps.metal1.okd.marthy.xyz
+  dnsNames:
+    - console.apps.metal1.okd.marthy.xyz
+  isCA: false
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt-prod
+  secretName: console-routes
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+  name: cert-manager-routes
+  namespace: openshift-ingress
+spec:
+  commonName: apps.metal1.okd.marthy.xyz
+  dnsNames:
+    - apps.metal1.okd.marthy.xyz
+    - '*.apps.metal1.okd.marthy.xyz'
+  isCA: false
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt-prod
+  secretName: cert-manager-routes
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+  name: letsencrypt-prod
+spec:
+  acme:
+    email: marthy.david@gmail.com
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    server: https://acme-v02.api.letsencrypt.org/directory
+    solvers:
+      - dns01:
+          route53:
+            accessKeyIDSecretRef:
+              key: aws_ak
+              name: route53-awssecret
+            region: eu-west-1
+            secretAccessKeySecretRef:
+              key: aws_sk
+              name: route53-awssecret
+---
 apiVersion: operator.openshift.io/v1alpha1
 kind: CertManager
 metadata:
