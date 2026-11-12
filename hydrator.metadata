@@ -1,8 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "cac20ca1d0ebd3f3894d8ed4e8507f3133f770d4",
+  "drySha": "98ee931900d18764556f4fef0b95c6d7376446fd",
   "author": "David Marthy <marthy.david@gmail.com>",
-  "date": "2026-11-12T20:08:50Z",
-  "subject": "fix(metal1): let ESO reach Vault through the operator's NetworkPolicies (#2029)",
-  "body": "The openshift ESO operator isolates the operand with deny-all NetworkPolicies, so the\nvault-backend store timed out logging in. Allow the core controller egress to\nvault.marthy.xyz (nas ingress 192.168.20.1:443) via ExternalSecretsConfig\ncontrollerConfig.networkPolicies.\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>\n"
+  "date": "2026-11-12T20:21:02Z",
+  "subject": "fix(metal1): drop the custom audience from the Vault login token (#2030)",
+  "body": "Vault calls metal1's TokenReview API with the login token itself; a token with\naudience 'vault' is rejected there (401), so Vault answered 403. The role now checks\nthe default audience https://kubernetes.default.svc instead.\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>\n"
 }

@@ -40,8 +40,6 @@ spec:
           mountPath: kubernetes-metal1
           role: external-secrets
           serviceAccountRef:
-            audiences:
-              - vault
             name: vault-auth
             namespace: external-secrets-operator
       path: secret
