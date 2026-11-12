@@ -6,7 +6,10 @@ injector:
   enabled: false
 
 server:
+  # repository and tag together so Renovate's helm-values manager tracks the image (#2018);
+  # the repository equals the chart default, so the rendered image is unchanged.
   image:
+    repository: hashicorp/vault
     tag: "2.0.4"
   # One replica, but HA mode so the lock bucket is used and a second replica can be added later.
   ha:
