@@ -1,8 +1,8 @@
-# Migrated from former Fleet bundle truenas/overseerr
+# Migrated from former Fleet bundle truenas/overseerr, now Seerr (successor of Overseerr)
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: truenas-overseerr
+  name: truenas-seerr
   annotations:
     argocd.argoproj.io/sync-wave: "3"
   namespace: argocd
@@ -20,17 +20,17 @@ spec:
           - nas
   template:
     metadata:
-      name: truenas-overseerr-{{ .name }}
+      name: truenas-seerr-{{ .name }}
     spec:
       project: default
       sourceHydrator:
         drySource:
           repoURL: https://github.com/marthydavid/homelab
           targetRevision: main
-          path: argocd/apps/truenas/overseerr/overlays/{{ .name }}
+          path: argocd/apps/truenas/seerr/overlays/{{ .name }}
         syncSource:
           targetBranch: rendered
-          path: rendered/{{ .name }}/truenas/overseerr
+          path: rendered/{{ .name }}/truenas/seerr
       destination:
         server: '{{ .server }}'
         namespace: mediarr

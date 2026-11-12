@@ -2,7 +2,7 @@ helmCharts:
 - name: app-template
   repo: https://bjw-s-labs.github.io/helm-charts
   version: 5.3.0
-  releaseName: overseerr
+  releaseName: seerr
   namespace: mediarr
   includeCRDs: true
   valuesFile: ../../values-nas.yaml
