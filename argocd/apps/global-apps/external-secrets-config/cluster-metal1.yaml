@@ -1,0 +1,43 @@
+# Argo CD cluster Secret for metal1 (OKD, sm1-sm3), built from Vault secret/argocd-cluster-metal1
+# (server, bearerToken, caData from the argocd-manager ServiceAccount, see
+# argocd/bootstrap/spokes/metal1-argocd-manager.yaml). The labels select which ApplicationSets
+# target it (today only reloader) and turn on auto-sync.
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+  name: cluster-metal1
+  namespace: argocd
+spec:
+  secretStoreRef:
+    name: vault-backend
+    kind: ClusterSecretStore
+  target:
+    name: cluster-metal1
+    creationPolicy: Owner
+    template:
+      type: Opaque
+      metadata:
+        labels:
+          argocd.argoproj.io/secret-type: cluster
+          homelab/cluster: metal1
+          homelab/auto-sync: "true"
+      data:
+        name: metal1
+        server: "{{ .server }}"
+        config: |
+          {"bearerToken": "{{ .bearerToken }}", "tlsClientConfig": {"insecure": false, "caData": "{{ .caData }}"}}
+  data:
+    - secretKey: server
+      remoteRef:
+        key: secret/argocd-cluster-metal1
+        property: server
+    - secretKey: bearerToken
+      remoteRef:
+        key: secret/argocd-cluster-metal1
+        property: bearerToken
+    - secretKey: caData
+      remoteRef:
+        key: secret/argocd-cluster-metal1
+        property: caData

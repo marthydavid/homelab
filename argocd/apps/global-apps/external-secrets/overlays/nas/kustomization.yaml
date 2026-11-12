@@ -1,6 +1,7 @@
 resources:
 - ../../../external-secrets-config/argocd-entra.yaml
 - ../../../external-secrets-config/argocd-repo-write.yaml
+- ../../../external-secrets-config/cluster-metal1.yaml
 - ../../../external-secrets-config/clustersecretstore.yaml
 - ../../../external-secrets-config/slack_api_url.yaml
 

@@ -1,2 +1,12 @@
-resources:
-- ../../base
+# metal1 is OKD: the restricted-v2 SCC assigns the UID per namespace, so the chart must not
+# pin runAsUser (values-metal1.yaml unsets it).
+helmCharts:
+- name: reloader
+  repo: https://stakater.github.io/stakater-charts
+  version: 2.2.20
+  releaseName: reloader
+  namespace: reloader-system
+  includeCRDs: true
+  valuesFile: ../../base/values.yaml
+  additionalValuesFiles:
+  - values-metal1.yaml

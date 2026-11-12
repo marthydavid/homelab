@@ -1,0 +1,33 @@
+# Applied BY HAND to metal1 (OKD), not by ArgoCD: this is the identity the hub uses to reach it.
+#   kubectl --context metal1 apply -f argocd/bootstrap/spokes/metal1-argocd-manager.yaml
+# The token from Secret argocd-manager-token goes to Vault secret/argocd-cluster-metal1
+# (keys server, bearerToken, caData); the ExternalSecret cluster-metal1 in
+# argocd/apps/global-apps/external-secrets-config turns it into the ArgoCD cluster Secret.
+# Same RBAC as `argocd cluster add`.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: argocd-manager
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: argocd-manager
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: argocd-manager
+    namespace: kube-system
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: argocd-manager-token
+  namespace: kube-system
+  annotations:
+    kubernetes.io/service-account.name: argocd-manager
+type: kubernetes.io/service-account-token
