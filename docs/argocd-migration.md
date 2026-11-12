@@ -90,10 +90,24 @@ To add an operator, create a new directory with the same files; the ApplicationS
 Keep OLM-generated OperatorGroup names as they are (`openshift-nfd-5zfqg`), because two
 OperatorGroups in one namespace break OLM.
 
-Not in git yet: the ClusterIssuer's Route53 Secret `route53-awssecret` (hand-made, same key as Vault
-`secret/cert-manager-pecs`). It becomes an ExternalSecret once metal1's ESO can log in to Vault
-(branch `feat/metal1-eso-vault`: Vault Kubernetes auth at `auth/kubernetes-metal1` plus a
-`vault-backend` ClusterSecretStore).
+Secrets on metal1 come from Vault: the ClusterSecretStore `vault-backend` (in
+`okd/external-secrets-operator`) logs in to `vault.marthy.xyz` with Kubernetes auth at
+`auth/kubernetes-metal1`, role `external-secrets` (SA `vault-auth`, audience
+`https://kubernetes.default.svc`), and policy `external-secrets-metal1`. The policy can read
+`secret/cert-manager-pecs`; extend it when metal1 needs more paths. The Vault side isn't in git:
+```bash
+vault auth enable -path=kubernetes-metal1 kubernetes
+vault write auth/kubernetes-metal1/config kubernetes_host=https://api.metal1.okd.marthy.xyz:6443 \
+  kubernetes_ca_cert=@metal1-ca.pem disable_local_ca_jwt=true
+vault write auth/kubernetes-metal1/role/external-secrets bound_service_account_names=vault-auth \
+  bound_service_account_namespaces=external-secrets-operator \
+  audience=https://kubernetes.default.svc token_policies=external-secrets-metal1 token_ttl=1h
+```
+Two gotchas:
+- The openshift ESO operator isolates ESO with deny-all NetworkPolicies, so Vault egress is opened
+  in `ExternalSecretsConfig.spec.controllerConfig.networkPolicies`.
+- Don't give the login token a custom audience. Vault calls metal1's TokenReview API *with* that
+  token, and the API server only accepts its own audience.
 
 ## Known gaps
 - **Secrets backend is down.** `vault-backend` points at `vault.oci.marthy.xyz`, which went away
