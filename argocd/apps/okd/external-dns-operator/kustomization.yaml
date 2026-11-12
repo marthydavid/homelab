@@ -2,3 +2,5 @@ resources:
 - namespace.yaml
 - operatorgroup.yaml
 - subscription.yaml
+components:
+- ../../../components/installplan-approver

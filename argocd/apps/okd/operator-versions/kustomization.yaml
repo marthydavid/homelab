@@ -3,4 +3,3 @@ resources:
 - rbac.yaml
 - github-token.yaml
 - publisher.yaml
-- approver.yaml

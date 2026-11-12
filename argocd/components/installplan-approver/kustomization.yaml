@@ -1,0 +1,34 @@
+# Include from an operator app under argocd/apps/okd:
+#   components:
+#   - ../../../components/installplan-approver
+# The app must have exactly one OperatorGroup; its namespace becomes this component's namespace.
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+resources:
+  - resources.yaml
+configMapGenerator:
+  - name: installplan-approver
+    namespace: NAMESPACE
+    files:
+      - approve.py
+    options:
+      disableNameSuffixHash: true
+replacements:
+  - source:
+      kind: OperatorGroup
+      fieldPath: metadata.namespace
+    targets:
+      - select:
+          name: installplan-approver
+        fieldPaths:
+          - metadata.namespace
+      - select:
+          kind: RoleBinding
+          name: installplan-approver
+        fieldPaths:
+          - subjects.0.namespace
+      - select:
+          kind: Job
+          name: approve-installplans
+        fieldPaths:
+          - metadata.namespace
