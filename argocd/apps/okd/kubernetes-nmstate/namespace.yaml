@@ -1,0 +1,12 @@
+# Captured from metal1 (OKD) on 2026-11-12; installed by hand before ArgoCD managed it.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: openshift-nmstate
+  labels:
+    name: openshift-nmstate
+    openshift.io/cluster-monitoring: "true"
+    pod-security.kubernetes.io/enforce: privileged
+    security.openshift.io/scc.podSecurityLabelSync: "true"
+  annotations:
+    openshift.io/node-selector: ""

@@ -1,0 +1,24 @@
+# Captured from metal1 (OKD) on 2026-11-12; installed by hand before ArgoCD managed it.
+# Operand: applied after the operator's CRDs exist (wave 2, SkipDryRunOnMissingResource).
+apiVersion: keda.sh/v1alpha1
+kind: KedaController
+metadata:
+  name: keda
+  namespace: openshift-keda
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  admissionWebhooks:
+    logEncoder: console
+    logLevel: info
+    resources: {}
+  metricsServer:
+    auditConfig:
+      lifetime: {}
+      policy: {}
+    logLevel: "0"
+    resources: {}
+  operator:
+    logEncoder: console
+    logLevel: info
+    resources: {}

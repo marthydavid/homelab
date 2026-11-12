@@ -1,0 +1,11 @@
+# Captured from metal1 (OKD) on 2026-11-12; installed by hand before ArgoCD managed it.
+# Keep this exact (OLM-generated) name: a second OperatorGroup in the namespace breaks OLM.
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: openshift-nfd-5zfqg
+  namespace: openshift-nfd
+spec:
+  targetNamespaces:
+    - openshift-nfd
+  upgradeStrategy: Default

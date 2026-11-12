@@ -1,0 +1,15 @@
+# Captured from metal1 (OKD) on 2026-11-12; installed by hand before ArgoCD managed it.
+# Operand: applied after the operator's CRDs exist (wave 2, SkipDryRunOnMissingResource).
+apiVersion: nmstate.io/v1
+kind: NMState
+metadata:
+  name: nmstate
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  logLevel: info
+  metricsConfiguration:
+    bindAddress: ":8089"
+  probeConfiguration:
+    dns:
+      host: root-servers.net
