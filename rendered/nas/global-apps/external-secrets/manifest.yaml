@@ -34617,6 +34617,46 @@ kind: ExternalSecret
 metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "2"
+  name: cluster-metal1
+  namespace: argocd
+spec:
+  data:
+    - remoteRef:
+        key: secret/argocd-cluster-metal1
+        property: server
+      secretKey: server
+    - remoteRef:
+        key: secret/argocd-cluster-metal1
+        property: bearerToken
+      secretKey: bearerToken
+    - remoteRef:
+        key: secret/argocd-cluster-metal1
+        property: caData
+      secretKey: caData
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: vault-backend
+  target:
+    creationPolicy: Owner
+    name: cluster-metal1
+    template:
+      data:
+        config: |
+          {"bearerToken": "{{ .bearerToken }}", "tlsClientConfig": {"insecure": false, "caData": "{{ .caData }}"}}
+        name: metal1
+        server: '{{ .server }}'
+      metadata:
+        labels:
+          argocd.argoproj.io/secret-type: cluster
+          homelab/auto-sync: "true"
+          homelab/cluster: metal1
+      type: Opaque
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
   name: slack-api
   namespace: cattle-monitoring-system
 spec:
