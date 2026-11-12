@@ -1,8 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "da14e1c650a16c62c7d57134ef086d7cb4ec798b",
-  "author": "Marthy Dávid <marthy.david@gmail.com>",
-  "date": "2026-11-12T17:04:49Z",
-  "subject": "chore(qbit): pin qbittorrent to 4.6.7 and hold the archived onedr0p image in Renovate",
-  "body": "An exact tag lets Renovate track versions; the floating '4' tag could not be bumped\nand the 'v5' update pointed at the stale onedr0p image (stops at 5.0.4). The v5\nmigration is tracked in #2015.\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
+  "drySha": "9fd2b17aacc7c0c7d096dafa71e4faeb3b1809fe",
+  "author": "David Marthy <marthy.david@gmail.com>",
+  "date": "2026-11-12T17:18:52Z",
+  "subject": "feat(qbit): move to ghcr.io/home-operations/qbittorrent 5.3.0 (#2015) (#2017)",
+  "body": "The archived onedr0p image stops at 5.0.4 and the v5 image uses a different\nlayout: config and data both in /config/qBittorrent (XDG under /config), no\nQBITTORRENT__* env. A one-off init container copies the two v4 hostPaths into\nthe new /zfs/k3s/configs/qbittorrent-v5 after the v4 pod has stopped\n(Recreate) and skips itself afterwards; the v4 directories are mounted\nread-only and stay untouched for rollback.\n\nAlso drops the onedr0p Renovate hold and automerge pattern (last onedr0p\nimage) and the inert setGateway annotation.\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>\n"
 }

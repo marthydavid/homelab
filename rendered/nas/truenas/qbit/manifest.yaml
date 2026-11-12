@@ -57,8 +57,6 @@ spec:
     type: Recreate
   template:
     metadata:
-      annotations:
-        setGateway: "true"
       labels:
         app.kubernetes.io/controller: main
         app.kubernetes.io/instance: qbittorrent
@@ -67,13 +65,9 @@ spec:
       automountServiceAccountToken: false
       containers:
         - env:
-            - name: QBITTORRENT__PORT
+            - name: QBT_WEBUI_PORT
               value: "8080"
-            - name: QBITTORRENT__USE_PROFILE
-              value: "true"
-            - name: UMASK
-              value: "022"
-          image: ghcr.io/onedr0p/qbittorrent:4.6.7
+          image: ghcr.io/home-operations/qbittorrent:5.3.0
           livenessProbe:
             failureThreshold: 3
             initialDelaySeconds: 0
@@ -102,12 +96,10 @@ spec:
               port: 8080
             timeoutSeconds: 1
           volumeMounts:
-            - mountPath: /config/qBittorrent/cache
+            - mountPath: /config/.cache
               name: cache
-            - mountPath: /config/qBittorrent/config
+            - mountPath: /config
               name: config
-            - mountPath: /config/qBittorrent/data
-              name: data
             - mountPath: /zfs/media
               name: media
       dnsPolicy: ClusterFirst
@@ -116,6 +108,37 @@ spec:
       hostNetwork: false
       hostPID: false
       hostname: qbittorrent
+      initContainers:
+        - command:
+            - /bin/bash
+            - -c
+            - |
+              set -euo pipefail
+              dst=/config/qBittorrent
+              if [ -f "$dst/.migrated-from-v4" ]; then echo "already migrated"; exit 0; fi
+              if [ -e "$dst/qBittorrent.conf" ]; then echo "refusing: $dst already has a config"; exit 1; fi
+              mkdir -p "$dst"
+              cp -a /v4/data/. "$dst/"
+              cp -a /v4/config/. "$dst/"
+              rm -rf "$dst/.cache" "$dst/ipc-socket" "$dst/lockfile" "$dst/rss/storage.lock"
+              sed -i 's#^FileLogger\\Path=.*#FileLogger\\Path=/config/qBittorrent/logs#' "$dst/qBittorrent.conf"
+              touch "$dst/.migrated-from-v4"
+              echo "migrated, BT_backup files: $(ls "$dst/BT_backup" | wc -l)"
+          image: ghcr.io/home-operations/qbittorrent:5.3.0
+          name: migrate-v4
+          volumeMounts:
+            - mountPath: /config/.cache
+              name: cache
+            - mountPath: /config
+              name: config
+            - mountPath: /zfs/media
+              name: media
+            - mountPath: /v4/config
+              name: v4-config
+              readOnly: true
+            - mountPath: /v4/data
+              name: v4-data
+              readOnly: true
       securityContext:
         fsGroup: 568
         fsGroupChangePolicy: OnRootMismatch
@@ -128,14 +151,17 @@ spec:
         - emptyDir: {}
           name: cache
         - hostPath:
-            path: /zfs/k3s/configs/qbittorrent-config
+            path: /zfs/k3s/configs/qbittorrent-v5
           name: config
-        - hostPath:
-            path: /zfs/k3s/configs/qbittorrent-data
-          name: data
         - hostPath:
             path: /zfs/media
           name: media
+        - hostPath:
+            path: /zfs/k3s/configs/qbittorrent-config
+          name: v4-config
+        - hostPath:
+            path: /zfs/k3s/configs/qbittorrent-data
+          name: v4-data
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
