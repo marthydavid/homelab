@@ -1,8 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "23f6787a8d7d880a16297e816bb7283fd98873e4",
+  "drySha": "ef64c463eb095601a19518b7fc80a5020cf9011c",
   "author": "David Marthy <marthy.david@gmail.com>",
-  "date": "2026-11-12T18:03:16Z",
-  "subject": "feat(argocd): register metal1 (#2021)",
-  "body": "* feat(reloader): OKD-compatible values for metal1\n\nOKD's restricted-v2 SCC assigns the UID from the namespace range and rejects the\nchart's fixed runAsUser 65534; unset it for the metal1 overlay only.\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n\n* feat(argocd): register metal1 from Vault\n\nExternalSecret cluster-metal1 builds the Argo CD cluster Secret from Vault\nsecret/argocd-cluster-metal1; the argocd-manager ServiceAccount it uses is kept in\nargocd/bootstrap/spokes and applied to metal1 by hand. Labels homelab/cluster=metal1\nand homelab/auto-sync=true, so reloader (the only app targeting metal1) deploys there.\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n\n---------\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>\n"
+  "date": "2026-11-12T18:06:15Z",
+  "subject": "docs: how metal1 is registered (Vault + ExternalSecret) (#2022)",
+  "body": "Also the follow-up commit the hydrator needs to render reloader-metal1.\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>\n"
 }

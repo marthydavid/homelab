@@ -1,0 +1,7 @@
+{
+  "repoURL": "https://github.com/marthydavid/homelab",
+  "drySha": "ef64c463eb095601a19518b7fc80a5020cf9011c",
+  "commands": [
+    "kustomize build ./argocd/apps/global-apps/reloader/overlays/metal1 --enable-helm --load-restrictor LoadRestrictionsNone"
+  ]
+}
