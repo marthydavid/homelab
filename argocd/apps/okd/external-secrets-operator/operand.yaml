@@ -1,9 +1,0 @@
-# Deploys the external-secrets operand (controller, webhook, cert-controller) into namespace
-# external-secrets. Without this, only the operator runs and no ExternalSecret is reconciled.
-apiVersion: operator.openshift.io/v1alpha1
-kind: ExternalSecretsConfig
-metadata:
-  name: cluster
-  annotations:
-    argocd.argoproj.io/sync-wave: "2"
-spec: {}
