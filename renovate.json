@@ -55,6 +55,11 @@
       "ignoreTests": true,
       "automergeType": "pr",
       "matchUpdateTypes": ["patch"]
+    },
+    {
+      "description": "Never automerge Vault (image or chart): with nas auto-sync a merge restarts the secrets root for both clusters, so bumps get a PR and a human (issue #2018)",
+      "matchDepNames": ["hashicorp/vault", "vault"],
+      "automerge": false
     }
   ]
 }
