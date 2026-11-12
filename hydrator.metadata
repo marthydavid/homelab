@@ -1,8 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "9170cb92f94a88f4203804778516bbc28391b88a",
-  "author": "David Marthy <marthy.david@gmail.com>",
-  "date": "2026-11-12T16:55:33Z",
-  "subject": "Revert qbittorrent v5 bump: the v5 image needs a different layout (#2013)",
-  "body": "The v5 image runs as nobody, uses /config/qBittorrent (XDG layout, no\nQBITTORRENT__USE_PROFILE) and its entrypoint writes there, so the pod crash-loops\nwith permission denied. Needs a values/volume migration, not just a tag bump.\n\nCo-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
+  "drySha": "da14e1c650a16c62c7d57134ef086d7cb4ec798b",
+  "author": "Marthy Dávid <marthy.david@gmail.com>",
+  "date": "2026-11-12T17:04:49Z",
+  "subject": "chore(qbit): pin qbittorrent to 4.6.7 and hold the archived onedr0p image in Renovate",
+  "body": "An exact tag lets Renovate track versions; the floating '4' tag could not be bumped\nand the 'v5' update pointed at the stale onedr0p image (stops at 5.0.4). The v5\nmigration is tracked in #2015.\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
 }
