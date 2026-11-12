@@ -1,8 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "801e78b610ca057b008741fa57cd5bb901dcf4c9",
+  "drySha": "3a8e4a83dfe562309d10fb814c60b0a1676ff5e5",
   "author": "renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>",
-  "date": "2026-11-12T16:46:08Z",
-  "subject": "chore(deps): update ghcr.io/seerr-team/seerr docker tag to v3.5.2 (#2012)",
+  "date": "2026-11-12T16:49:39Z",
+  "subject": "chore(deps): update ghcr.io/onedr0p/qbittorrent docker tag to v5 (#1484)",
   "body": "Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>\n"
 }

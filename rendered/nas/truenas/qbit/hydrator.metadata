@@ -1,6 +1,6 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "77fb737edc8c26c67a1e91a08041589e515a3337",
+  "drySha": "3a8e4a83dfe562309d10fb814c60b0a1676ff5e5",
   "commands": [
     "kustomize build ./argocd/apps/truenas/qbit/overlays/nas --enable-helm --load-restrictor LoadRestrictionsNone"
   ]
