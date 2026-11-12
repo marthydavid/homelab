@@ -1,6 +1,4 @@
-# Captured from metal1 on 2026-11-12. The Route53 Secret route53-awssecret (namespace
-# cert-manager) is still hand-made; it moves to an ExternalSecret from Vault
-# secret/cert-manager-pecs once metal1's ESO can log in to Vault (branch feat/metal1-eso-vault).
+# Captured from metal1 on 2026-11-12. Its Route53 Secret comes from route53-externalsecret.yaml.
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:

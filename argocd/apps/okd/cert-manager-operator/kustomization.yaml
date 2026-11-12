@@ -5,3 +5,4 @@ resources:
 - operand.yaml
 - clusterissuer.yaml
 - route-certificates.yaml
+- route53-externalsecret.yaml

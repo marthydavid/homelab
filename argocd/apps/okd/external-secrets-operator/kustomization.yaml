@@ -3,3 +3,5 @@ resources:
 - operatorgroup.yaml
 - subscription.yaml
 - operand.yaml
+- vault-auth.yaml
+- clustersecretstore.yaml
