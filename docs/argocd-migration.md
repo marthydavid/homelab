@@ -77,10 +77,10 @@ and the ApplicationSet `okd-operators` turns each one into an app `okd-<dir>-met
 
 | dir | operator(s) | operand |
 |---|---|---|
-| cert-manager-operator | openshift-cert-manager-operator | CertManager `cluster` |
+| cert-manager-operator | openshift-cert-manager-operator | CertManager `cluster`, ClusterIssuer `letsencrypt-prod`, Certificates `cert-manager-routes` / `console-routes` |
 | custom-metrics-autoscaler | openshift-custom-metrics-autoscaler-operator | KedaController `keda` |
 | external-dns-operator | external-dns-operator | none |
-| external-secrets-operator | openshift-external-secrets-operator | none yet (ESO not deployed, see below) |
+| external-secrets-operator | openshift-external-secrets-operator | ExternalSecretsConfig `cluster` (deploys ESO into `external-secrets`) |
 | kubernetes-nmstate | kubernetes-nmstate-operator | NMState `nmstate` |
 | metallb-operator | metallb-operator | MetalLB `metallb` |
 | nfd | nfd | NodeFeatureDiscovery `nfd-instance` |
@@ -90,9 +90,10 @@ To add an operator, create a new directory with the same files; the ApplicationS
 Keep OLM-generated OperatorGroup names as they are (`openshift-nfd-5zfqg`), because two
 OperatorGroups in one namespace break OLM.
 
-Not in git yet: the ClusterIssuer `letsencrypt-prod`, its Route53 Secret and the route certificates.
-They wait for ESO on metal1 (branch `feat/metal1-eso-vault`), which needs Vault Kubernetes auth at
-`auth/kubernetes-metal1` first.
+Not in git yet: the ClusterIssuer's Route53 Secret `route53-awssecret` (hand-made, same key as Vault
+`secret/cert-manager-pecs`). It becomes an ExternalSecret once metal1's ESO can log in to Vault
+(branch `feat/metal1-eso-vault`: Vault Kubernetes auth at `auth/kubernetes-metal1` plus a
+`vault-backend` ClusterSecretStore).
 
 ## Known gaps
 - **Secrets backend is down.** `vault-backend` points at `vault.oci.marthy.xyz`, which went away
