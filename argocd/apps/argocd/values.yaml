@@ -74,6 +74,26 @@ configs:
     # Lets kustomize inflate Helm charts (helmCharts:), which is how multi-source Helm apps get
     # wrapped into a single source for the Source Hydrator (docs/source-hydrator.md).
     kustomize.buildOptions: --enable-helm --load-restrictor LoadRestrictionsNone
+    # SSO with Entra ID (tenant MARTHY.XYZ, app registration "argocd-nas"; only assigned users
+    # can sign in). The client secret comes from Vault secret/argocd-entra via the
+    # ExternalSecret argocd-entra. The local admin stays enabled as a break-glass login.
+    oidc.config: |
+      name: Entra ID
+      issuer: https://login.microsoftonline.com/ef4f2d1b-c513-4d24-a806-dd2a4438d051/v2.0
+      clientID: cea71179-7ad4-4493-b66e-c306f959c880
+      clientSecret: $argocd-entra:clientSecret
+      requestedIDTokenClaims:
+        groups:
+          essential: true
+      requestedScopes:
+        - openid
+        - profile
+        - email
+  rbac:
+    # Entra security group "argocd-admins" (object ID). Users outside it get no access.
+    policy.csv: |
+      g, 1c3ab8fa-3555-46eb-9cb4-412bd28f1c86, role:admin
+    scopes: "[groups]"
   params:
     # Diff against a server-side apply dry-run, so fields the API server / CRDs default
     # (ExternalSecret remoteRef policies, ServiceMonitor relabeling action, ...) are not
