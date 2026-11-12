@@ -134,6 +134,7 @@ spec:
       hostPID: false
       nodeSelector:
         nvidia.com/gpu.count: "1"
+      runtimeClassName: nvidia
       securityContext:
         fsGroup: 568
         fsGroupChangePolicy: OnRootMismatch
