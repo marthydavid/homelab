@@ -1,0 +1,5 @@
+# OKD restricted-v2 assigns the UID from the namespace range; a fixed runAsUser is rejected.
+reloader:
+  deployment:
+    securityContext:
+      runAsUser: null
