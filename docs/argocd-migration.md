@@ -69,6 +69,31 @@ into the cluster Secret with `homelab/cluster=metal1` and `homelab/auto-sync=tru
 hydrated app, the first app on metal1 (`reloader-metal1`) only gets output on `rendered` after a
 follow-up commit on `main` (docs/source-hydrator.md).
 
+### OKD operators on metal1
+The OLM operators on metal1 were installed by hand and captured into `argocd/apps/okd/<dir>` on
+2026-11-12 (#2024). Each directory holds the Namespace, OperatorGroup, Subscription and the operand,
+and the ApplicationSet `okd-operators` turns each one into an app `okd-<dir>-metal1`. All come from
+`redhat-operators` with automatic approval:
+
+| dir | operator(s) | operand |
+|---|---|---|
+| cert-manager-operator | openshift-cert-manager-operator | CertManager `cluster` |
+| custom-metrics-autoscaler | openshift-custom-metrics-autoscaler-operator | KedaController `keda` |
+| external-dns-operator | external-dns-operator | none |
+| external-secrets-operator | openshift-external-secrets-operator | none yet (ESO not deployed, see below) |
+| kubernetes-nmstate | kubernetes-nmstate-operator | NMState `nmstate` |
+| metallb-operator | metallb-operator | MetalLB `metallb` |
+| nfd | nfd | NodeFeatureDiscovery `nfd-instance` |
+| openshift-storage | local-storage-operator, lvms-operator | LVMCluster `test-lvmcluster` |
+
+To add an operator, create a new directory with the same files; the ApplicationSet picks it up.
+Keep OLM-generated OperatorGroup names as they are (`openshift-nfd-5zfqg`), because two
+OperatorGroups in one namespace break OLM.
+
+Not in git yet: the ClusterIssuer `letsencrypt-prod`, its Route53 Secret and the route certificates.
+They wait for ESO on metal1 (branch `feat/metal1-eso-vault`), which needs Vault Kubernetes auth at
+`auth/kubernetes-metal1` first.
+
 ## Known gaps
 - **Secrets backend is down.** `vault-backend` points at `vault.oci.marthy.xyz`, which went away
   with the OCI cluster. Existing Secrets on nas still work, but no ExternalSecret can refresh,
