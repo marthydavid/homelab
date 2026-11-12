@@ -1,8 +1,7 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "98ee931900d18764556f4fef0b95c6d7376446fd",
-  "author": "David Marthy <marthy.david@gmail.com>",
-  "date": "2026-11-12T20:21:02Z",
-  "subject": "fix(metal1): drop the custom audience from the Vault login token (#2030)",
-  "body": "Vault calls metal1's TokenReview API with the login token itself; a token with\naudience 'vault' is rejected there (401), so Vault answered 403. The role now checks\nthe default audience https://kubernetes.default.svc instead.\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>\n"
+  "drySha": "cdd98c4c9b0263f82e0c62a7b532199ee9a2364d",
+  "author": "renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>",
+  "date": "2026-11-12T20:38:39Z",
+  "subject": "chore(deps): update hashicorp/vault docker tag to v2.2.2"
 }

@@ -309,7 +309,7 @@ spec:
               value: https://$(HOSTNAME).vault-internal:8201
             - name: HOME
               value: /home/vault
-          image: hashicorp/vault:2.0.4
+          image: hashicorp/vault:2.2.2
           imagePullPolicy: IfNotPresent
           lifecycle:
             preStop:
@@ -448,7 +448,7 @@ spec:
       env:
         - name: VAULT_ADDR
           value: http://vault.vault.svc:8200
-      image: hashicorp/vault:2.0.4
+      image: hashicorp/vault:2.2.2
       imagePullPolicy: IfNotPresent
       name: vault-server-test
       volumeMounts:
