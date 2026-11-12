@@ -1,0 +1,46 @@
+# OLM v1 pilot (2026-11-12): KEDA moves from OLM (Classic) Subscription/OperatorGroup to a
+# ClusterExtension. Pinned to the exact version that was installed by OLM (Classic), so the move
+# itself changes nothing; Renovate/humans bump spec.source.catalog.version to upgrade.
+# OKD 4.22 still requires an installer ServiceAccount (deprecated and ignored from 5.0, where
+# OLM v1 uses its own cluster-admin account), so it gets cluster-admin here as well.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: keda-installer
+  namespace: openshift-keda
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: keda-installer
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: keda-installer
+    namespace: openshift-keda
+---
+apiVersion: olm.operatorframework.io/v1
+kind: ClusterExtension
+metadata:
+  name: openshift-custom-metrics-autoscaler-operator
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  namespace: openshift-keda
+  serviceAccount:
+    name: keda-installer
+  source:
+    sourceType: Catalog
+    catalog:
+      packageName: openshift-custom-metrics-autoscaler-operator
+      channels:
+        - stable
+      version: "2.19.0-4"
+      upgradeConstraintPolicy: CatalogProvided
