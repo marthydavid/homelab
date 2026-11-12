@@ -3,6 +3,51 @@ kind: Namespace
 metadata:
   name: external-secrets-operator
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+  name: vault-auth
+  namespace: external-secrets-operator
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+  name: vault-auth-delegator
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:auth-delegator
+subjects:
+  - kind: ServiceAccount
+    name: vault-auth
+    namespace: external-secrets-operator
+---
+apiVersion: external-secrets.io/v1
+kind: ClusterSecretStore
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+  name: vault-backend
+spec:
+  provider:
+    vault:
+      auth:
+        kubernetes:
+          mountPath: kubernetes-metal1
+          role: external-secrets
+          serviceAccountRef:
+            audiences:
+              - vault
+            name: vault-auth
+            namespace: external-secrets-operator
+      path: secret
+      server: https://vault.marthy.xyz
+      version: v2
+---
 apiVersion: operator.openshift.io/v1alpha1
 kind: ExternalSecretsConfig
 metadata:

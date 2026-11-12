@@ -61,6 +61,30 @@ spec:
               key: aws_sk
               name: route53-awssecret
 ---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+  name: route53-awssecret
+  namespace: cert-manager
+spec:
+  data:
+    - remoteRef:
+        key: secret/cert-manager-pecs
+        property: aws_ak
+      secretKey: aws_ak
+    - remoteRef:
+        key: secret/cert-manager-pecs
+        property: aws_sk
+      secretKey: aws_sk
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: vault-backend
+  target:
+    creationPolicy: Owner
+    name: route53-awssecret
+---
 apiVersion: operator.openshift.io/v1alpha1
 kind: CertManager
 metadata:

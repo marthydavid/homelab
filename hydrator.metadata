@@ -1,8 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "295112a7e082deae9022514134bb782a26258af7",
+  "drySha": "1c963ffbbe47aa934ef7195c20242907413fd944",
   "author": "David Marthy <marthy.david@gmail.com>",
-  "date": "2026-11-12T19:56:32Z",
-  "subject": "feat(metal1): persist the rest of the cert-manager and ESO operands (#2026)",
-  "body": "- cert-manager-operator: the letsencrypt-prod ClusterIssuer and the cert-manager-routes /\n  console-routes Certificates (identical to live; the Route53 Secret stays hand-made for now).\n- external-secrets-operator: ExternalSecretsConfig/cluster, so the operator deploys ESO.\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>\n"
+  "date": "2026-11-12T20:04:49Z",
+  "subject": "feat(metal1): Route53 secret from Vault via ESO (Kubernetes auth) (#2028)",
+  "body": "- external-secrets-operator: SA vault-auth (system:auth-delegator) and the vault-backend\n  ClusterSecretStore, logging in to vault.marthy.xyz at auth/kubernetes-metal1, role\n  external-secrets (policy external-secrets-metal1: read secret/cert-manager-pecs).\n- cert-manager-operator: ExternalSecret route53-awssecret replaces the hand-made Secret\n  (same key as Vault secret/cert-manager-pecs).\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>\n"
 }
