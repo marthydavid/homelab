@@ -1,7 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "cdd98c4c9b0263f82e0c62a7b532199ee9a2364d",
-  "author": "renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>",
-  "date": "2026-11-12T20:38:39Z",
-  "subject": "chore(deps): update hashicorp/vault docker tag to v2.2.2"
+  "drySha": "12b55a0d5c501b626f531ff1e33b738db8d79265",
+  "author": "David Marthy <marthy.david@gmail.com>",
+  "date": "2026-11-12T21:24:16Z",
+  "subject": "feat(metal1): OLM v1 pilot, KEDA as a ClusterExtension (#2035)",
+  "body": "Replaces the OLM (Classic) Subscription and OperatorGroup of the custom metrics autoscaler\n(KEDA) with a ClusterExtension pinned to the installed version 2.19.0-4 (present in the\nOLM v1 catalog, redhat-operator-index v4.22), plus the installer ServiceAccount OKD 4.22\nstill requires. The leftover Classic CSV is deleted by hand after the merge.\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>\n"
 }

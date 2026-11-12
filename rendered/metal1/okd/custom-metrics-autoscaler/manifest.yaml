@@ -5,6 +5,29 @@ metadata:
     security.openshift.io/scc.podSecurityLabelSync: "true"
   name: openshift-keda
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+  name: keda-installer
+  namespace: openshift-keda
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+  name: keda-installer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: keda-installer
+    namespace: openshift-keda
+---
 apiVersion: keda.sh/v1alpha1
 kind: KedaController
 metadata:
@@ -28,24 +51,21 @@ spec:
     logLevel: info
     resources: {}
 ---
-apiVersion: operators.coreos.com/v1
-kind: OperatorGroup
-metadata:
-  name: openshift-keda
-  namespace: openshift-keda
-spec:
-  upgradeStrategy: Default
----
-apiVersion: operators.coreos.com/v1alpha1
-kind: Subscription
+apiVersion: olm.operatorframework.io/v1
+kind: ClusterExtension
 metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "1"
   name: openshift-custom-metrics-autoscaler-operator
-  namespace: openshift-keda
 spec:
-  channel: stable
-  installPlanApproval: Automatic
-  name: openshift-custom-metrics-autoscaler-operator
-  source: redhat-operators
-  sourceNamespace: openshift-marketplace
+  namespace: openshift-keda
+  serviceAccount:
+    name: keda-installer
+  source:
+    catalog:
+      channels:
+        - stable
+      packageName: openshift-custom-metrics-autoscaler-operator
+      upgradeConstraintPolicy: CatalogProvided
+      version: 2.19.0-4
+    sourceType: Catalog
