@@ -1,8 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "12b55a0d5c501b626f531ff1e33b738db8d79265",
+  "drySha": "37516abf866e3d8b359a252a95c64ea5ff1e87d2",
   "author": "David Marthy <marthy.david@gmail.com>",
-  "date": "2026-11-12T21:24:16Z",
-  "subject": "feat(metal1): OLM v1 pilot, KEDA as a ClusterExtension (#2035)",
-  "body": "Replaces the OLM (Classic) Subscription and OperatorGroup of the custom metrics autoscaler\n(KEDA) with a ClusterExtension pinned to the installed version 2.19.0-4 (present in the\nOLM v1 catalog, redhat-operator-index v4.22), plus the installer ServiceAccount OKD 4.22\nstill requires. The leftover Classic CSV is deleted by hand after the merge.\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>\n"
+  "date": "2026-11-12T21:43:07Z",
+  "subject": "feat(renovate): bump OLM v1 ClusterExtension versions from the operator-versions data (#2036)",
+  "body": "- customDatasources.okd-operators: raw.githubusercontent.com/marthydavid/homelab/\n  operator-versions/metal1/{{packageName}}.json (stakater/operator-versions format).\n- customManagers: regex on argocd/apps/okd/*/clusterextension.yaml, a '# renovate:'\n  marker above spec.source.catalog.version; loose versioning, extractVersion ^v, never\n  automerge.\n- KEDA pinned to 2.19.0-3 (one release back) to test the whole path: Renovate PR,\n  merge, Argo CD sync, OLM v1 upgrade to 2.19.0-4.\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>\n"
 }
