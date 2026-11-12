@@ -20,11 +20,6 @@
   },
   "packageRules": [
     {
-      "description": "Hold the archived onedr0p/qbittorrent image (stops at 5.0.4, v5 needs a layout migration, see the qbittorrent v5 issue)",
-      "matchPackageNames": ["ghcr.io/onedr0p/qbittorrent"],
-      "enabled": false
-    },
-    {
       "description": "Hold external-dns: v0.23 rewrites target/alias A ALIAS records to plain A (issue #1908)",
       "matchPackageNames": ["external-dns"],
       "matchDatasources": ["helm"],
@@ -43,7 +38,7 @@
       "ignoreTests": true,
       "automergeType": "pr",
       "matchUpdateTypes": ["patch", "minor", "digest"],
-      "matchPackagePatterns": ["ghcr.io/bjw-s", "ghcr.io/onedr0p", "ghcr.io/home-operations", "ghcr.io/scr", "ghcr.io/marthydavid"]
+      "matchPackagePatterns": ["ghcr.io/bjw-s", "ghcr.io/home-operations", "ghcr.io/scr", "ghcr.io/marthydavid"]
     },
     {
       "description": "Auto merge container digests",
