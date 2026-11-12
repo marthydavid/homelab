@@ -8,7 +8,9 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
 spec:
   channel: stable-v1
-  installPlanApproval: Automatic
+  installPlanApproval: Manual
   name: openshift-external-secrets-operator
   source: redhat-operators
   sourceNamespace: openshift-marketplace
+  # renovate: datasource=custom.okd-operators depName=openshift-external-secrets-operator
+  startingCSV: openshift-external-secrets-operator.v1.2.1

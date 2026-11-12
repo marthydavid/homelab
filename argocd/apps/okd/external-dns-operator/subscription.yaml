@@ -8,7 +8,9 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
 spec:
   channel: stable-v1
-  installPlanApproval: Automatic
+  installPlanApproval: Manual
   name: external-dns-operator
   source: redhat-operators
   sourceNamespace: openshift-marketplace
+  # renovate: datasource=custom.okd-operators depName=external-dns-operator
+  startingCSV: external-dns-operator.v1.3.12

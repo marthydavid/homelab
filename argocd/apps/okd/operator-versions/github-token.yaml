@@ -1,0 +1,60 @@
+# Short-lived (1h) GitHub token for the publisher's push, minted by ESO from the same GitHub App
+# Argo CD uses for the rendered branch (Vault secret/argocd). Scoped to contents:write on homelab.
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: github-app
+  namespace: operator-versions
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  secretStoreRef:
+    name: vault-backend
+    kind: ClusterSecretStore
+  target:
+    name: github-app
+    creationPolicy: Owner
+  data:
+    - secretKey: privateKey
+      remoteRef:
+        key: secret/argocd
+        property: githubAppPrivateKey
+---
+apiVersion: generators.external-secrets.io/v1alpha1
+kind: GithubAccessToken
+metadata:
+  name: homelab-contents-write
+  namespace: operator-versions
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  appID: "5714134"
+  installID: "180917314"
+  repositories:
+    - homelab
+  permissions:
+    contents: write
+  auth:
+    privateKey:
+      secretRef:
+        name: github-app
+        key: privateKey
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: github-token
+  namespace: operator-versions
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  refreshInterval: 30m
+  target:
+    name: github-token
+    creationPolicy: Owner
+  dataFrom:
+    - sourceRef:
+        generatorRef:
+          apiVersion: generators.external-secrets.io/v1alpha1
+          kind: GithubAccessToken
+          name: homelab-contents-write

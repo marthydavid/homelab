@@ -1,0 +1,76 @@
+# Argo CD-driven OLM upgrades: every operator app under argocd/apps/okd includes this component.
+# Subscriptions use installPlanApproval: Manual with startingCSV pinned in git (bumped by Renovate).
+# After each sync, the PostSync hook Job approves OLM's InstallPlan up to that pin and waits for
+# the new CSV, so the upgrade (or its failure) is part of the Argo CD sync result.
+# The namespace is set from the app's OperatorGroup (see kustomization.yaml in this component).
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: installplan-approver
+  namespace: NAMESPACE
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: installplan-approver
+  namespace: NAMESPACE
+rules:
+  - apiGroups: ["operators.coreos.com"]
+    resources: ["subscriptions", "clusterserviceversions"]
+    verbs: ["get", "list"]
+  - apiGroups: ["operators.coreos.com"]
+    resources: ["installplans"]
+    verbs: ["get", "list", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: installplan-approver
+  namespace: NAMESPACE
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: installplan-approver
+subjects:
+  - kind: ServiceAccount
+    name: installplan-approver
+    namespace: NAMESPACE
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: approve-installplans
+  namespace: NAMESPACE
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    # keep the last run (logs) until the next sync replaces it
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+spec:
+  backoffLimit: 0
+  activeDeadlineSeconds: 1800
+  template:
+    spec:
+      serviceAccountName: installplan-approver
+      restartPolicy: Never
+      containers:
+        - name: approve
+          image: docker.io/alpine/k8s:1.35.10
+          command: ["python3", "/scripts/approve.py"]
+          env:
+            - name: HOME
+              value: /tmp
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          volumeMounts:
+            - name: scripts
+              mountPath: /scripts
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: scripts
+          configMap:
+            name: installplan-approver
+        - name: tmp
+          emptyDir: {}

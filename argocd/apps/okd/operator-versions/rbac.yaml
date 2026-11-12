@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: publisher
+  namespace: operator-versions
+---
+# get-versions.sh: `oc get packagemanifests` (each package) and `oc get clusterversion`
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: operator-versions-publisher
+rules:
+  - apiGroups: ["packages.operators.coreos.com"]
+    resources: ["packagemanifests"]
+    verbs: ["get", "list"]
+  - apiGroups: ["config.openshift.io"]
+    resources: ["clusterversions"]
+    verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: operator-versions-publisher
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: operator-versions-publisher
+subjects:
+  - kind: ServiceAccount
+    name: publisher
+    namespace: operator-versions

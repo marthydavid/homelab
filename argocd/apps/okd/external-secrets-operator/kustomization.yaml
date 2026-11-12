@@ -5,3 +5,5 @@ resources:
 - operand.yaml
 - vault-auth.yaml
 - clustersecretstore.yaml
+components:
+- ../../../components/installplan-approver
