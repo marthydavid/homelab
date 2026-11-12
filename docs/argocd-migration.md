@@ -67,8 +67,9 @@ After that, ArgoCD manages itself (`argocd/applicationsets/argocd/argocd.yaml`).
   ServiceMonitors apply, but nothing scrapes them yet.
 - **immich:** chart 0.12 removed the bundled postgres subchart, but `values-nas.yaml` still
   configures `postgresql:`, so it does not render.
-- **kube-vip:** this is a control-plane VIP, so it belongs to cluster bootstrap, not ArgoCD.
-  The manifests stay in `kube-vip/` and are applied by hand.
+- **kube-vip:** removed. It was a control-plane VIP for the dropped budapest-k3s and rke2-sm4
+  clusters. metal1 (OKD) gets its API and ingress VIPs from OKD's own keepalived/haproxy
+  (`openshift-kni-infra`), and nas doesn't use one.
 
 ## Rancher leftovers on the cluster
 Rancher left `wrangler.cattle.io/auth-prov-v2-crole*` finalizers on ClusterRoles and
