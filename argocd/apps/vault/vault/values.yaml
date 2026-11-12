@@ -10,7 +10,7 @@ server:
   # the repository equals the chart default, so the rendered image is unchanged.
   image:
     repository: hashicorp/vault
-    tag: "2.0.4"
+    tag: "2.2.2"
   # One replica, but HA mode so the lock bucket is used and a second replica can be added later.
   ha:
     enabled: true
