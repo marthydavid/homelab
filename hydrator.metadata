@@ -1,8 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "951bc64fb8674e68f191426a12731d8bd5746bfb",
+  "drySha": "77fb737edc8c26c67a1e91a08041589e515a3337",
   "author": "David Marthy <marthy.david@gmail.com>",
-  "date": "2026-11-12T09:02:08Z",
-  "subject": "fix(kyverno): acknowledge legacy policies so 3.10 can upgrade (#2008)",
-  "body": "* fix(kyverno): acknowledge legacy policies so 3.10 can upgrade\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\n\n* fix(kyverno): repair values file after append\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\n\n---------\n\nCo-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
+  "date": "2026-11-12T09:58:15Z",
+  "subject": "chore(kyverno): drop the legacy-policies acknowledgement (#2010)",
+  "body": "The leftover rke2-coredns policies are deleted, so the flag is no longer needed.\n\nCo-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
 }

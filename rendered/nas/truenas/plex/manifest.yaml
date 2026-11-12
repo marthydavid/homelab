@@ -1,4 +1,15 @@
 apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/instance: plex
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: plex
+    helm.sh/chart: app-template-5.3.0
+  name: plex
+  namespace: mediarr
+---
+apiVersion: v1
 kind: Service
 metadata:
   labels:
@@ -6,15 +17,17 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: plex
     app.kubernetes.io/service: plex
-    helm.sh/chart: app-template-1.5.1
+    helm.sh/chart: app-template-5.3.0
   name: plex
+  namespace: mediarr
 spec:
   ports:
     - name: http
       port: 32400
       protocol: TCP
-      targetPort: http
+      targetPort: 32400
   selector:
+    app.kubernetes.io/controller: main
     app.kubernetes.io/instance: plex
     app.kubernetes.io/name: plex
   type: ClusterIP
@@ -23,33 +36,56 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   labels:
+    app.kubernetes.io/controller: main
     app.kubernetes.io/instance: plex
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: plex
-    helm.sh/chart: app-template-1.5.1
+    helm.sh/chart: app-template-5.3.0
   name: plex
+  namespace: mediarr
 spec:
   podManagementPolicy: OrderedReady
   replicas: 1
   revisionHistoryLimit: 3
   selector:
     matchLabels:
+      app.kubernetes.io/controller: main
       app.kubernetes.io/instance: plex
       app.kubernetes.io/name: plex
   serviceName: plex
   template:
     metadata:
+      annotations:
+        kubectl.kubernetes.io/default-container: main
       labels:
+        app.kubernetes.io/controller: main
         app.kubernetes.io/instance: plex
         app.kubernetes.io/name: plex
     spec:
-      automountServiceAccountToken: true
+      automountServiceAccountToken: false
       containers:
+        - env:
+            - name: PLEX_URL
+              value: http://localhost:32400
+            - name: REFRESH_LIBRARY_ON_SCAN
+              value: "false"
+            - name: TZ
+              value: Europe/Budapest
+          envFrom:
+            - secretRef:
+                name: plex-token
+          image: docker.io/remirigal/plex-auto-languages:v1.2.3
+          imagePullPolicy: IfNotPresent
+          name: auto-languages
+          volumeMounts:
+            - mountPath: /.local
+              name: local
+            - mountPath: /config
+              name: pal-config
         - env:
             - name: TZ
               value: Europe/Budapest
           image: ghcr.io/home-operations/plex:rolling@sha256:06ef0fc23e9af9bbaf284c3f27972f94e703d13d6f745edeb6818fcbebf6c673
-          imagePullPolicy: null
           livenessProbe:
             failureThreshold: 3
             initialDelaySeconds: 0
@@ -57,11 +93,7 @@ spec:
             tcpSocket:
               port: 32400
             timeoutSeconds: 1
-          name: plex
-          ports:
-            - containerPort: 32400
-              name: http
-              protocol: TCP
+          name: main
           readinessProbe:
             failureThreshold: 3
             initialDelaySeconds: 0
@@ -95,27 +127,11 @@ spec:
               name: pal-config
             - mountPath: /transcode
               name: transcode
-        - env:
-            - name: PLEX_URL
-              value: http://localhost:32400
-            - name: REFRESH_LIBRARY_ON_SCAN
-              value: "false"
-            - name: TZ
-              value: Europe/Budapest
-          envFrom:
-            - secretRef:
-                name: plex-token
-          image: docker.io/remirigal/plex-auto-languages:v1.2.3
-          imagePullPolicy: IfNotPresent
-          name: auto-languages
-          volumeMounts:
-            - mountPath: /config
-              name: pal-config
-            - mountPath: /.local
-              name: local
       dnsPolicy: ClusterFirstWithHostNet
-      enableServiceLinks: true
+      enableServiceLinks: false
+      hostIPC: false
       hostNetwork: true
+      hostPID: false
       nodeSelector:
         nvidia.com/gpu.count: "1"
       securityContext:
@@ -127,7 +143,7 @@ spec:
           - 44
           - 109
           - 10000
-      serviceAccountName: default
+      serviceAccountName: plex
       volumes:
         - hostPath:
             path: /zfs/k3s/configs/plex-config
@@ -144,7 +160,6 @@ spec:
           name: transcode
   updateStrategy:
     type: RollingUpdate
-  volumeClaimTemplates: null
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -156,8 +171,9 @@ metadata:
     app.kubernetes.io/instance: plex
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: plex
-    helm.sh/chart: app-template-1.5.1
+    helm.sh/chart: app-template-5.3.0
   name: plex
+  namespace: mediarr
 spec:
   ingressClassName: nginx
   rules:

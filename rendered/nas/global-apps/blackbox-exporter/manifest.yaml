@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: prometheus-blackbox-exporter
     app.kubernetes.io/version: v0.29.1
-    helm.sh/chart: prometheus-blackbox-exporter-11.21.2
+    helm.sh/chart: prometheus-blackbox-exporter-11.21.3
   name: prometheus-blackbox-exporter
   namespace: cattle-monitoring-system
 ---
@@ -30,7 +30,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: prometheus-blackbox-exporter
     app.kubernetes.io/version: v0.29.1
-    helm.sh/chart: prometheus-blackbox-exporter-11.21.2
+    helm.sh/chart: prometheus-blackbox-exporter-11.21.3
   name: prometheus-blackbox-exporter
   namespace: cattle-monitoring-system
 ---
@@ -42,7 +42,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: prometheus-blackbox-exporter
     app.kubernetes.io/version: v0.29.1
-    helm.sh/chart: prometheus-blackbox-exporter-11.21.2
+    helm.sh/chart: prometheus-blackbox-exporter-11.21.3
   name: prometheus-blackbox-exporter
   namespace: cattle-monitoring-system
 spec:
@@ -64,7 +64,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: prometheus-blackbox-exporter
     app.kubernetes.io/version: v0.29.1
-    helm.sh/chart: prometheus-blackbox-exporter-11.21.2
+    helm.sh/chart: prometheus-blackbox-exporter-11.21.3
   name: prometheus-blackbox-exporter
   namespace: cattle-monitoring-system
 spec:
@@ -88,7 +88,7 @@ spec:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: prometheus-blackbox-exporter
         app.kubernetes.io/version: v0.29.1
-        helm.sh/chart: prometheus-blackbox-exporter-11.21.2
+        helm.sh/chart: prometheus-blackbox-exporter-11.21.3
     spec:
       automountServiceAccountToken: false
       containers:
@@ -139,7 +139,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: prometheus-blackbox-exporter
     app.kubernetes.io/version: v0.29.1
-    helm.sh/chart: prometheus-blackbox-exporter-11.21.2
+    helm.sh/chart: prometheus-blackbox-exporter-11.21.3
   name: prometheus-blackbox-exporter
   namespace: cattle-monitoring-system
 spec:
