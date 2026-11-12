@@ -1,8 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "1c963ffbbe47aa934ef7195c20242907413fd944",
+  "drySha": "cac20ca1d0ebd3f3894d8ed4e8507f3133f770d4",
   "author": "David Marthy <marthy.david@gmail.com>",
-  "date": "2026-11-12T20:04:49Z",
-  "subject": "feat(metal1): Route53 secret from Vault via ESO (Kubernetes auth) (#2028)",
-  "body": "- external-secrets-operator: SA vault-auth (system:auth-delegator) and the vault-backend\n  ClusterSecretStore, logging in to vault.marthy.xyz at auth/kubernetes-metal1, role\n  external-secrets (policy external-secrets-metal1: read secret/cert-manager-pecs).\n- cert-manager-operator: ExternalSecret route53-awssecret replaces the hand-made Secret\n  (same key as Vault secret/cert-manager-pecs).\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>\n"
+  "date": "2026-11-12T20:08:50Z",
+  "subject": "fix(metal1): let ESO reach Vault through the operator's NetworkPolicies (#2029)",
+  "body": "The openshift ESO operator isolates the operand with deny-all NetworkPolicies, so the\nvault-backend store timed out logging in. Allow the core controller egress to\nvault.marthy.xyz (nas ingress 192.168.20.1:443) via ExternalSecretsConfig\ncontrollerConfig.networkPolicies.\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>\n"
 }

@@ -54,7 +54,18 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "2"
   name: cluster
-spec: {}
+spec:
+  controllerConfig:
+    networkPolicies:
+      - componentName: ExternalSecretsCoreController
+        egress:
+          - ports:
+              - port: 443
+                protocol: TCP
+            to:
+              - ipBlock:
+                  cidr: 192.168.20.1/32
+        name: allow-vault-egress
 ---
 apiVersion: operators.coreos.com/v1
 kind: OperatorGroup
