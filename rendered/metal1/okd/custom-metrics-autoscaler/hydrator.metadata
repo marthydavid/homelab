@@ -1,6 +1,6 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "01831d140b40554b7e92331c1a6b7c5020ef5ac9",
+  "drySha": "aa76a775a54974ff9009280b4bfff1daa7eaf39a",
   "commands": [
     "kustomize build ./argocd/apps/okd/custom-metrics-autoscaler --enable-helm --load-restrictor LoadRestrictionsNone"
   ]

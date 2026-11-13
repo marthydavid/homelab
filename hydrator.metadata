@@ -1,8 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "01831d140b40554b7e92331c1a6b7c5020ef5ac9",
-  "author": "David Marthy <marthy.david@gmail.com>",
-  "date": "2026-11-13T07:08:27Z",
-  "subject": "fix(metal1): shorten the KEDA ClusterExtension name (#2038)",
-  "body": "OLM v1 (4.22) stores an install as Secret sh.helm.release.v1.<name>.v1 and puts that name in a\nlabel (max 63 bytes); openshift-custom-metrics-autoscaler-operator (44 chars) made it fail with\n'must be no more than 63 bytes'. Renamed to keda.\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>\n"
+  "drySha": "aa76a775a54974ff9009280b4bfff1daa7eaf39a",
+  "author": "renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>",
+  "date": "2026-11-13T07:22:15Z",
+  "subject": "chore(deps): update openshift-custom-metrics-autoscaler-operator to 2.19.0-4 (#2037)",
+  "body": "Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>\n"
 }
