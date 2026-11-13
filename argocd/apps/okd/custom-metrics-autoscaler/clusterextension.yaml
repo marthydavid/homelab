@@ -30,7 +30,9 @@ subjects:
 apiVersion: olm.operatorframework.io/v1
 kind: ClusterExtension
 metadata:
-  name: openshift-custom-metrics-autoscaler-operator
+  # Short on purpose: OLM v1 (4.22) stores the install as Secret sh.helm.release.v1.<name>.v1 and
+  # the name ends up in a label (max 63 bytes), so <name> must stay under ~40 characters.
+  name: keda
   annotations:
     argocd.argoproj.io/sync-wave: "1"
 spec:
