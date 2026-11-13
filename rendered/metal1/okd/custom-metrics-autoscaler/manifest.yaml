@@ -56,7 +56,7 @@ kind: ClusterExtension
 metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "1"
-  name: openshift-custom-metrics-autoscaler-operator
+  name: keda
 spec:
   namespace: openshift-keda
   serviceAccount:
