@@ -9,30 +9,19 @@
   "prConcurrentLimit": 25,
   "argocd": {
     "commitMessageTopic": "argocd chart {{depName}}",
-    "fileMatch": [
-      "(^|/)argocd/applicationsets/.+\\.yaml$"
+    "managerFilePatterns": [
+      "/(^|/)argocd/applicationsets/.+\\.yaml$/"
     ]
   },
   "helm-values": {
     "commitMessageTopic": "helm values {{depName}}",
-    "fileMatch": [
-      "(^|/).*-values\\.yaml$",
-      "(^|/).*\\.yaml$"
+    "managerFilePatterns": [
+      "/(^|/).*\\.yaml$/"
     ]
   },
   "packageRules": [
     {
-      "description": "Hold external-dns: v0.23 rewrites target/alias A ALIAS records to plain A (issue #1908)",
-      "matchPackageNames": [
-        "external-dns"
-      ],
-      "matchDatasources": [
-        "helm"
-      ],
-      "enabled": false
-    },
-    {
-      "description": "Hold external-dns at chart 1.20.x until #1908 is solved (v0.23 rewrites ALIAS records to A)",
+      "description": "Hold external-dns at chart 1.20.x until #1908 is solved (v0.23 rewrites target/alias ALIAS records to A)",
       "matchDatasources": [
         "helm"
       ],
@@ -42,7 +31,7 @@
       "enabled": false
     },
     {
-      "description": "Auto merge container digests",
+      "description": "Auto merge patch, minor and digest updates of images from trusted registries",
       "matchDatasources": [
         "docker"
       ],
@@ -54,15 +43,12 @@
         "minor",
         "digest"
       ],
-      "matchPackagePatterns": [
-        "ghcr.io/bjw-s",
-        "ghcr.io/home-operations",
-        "ghcr.io/scr",
-        "ghcr.io/marthydavid"
+      "matchPackageNames": [
+        "/^ghcr\\.io\\/(bjw-s|home-operations|scr|marthydavid)/"
       ]
     },
     {
-      "description": "Auto merge container digests",
+      "description": "Auto merge patch updates of all container images",
       "matchDatasources": [
         "docker"
       ],
@@ -107,13 +93,13 @@
     {
       "customType": "regex",
       "description": "OLM v1 ClusterExtensions on metal1: spec.source.catalog.version",
-      "fileMatch": [
-        "(^|/)argocd/apps/okd/.+/clusterextension\\.yaml$"
-      ],
       "matchStrings": [
         "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n\\s*version: \"?(?<currentValue>[^\"\\s]+)\"?"
       ],
-      "versioningTemplate": "loose"
+      "versioningTemplate": "loose",
+      "managerFilePatterns": [
+        "/(^|/)argocd/apps/okd/.+/clusterextension\\.yaml$/"
+      ]
     }
   ],
   "customDatasources": {
