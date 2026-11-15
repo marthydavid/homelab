@@ -78,7 +78,7 @@ spec:
               value: info
             - name: RADARR__PORT
               value: "7878"
-          image: ghcr.io/home-operations/radarr:7.0.2.10888
+          image: ghcr.io/home-operations/radarr:7.0.3.10912
           livenessProbe:
             failureThreshold: 3
             initialDelaySeconds: 0
