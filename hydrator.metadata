@@ -1,8 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "aa76a775a54974ff9009280b4bfff1daa7eaf39a",
-  "author": "renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>",
-  "date": "2026-11-13T07:22:15Z",
-  "subject": "chore(deps): update openshift-custom-metrics-autoscaler-operator to 2.19.0-4 (#2037)",
-  "body": "Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>\n"
+  "drySha": "10a9f7a8a5cc4f85350ae21b8de76d72e2eb80b9",
+  "author": "David Marthy <marthy.david@gmail.com>",
+  "date": "2026-11-15T22:39:19Z",
+  "subject": "chore(qbit): drop the one-off v4 migration init container and mounts (#2015)",
+  "body": "Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
 }
