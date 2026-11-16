@@ -78,7 +78,7 @@ spec:
               value: info
             - name: PROWLARR__PORT
               value: "9696"
-          image: ghcr.io/home-operations/prowlarr:3.0.1.5752
+          image: ghcr.io/home-operations/prowlarr:3.0.2.5777
           livenessProbe:
             failureThreshold: 3
             initialDelaySeconds: 0
