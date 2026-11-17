@@ -1,8 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "f974078ac546c71bd2fa788d9766bcffc74fffd6",
+  "drySha": "9a20b793a4809607bfae13aad5a9a769fb363b51",
   "author": "renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>",
-  "date": "2026-11-16T06:42:14Z",
-  "subject": "chore(deps): update ghcr.io/home-operations/radarr docker tag to v7.0.3.10918 (#2044)",
+  "date": "2026-11-17T04:13:19Z",
+  "subject": "chore(deps): update ghcr.io/home-operations/prowlarr docker tag to v3.0.2.5780 (#2045)",
   "body": "Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>\n"
 }
