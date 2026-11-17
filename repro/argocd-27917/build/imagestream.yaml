@@ -1,0 +1,9 @@
+# Output of the build in buildconfig.yaml. Lives in the vcluster's host namespace, so removing the
+# repro (scripts/down.sh deletes the namespace) removes the image as well.
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: argocd-27917-test
+  namespace: vcluster-argocd-27917
+  labels:
+    homelab/repro: argocd-27917

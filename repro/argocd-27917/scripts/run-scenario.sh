@@ -7,6 +7,7 @@ source "$(dirname "$0")/lib.sh"
 inst="${1:?instance}" scen="${2:?scenario}" timeout="${3:-240}"
 ns="argocd-$inst"
 
+"$(dirname "$0")/connect.sh" >/dev/null
 "$(dirname "$0")/reset.sh" "$inst" "$scen"
 
 helm template roots "$REPRO_DIR/gitops/roots" --set instance="$inst" --set "scenarios={$scen}" \

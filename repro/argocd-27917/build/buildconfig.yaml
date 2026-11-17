@@ -1,0 +1,89 @@
+# Builds Argo CD v3.6.1 + argoproj/argo-cd#28066 (fix for #27917) on metal1 and pushes it to the
+# internal registry as argocd-27917-test:v3.6.1-pr28066.
+#
+# Source: branch fix/27917-aggregate-missing-on-v3.6.1 of github.com/marthydavid/argo-cd, which is
+# the v3.6.1 tag plus the PR commit (health.go unchanged, health_test.go adapted). The Dockerfile
+# fetches the exact commit itself (build arg GIT_COMMIT) instead of using a build context: the repo's
+# .dockerignore strips test/, manifests/, hack/ and docs/, and the controller tests need them.
+#
+# What the image is: the official quay.io/argoproj/argocd:v3.6.1 with /usr/local/bin/argocd (one
+# binary, all components are symlinks to it) replaced by a build of the patched source, made with the
+# project's own `make argocd-all` on the project's pinned Go image. The UI is embedded into that
+# binary at compile time (ui/embed.go); the real UI is a ~10 min webpack build that the patch does not
+# touch, so it is stubbed. USE THE IMAGE FOR THE application-controller ONLY.
+#
+# Steps, in order: (1) the health tests, blocking; (2) make argocd-all; (3) the whole ./controller
+# package, informative only (its result is printed, not enforced).
+#
+# Start with scripts/build-image.sh (passes GIT_COMMIT and BUILD_DATE as build args).
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: argocd-pr28066
+  namespace: vcluster-argocd-27917
+  labels:
+    homelab/repro: argocd-27917
+spec:
+  runPolicy: Serial
+  completionDeadlineSeconds: 5400
+  successfulBuildsHistoryLimit: 3
+  failedBuildsHistoryLimit: 3
+  resources:
+    requests:
+      cpu: "2"
+      memory: 4Gi
+    limits:
+      cpu: "6"
+      memory: 12Gi
+  source:
+    type: Dockerfile
+    dockerfile: |
+      FROM docker.io/library/golang:1.27.3@sha256:957861185dbf29d93668ace41e011d091c6e779953d47f0316ef2cc58e28fe2b AS build
+      SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+      WORKDIR /go/src/github.com/argoproj/argo-cd
+      ENV GOFLAGS=-buildvcs=false GODEBUG=tarinsecurepath=0,zipinsecurepath=0
+      ARG GIT_URL=https://github.com/marthydavid/argo-cd.git
+      ARG GIT_COMMIT
+      ARG BUILD_DATE
+
+      # the exact commit, complete tree (see the header of this file)
+      RUN test -n "$GIT_COMMIT" \
+       && git init -q . && git remote add origin "$GIT_URL" \
+       && git fetch -q --depth 1 origin "$GIT_COMMIT" && git checkout -q FETCH_HEAD \
+       && git log -1 --format='building %H %s' \
+       && test "$(git rev-parse HEAD)" = "$GIT_COMMIT"
+      RUN go mod download
+
+      # ui/embed.go embeds dist/app at compile time, stub it (see the header of this file)
+      RUN mkdir -p ui/dist/app/assets/images/resources \
+       && echo '<!doctype html><title>stub</title>UI stubbed: controller-only build of argo-cd#28066 on v3.6.1' > ui/dist/app/index.html \
+       && echo stub > ui/dist/app/assets/images/resources/stub.txt
+
+      # (1) blocking: the health tests, including the PR's regression test
+      RUN go test ./controller -run 'TestSetApplicationHealth|TestFormatHealthCauses|TestChildAppHealth' -count=1 -v > /tmp/health-tests.log 2>&1; rc=$?; \
+          grep -E '^(--- (PASS|FAIL)|PASS|FAIL|ok)' /tmp/health-tests.log || true; \
+          if [ "$rc" -ne 0 ]; then tail -60 /tmp/health-tests.log; exit "$rc"; fi
+
+      # (2) the binary, exactly like the project's Dockerfile does it
+      RUN GIT_COMMIT="$GIT_COMMIT" GIT_TREE_STATE=clean GIT_TAG= BUILD_DATE="$BUILD_DATE" \
+          EXTRA_BUILD_INFO="includes argoproj/argo-cd#28066 (fix for #27917); UI stubbed, controller only" \
+          GOOS=linux GOARCH=amd64 make argocd-all
+
+      # (3) informative: the rest of the controller package, a failure here does not fail the build
+      RUN (go test ./controller -count=1 -timeout 30m 2>&1 | tee /tmp/controller-tests.log | grep -E '^(--- FAIL|FAIL|ok|panic)') ; true
+
+      FROM quay.io/argoproj/argocd:v3.6.1
+      LABEL io.homelab.repro="argocd-27917" \
+            io.homelab.patch="argoproj/argo-cd#28066 on v3.6.1" \
+            io.homelab.scope="application-controller only, UI stubbed"
+      USER root
+      COPY --from=build /go/src/github.com/argoproj/argo-cd/dist/argocd /usr/local/bin/argocd
+      USER 999
+  strategy:
+    type: Docker
+    dockerStrategy:
+      noCache: false
+  output:
+    to:
+      kind: ImageStreamTag
+      name: argocd-27917-test:v3.6.1-pr28066

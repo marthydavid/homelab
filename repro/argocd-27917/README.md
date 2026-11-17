@@ -29,6 +29,7 @@ on the host (read PersistentVolumes, write VolumeSnapshotContents); the values s
 |---|---|---|---|
 | `latest` | 10.18.0 | v3.6.1 | the chart the repro is about, owns the CRDs |
 | `v339` | 9.5.11 | v3.3.9 | last known-good version from the issue, control group |
+| `fixed` | 10.18.0 | v3.6.1 + #28066 | like `latest`, but the application-controller is the build of v3.6.1 + argo-cd#28066, see [Testing the fix](#testing-the-fix-28066-on-v361) |
 
 Chart versions are in [`scripts/lib.sh`](scripts/lib.sh) (`ARGOCD_CHART`); add an instance there to
 compare another version (chart 9.5.14 is the reported v3.4.2). Each instance is namespaced
@@ -66,10 +67,10 @@ while a resource failed to apply (it stays `OutOfSync`), so a health-only check 
 Valid runs only, i.e. after pitfalls 1 and 2 below were fixed. Same values, same manifests, same git
 revision for both instances; the Argo CD version (via its chart) is the variable.
 
-| scenario | v3.3.9 (chart 9.5.11) | v3.6.1 (chart 10.18.0) |
-|---|---|---|
-| `slow-workload` | gate **held**: wave 300 created at t+49..51s, when `a-database` turned Synced+Healthy; `seed-db` succeeded (3 runs) | gate **released early**: wave 300 created at t+3..4s while `a-database` was Progressing (its Deployment needs 45s); `seed-db` **failed** (3 runs) |
-| `mixed-live` | gate **held**: `c-consumer` never created in the 200s window, `b-operator` stayed `OutOfSync`/`Missing` (2 runs) | gate **released early**: `c-consumer` created at t+7s and completed while `b-operator` was `OutOfSync`/`Healthy` with `resource mapping not found for name: "fake-operator"` (2 runs) |
+| scenario | v3.3.9 (chart 9.5.11) | v3.6.1 (chart 10.18.0) | v3.6.1 + #28066 (`fixed`) |
+|---|---|---|---|
+| `slow-workload` | gate **held**: wave 300 created at t+49..51s, when `a-database` turned Synced+Healthy; `seed-db` succeeded (3 runs) | gate **released early**: wave 300 created at t+3..4s while `a-database` was Progressing (its Deployment needs 45s); `seed-db` **failed** (3 runs) | gate **held**: wave 300 created at t+50s, `seed-db` succeeded (2 runs) |
+| `mixed-live` | gate **held**: `c-consumer` never created in the 200s window, `b-operator` stayed `OutOfSync`/`Missing` (2 runs) | gate **released early**: `c-consumer` created at t+7s and completed while `b-operator` was `OutOfSync`/`Healthy` with `resource mapping not found for name: "fake-operator"` (2 runs) | gate **held**: `c-consumer` never created, `b-operator` stayed `OutOfSync`/`Missing` (2 runs) |
 
 What this shows: with Argo CD's default behaviour otherwise equal, v3.6.1 reports a child Application
 `Healthy` while parts of it are not applied or not ready, and the parent's sync-wave gate opens on that.
@@ -88,10 +89,44 @@ What it does not show:
   `mixed-live` because of the custom `Subscription` override in `argocd/values.yaml` (the third ingredient
   in the issue comment); without it v3.3.9 would skip the missing Subscription too. `slow-workload` does not
   depend on this, its Deployment has a Go-coded check. Read from source, not tested.
-* Anything about v3.4.2 (the reported version), the versions in between, or the fix in #28066. An image
-  built from that PR can be dropped into a third instance to test it.
+* Anything about v3.4.2 (the reported version) or the versions in between.
 * That the chart is the culprit: the two charts differ in more than the image tag. The values are shared, the
   rendered workloads are the same set, but chart defaults can differ.
+
+## Testing the fix (#28066 on v3.6.1)
+
+[argoproj/argo-cd#28066](https://github.com/argoproj/argo-cd/pull/28066) was written against master in May, a build
+of it on top of v3.6.1 is the `fixed` instance.
+
+* **Fork and branch:** [marthydavid/argo-cd](https://github.com/marthydavid/argo-cd), branch
+  `fix/27917-aggregate-missing-on-v3.6.1` = the `v3.6.1` tag + the PR commit (cherry-picked with `-x`, original
+  author kept) + one test commit. The PR's change to `controller/health.go` applied without conflicts and without edits (+7/-2, as in the PR).
+* **Two test adaptations, because v3.6.1 has what master had not when the PR was written** (the health-cause
+  message, #28455, which makes `setApplicationHealth` return a second value):
+  the PR's updated and new tests assert the `Caused by ...` string too; and `TestSetApplicationHealth_AllMissingResources`
+  and `..._WithHooks`, which the PR does not touch, now see the missing resources in the message
+  (`Caused by Pod:default/pod, Pod:default/pod2`) because they are aggregated as `Missing` one by one instead of by the
+  all-missing fallback. The app health is still `Missing`. If #28066 lands on a branch that has #28455 it needs this too.
+* **Build** ([`build/buildconfig.yaml`](build/buildconfig.yaml), `scripts/build-image.sh`): an OpenShift Build on metal1, output
+  to the internal registry only. It fetches the exact commit, stubs the embedded UI, runs the health tests (blocking),
+  then the project's own `make argocd-all` on the project's pinned `golang:1.27.3`, then the whole `./controller`
+  package (informative). The result is the official `quay.io/argoproj/argocd:v3.6.1` with `/usr/local/bin/argocd`
+  replaced. **Controller only**: the UI is embedded in that binary at compile time and is a stub here, the instance
+  swaps only `controller.image` (`argocd/values-fixed.yaml`), server and repo-server stay stock v3.6.1.
+* **Unit tests:** all 14 health tests pass (including the PR's regression test) and the whole `./controller` package
+  passes (`ok`, 84.5s), run inside the build.
+* **Verified, not assumed:** the running controller has the digest the build pushed, and `argocd version` in it reports
+  `v3.6.1+e483ea6`, commit `e483ea6e…`, clean tree, versus `v3.6.1`, `94037c4…`, tag `v3.6.1` in `latest`.
+* **Live test:** the table above. `fixed` behaves like the v3.3.9 control in both scenarios, `latest` still releases the gate.
+  The patched controller's log had no errors or panics.
+
+What it costs, which the PR author names as the trade-off: while a child is being applied its health reads `Missing` for the
+first seconds of the sync (`fixed-slow-workload-a-database` is `OutOfSync`/`Missing` at t+1s, where v3.6.1 says `Healthy`),
+as v3.3.9 does. That is also what holds the gate.
+
+Not covered: kinds other than the ones in the scenarios, HA/sharded controllers, large app trees, anything beyond the
+controller (UI, server), and upstream CI (`make lint`, e2e). The image lives in the internal registry with `emptyDir`
+storage, so it is gone if the registry pod restarts: rebuild with `scripts/build-image.sh`.
 
 ## Pitfalls found while building this (each one silently invalidated a run)
 
@@ -105,7 +140,13 @@ What it does not show:
    Names are `<instance>-<scenario>-<child>` and `root-<instance>-<scenario>` for that reason.
 3. **OpenShift UIDs.** The chart pins `runAsUser: 999` on redis, `restricted-v2` rejects it on the host, so
    the values null it. The vcluster default `runAsUser: 0` is nulled the same way.
-4. Do not `export KUBECONFIG=<vcluster kubeconfig>` before running the scripts, the host calls use
+4. **The tunnel to the vcluster drops.** A bare `kubectl port-forward` dies with `lost connection to pod` and a whole matrix then
+   "ran" against a dead tunnel. `connect.sh` now runs it under a restart loop, judges it by whether the virtual cluster answers, and
+   `run-scenario.sh` calls it first. A script failure is reported as `ERROR`, not as an inconclusive observation.
+5. **Building Argo CD in a container.** The repo's `.dockerignore` strips `test/`, `manifests/`, `hack/` and `docs/` from the build
+   context, which the controller tests need, so the Dockerfile fetches the commit itself. `oc start-build --follow` exits 0 on a failed
+   build unless `--wait` is given. The binary embeds the UI (`ui/embed.go`), a compile without `ui/dist/app` fails.
+6. Do not `export KUBECONFIG=<vcluster kubeconfig>` before running the scripts, the host calls use
    `--context metal1` and would no longer find it. Pass `--kubeconfig` per command instead.
 
 ## Run it

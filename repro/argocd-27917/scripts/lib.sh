@@ -20,6 +20,9 @@ VC_LOCAL_PORT="${VC_LOCAL_PORT:-18443}"
 declare -A ARGOCD_CHART=(
   [latest]="${ARGOCD_LATEST_CHART:-10.18.0}"   # Argo CD v3.6.1
   [v339]="${ARGOCD_V339_CHART:-9.5.11}"        # Argo CD v3.3.9
+  # latest chart, but the application-controller is the build of v3.6.1 + argo-cd#28066 (see
+  # argocd/values-fixed.yaml and scripts/build-image.sh, the image must exist before up.sh)
+  [fixed]="${ARGOCD_FIXED_CHART:-10.18.0}"
 )
 # Which instance owns the CRDs (only one release may install them).
 CRD_OWNER="latest"

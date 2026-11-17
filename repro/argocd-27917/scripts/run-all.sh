@@ -13,7 +13,8 @@ for scen in "${SCENARIOS[@]}"; do
     case $rc in
       0) result[$scen,$inst]="gate held" ;;
       3) result[$scen,$inst]="EARLY RELEASE (bug)" ;;
-      *) result[$scen,$inst]="inconclusive (rc=$rc)" ;;
+      2) result[$scen,$inst]="inconclusive" ;;
+      *) result[$scen,$inst]="ERROR, no observation (rc=$rc)" ;;
     esac
   done
 done

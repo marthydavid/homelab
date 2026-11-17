@@ -10,7 +10,7 @@ if [[ "$label" != "argocd-27917" ]]; then
 fi
 
 PIDFILE="$(dirname "$VC_KUBECONFIG")/port-forward.pid"
-[[ -f "$PIDFILE" ]] && kill "$(cat "$PIDFILE")" 2>/dev/null || true
+[[ -f "$PIDFILE" ]] && { kill -- "-$(cat "$PIDFILE")" 2>/dev/null || kill "$(cat "$PIDFILE")" 2>/dev/null || true; }
 rm -f "$PIDFILE" "$VC_KUBECONFIG"
 
 helm --kube-context "$HOST_CTX" uninstall "$VC_NAME" --namespace "$HOST_NS" --wait || true

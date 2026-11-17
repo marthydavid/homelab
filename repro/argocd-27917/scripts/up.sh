@@ -17,24 +17,26 @@ helm --kube-context "$HOST_CTX" upgrade --install "$VC_NAME" loft/vcluster \
 
 "$(dirname "$0")/connect.sh"
 
-for inst in "${!ARGOCD_CHART[@]}"; do
-  extra=()
-  [[ "$inst" != "$CRD_OWNER" ]] && extra=(-f "$REPRO_DIR/argocd/values-baseline.yaml")
-  echo ">> argo-cd instance $inst (chart ${ARGOCD_CHART[$inst]}) in namespace argocd-$inst"
-  # the CRD owner must be installed first, the others only reference the CRDs
-  if [[ "$inst" == "$CRD_OWNER" ]]; then
-    vc_helm upgrade --install "argocd-$inst" argo/argo-cd --version "${ARGOCD_CHART[$inst]}" \
-      --namespace "argocd-$inst" --create-namespace -f "$REPRO_DIR/argocd/values.yaml" --wait --timeout 10m
-  fi
-done
+# the CRD owner must be installed first, the others only reference the CRDs
+echo ">> argo-cd instance $CRD_OWNER (chart ${ARGOCD_CHART[$CRD_OWNER]}) in namespace argocd-$CRD_OWNER"
+vc_helm upgrade --install "argocd-$CRD_OWNER" argo/argo-cd --version "${ARGOCD_CHART[$CRD_OWNER]}" \
+  --namespace "argocd-$CRD_OWNER" --create-namespace -f "$REPRO_DIR/argocd/values.yaml" --wait --timeout 10m
+
 for inst in "${!ARGOCD_CHART[@]}"; do
   [[ "$inst" == "$CRD_OWNER" ]] && continue
+  # an optional argocd/values-<instance>.yaml adds per-instance settings (e.g. the `fixed` image)
+  inst_values=()
+  [[ -f "$REPRO_DIR/argocd/values-$inst.yaml" ]] && inst_values=(-f "$REPRO_DIR/argocd/values-$inst.yaml")
+  echo ">> argo-cd instance $inst (chart ${ARGOCD_CHART[$inst]}) in namespace argocd-$inst"
   vc_helm upgrade --install "argocd-$inst" argo/argo-cd --version "${ARGOCD_CHART[$inst]}" \
     --namespace "argocd-$inst" --create-namespace \
-    -f "$REPRO_DIR/argocd/values.yaml" -f "$REPRO_DIR/argocd/values-baseline.yaml" --wait --timeout 10m
+    -f "$REPRO_DIR/argocd/values.yaml" -f "$REPRO_DIR/argocd/values-baseline.yaml" "${inst_values[@]}" \
+    --wait --timeout 10m
 done
 
-echo ">> done. Argo CD versions:"
+echo ">> done. Images (repo-server / application-controller):"
 for inst in "${!ARGOCD_CHART[@]}"; do
-  printf '   %-8s %s\n' "$inst" "$(vc_kubectl -n "argocd-$inst" get deploy -o jsonpath='{.items[?(@.metadata.name=="argocd-'"$inst"'-repo-server")].spec.template.spec.containers[0].image}')"
+  repo="$(vc_kubectl -n "argocd-$inst" get deploy "argocd-$inst-repo-server" -o jsonpath='{.spec.template.spec.containers[0].image}')"
+  ctrl="$(vc_kubectl -n "argocd-$inst" get sts "argocd-$inst-application-controller" -o jsonpath='{.spec.template.spec.containers[0].image}')"
+  printf '   %-8s %s | %s\n' "$inst" "$repo" "$ctrl"
 done
