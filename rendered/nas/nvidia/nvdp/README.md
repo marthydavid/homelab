@@ -5,6 +5,6 @@ To hydrate the manifests in this repository, run the following commands:
 ```shell
 git clone https://github.com/marthydavid/homelab
 # cd into the cloned directory
-git checkout e7d89c4e883b369a87e7ed0b9f53a33131d92d5f
+git checkout 0a66b56970b329fa845d77122362653d7e17b086
 kustomize build ./argocd/apps/nvidia/nvdp/overlays/nas --enable-helm --load-restrictor LoadRestrictionsNone
 ```

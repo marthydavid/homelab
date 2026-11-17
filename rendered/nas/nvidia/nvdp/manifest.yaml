@@ -819,8 +819,8 @@ metadata:
     app.kubernetes.io/instance: nvidia-device-plugin
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: nvidia-device-plugin
-    app.kubernetes.io/version: 0.20.1
-    helm.sh/chart: nvidia-device-plugin-0.20.1
+    app.kubernetes.io/version: 0.20.2
+    helm.sh/chart: nvidia-device-plugin-0.20.2
   name: nvidia-device-plugin-service-account
   namespace: nvidia-device-plugin
 ---
@@ -978,8 +978,8 @@ metadata:
     app.kubernetes.io/instance: nvidia-device-plugin
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: nvidia-device-plugin
-    app.kubernetes.io/version: 0.20.1
-    helm.sh/chart: nvidia-device-plugin-0.20.1
+    app.kubernetes.io/version: 0.20.2
+    helm.sh/chart: nvidia-device-plugin-0.20.2
   name: nvidia-device-plugin-role
 rules:
   - apiGroups:
@@ -1095,8 +1095,8 @@ metadata:
     app.kubernetes.io/instance: nvidia-device-plugin
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: nvidia-device-plugin
-    app.kubernetes.io/version: 0.20.1
-    helm.sh/chart: nvidia-device-plugin-0.20.1
+    app.kubernetes.io/version: 0.20.2
+    helm.sh/chart: nvidia-device-plugin-0.20.2
   name: nvidia-device-plugin-role-binding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -1328,8 +1328,8 @@ metadata:
     app.kubernetes.io/instance: nvidia-device-plugin
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: nvidia-device-plugin
-    app.kubernetes.io/version: 0.20.1
-    helm.sh/chart: nvidia-device-plugin-0.20.1
+    app.kubernetes.io/version: 0.20.2
+    helm.sh/chart: nvidia-device-plugin-0.20.2
   name: nvidia-device-plugin
   namespace: nvidia-device-plugin
 spec:
@@ -1391,7 +1391,7 @@ spec:
               value: "1"
             - name: PROCESS_TO_SIGNAL
               value: nvidia-device-plugin
-          image: nvcr.io/nvidia/k8s-device-plugin:v0.20.1
+          image: nvcr.io/nvidia/k8s-device-plugin:v0.20.2
           name: nvidia-device-plugin-sidecar
           securityContext:
             capabilities:
@@ -1415,7 +1415,7 @@ spec:
               value: all
             - name: NVIDIA_DRIVER_CAPABILITIES
               value: compute,utility
-          image: nvcr.io/nvidia/k8s-device-plugin:v0.20.1
+          image: nvcr.io/nvidia/k8s-device-plugin:v0.20.2
           imagePullPolicy: IfNotPresent
           name: nvidia-device-plugin-ctr
           securityContext:
@@ -1463,7 +1463,7 @@ spec:
               value: ""
             - name: PROCESS_TO_SIGNAL
               value: ""
-          image: nvcr.io/nvidia/k8s-device-plugin:v0.20.1
+          image: nvcr.io/nvidia/k8s-device-plugin:v0.20.2
           name: nvidia-device-plugin-init
           volumeMounts:
             - mountPath: /available-configs
@@ -1512,8 +1512,8 @@ metadata:
     app.kubernetes.io/instance: nvidia-device-plugin
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: nvidia-device-plugin
-    app.kubernetes.io/version: 0.20.1
-    helm.sh/chart: nvidia-device-plugin-0.20.1
+    app.kubernetes.io/version: 0.20.2
+    helm.sh/chart: nvidia-device-plugin-0.20.2
   name: nvidia-device-plugin-gpu-feature-discovery
   namespace: nvidia-device-plugin
 spec:
@@ -1575,7 +1575,7 @@ spec:
               value: "1"
             - name: PROCESS_TO_SIGNAL
               value: gpu-feature-discovery
-          image: nvcr.io/nvidia/k8s-device-plugin:v0.20.1
+          image: nvcr.io/nvidia/k8s-device-plugin:v0.20.2
           name: gpu-feature-discovery-sidecar
           securityContext:
             privileged: true
@@ -1603,7 +1603,7 @@ spec:
               value: /config/config.yaml
             - name: NVIDIA_MIG_MONITOR_DEVICES
               value: all
-          image: nvcr.io/nvidia/k8s-device-plugin:v0.20.1
+          image: nvcr.io/nvidia/k8s-device-plugin:v0.20.2
           imagePullPolicy: IfNotPresent
           name: gpu-feature-discovery-ctr
           securityContext:
@@ -1645,7 +1645,7 @@ spec:
               value: ""
             - name: PROCESS_TO_SIGNAL
               value: ""
-          image: nvcr.io/nvidia/k8s-device-plugin:v0.20.1
+          image: nvcr.io/nvidia/k8s-device-plugin:v0.20.2
           name: gpu-feature-discovery-init
           volumeMounts:
             - mountPath: /available-configs
@@ -1691,8 +1691,8 @@ metadata:
     app.kubernetes.io/instance: nvidia-device-plugin
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: nvidia-device-plugin
-    app.kubernetes.io/version: 0.20.1
-    helm.sh/chart: nvidia-device-plugin-0.20.1
+    app.kubernetes.io/version: 0.20.2
+    helm.sh/chart: nvidia-device-plugin-0.20.2
   name: nvidia-device-plugin-mps-control-daemon
   namespace: nvidia-device-plugin
 spec:
@@ -1754,7 +1754,7 @@ spec:
               value: "1"
             - name: PROCESS_TO_SIGNAL
               value: /usr/bin/mps-control-daemon
-          image: nvcr.io/nvidia/k8s-device-plugin:v0.20.1
+          image: nvcr.io/nvidia/k8s-device-plugin:v0.20.2
           name: mps-control-daemon-sidecar
           volumeMounts:
             - mountPath: /available-configs
@@ -1777,7 +1777,7 @@ spec:
               value: all
             - name: NVIDIA_DRIVER_CAPABILITIES
               value: compute,utility
-          image: nvcr.io/nvidia/k8s-device-plugin:v0.20.1
+          image: nvcr.io/nvidia/k8s-device-plugin:v0.20.2
           imagePullPolicy: IfNotPresent
           name: mps-control-daemon-ctr
           securityContext:
@@ -1796,7 +1796,7 @@ spec:
         - command:
             - mps-control-daemon
             - mount-shm
-          image: nvcr.io/nvidia/k8s-device-plugin:v0.20.1
+          image: nvcr.io/nvidia/k8s-device-plugin:v0.20.2
           name: mps-control-daemon-mounts
           securityContext:
             privileged: true
@@ -1831,7 +1831,7 @@ spec:
               value: ""
             - name: PROCESS_TO_SIGNAL
               value: ""
-          image: nvcr.io/nvidia/k8s-device-plugin:v0.20.1
+          image: nvcr.io/nvidia/k8s-device-plugin:v0.20.2
           name: mps-control-daemon-init
           volumeMounts:
             - mountPath: /available-configs

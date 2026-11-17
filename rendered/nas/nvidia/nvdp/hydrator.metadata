@@ -1,6 +1,6 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "e7d89c4e883b369a87e7ed0b9f53a33131d92d5f",
+  "drySha": "0a66b56970b329fa845d77122362653d7e17b086",
   "commands": [
     "kustomize build ./argocd/apps/nvidia/nvdp/overlays/nas --enable-helm --load-restrictor LoadRestrictionsNone"
   ]
