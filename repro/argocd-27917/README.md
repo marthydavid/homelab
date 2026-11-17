@@ -81,6 +81,13 @@ What it does not show:
   t+1s on v3.6.1 while it is still `OutOfSync` with its sync `Running` and its Deployment only due in a
   later wave, which is what skipping `Live == nil` resources in `setApplicationHealth` would produce), but
   nothing here instruments the controller. Reading `controller/health.go` at v3.6.1 shows the unconditional skip.
+* That `mixed-live` also holds on a stock v3.3.9. Reading `controller/health.go` at v3.3.9, a `Missing`
+  resource is only aggregated when the kind has an `argocd-cm` health override or a Go-coded check
+  (`GetHealthCheckFunc`: Deployment, StatefulSet, Job, Service, ... , no CRs). Upstream ships a built-in Lua
+  check for `operators.coreos.com/Subscription`, but that counts as neither. So the control holds in
+  `mixed-live` because of the custom `Subscription` override in `argocd/values.yaml` (the third ingredient
+  in the issue comment); without it v3.3.9 would skip the missing Subscription too. `slow-workload` does not
+  depend on this, its Deployment has a Go-coded check. Read from source, not tested.
 * Anything about v3.4.2 (the reported version), the versions in between, or the fix in #28066. An image
   built from that PR can be dropped into a third instance to test it.
 * That the chart is the culprit: the two charts differ in more than the image tag. The values are shared, the
