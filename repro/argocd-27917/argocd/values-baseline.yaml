@@ -1,0 +1,4 @@
+# Extra values for every instance except the one that owns the CRDs (see CRD_OWNER in
+# scripts/lib.sh). CRDs are cluster scoped, so only one release may install them.
+crds:
+  install: false

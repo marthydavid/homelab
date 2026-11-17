@@ -1,0 +1,38 @@
+# Values shared by every Argo CD instance in the vcluster. Kept close to chart defaults on
+# purpose: the reported setup is a plain argo-helm install with one application-controller
+# replica, no sharding and no HA.
+#
+# Only trimmed down: dex, notifications and the ApplicationSet controller are not needed for
+# an app-of-apps repro and just cost memory on a shared cluster.
+global:
+  domain: argocd-27917.invalid
+
+dex:
+  enabled: false
+notifications:
+  enabled: false
+applicationSet:
+  enabled: false
+redis-ha:
+  enabled: false
+
+controller:
+  replicas: 1
+
+configs:
+  params:
+    server.insecure: true
+  cm:
+    # Registered health override for a CR whose CRD is missing in the vcluster. This is the third
+    # ingredient of the "mixed-live" scenario: argo-cd v3.3.9 only skipped a Missing resource
+    # when its kind had neither an override nor a built-in health check, v3.4+ skips it always.
+    resource.customizations.health.operators.coreos.com_Subscription: |
+      hs = {}
+      if obj.status ~= nil and obj.status.state == "AtLatestKnown" then
+        hs.status = "Healthy"
+        hs.message = "subscription is at the latest known version"
+      else
+        hs.status = "Progressing"
+        hs.message = "waiting for the subscription to resolve"
+      end
+      return hs

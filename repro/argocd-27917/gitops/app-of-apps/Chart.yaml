@@ -1,0 +1,4 @@
+apiVersion: v2
+name: app-of-apps
+description: Renders the child Applications (with sync-wave annotations) of one argo-cd#27917 scenario
+version: 0.1.0

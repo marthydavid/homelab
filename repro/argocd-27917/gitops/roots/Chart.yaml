@@ -1,0 +1,4 @@
+apiVersion: v2
+name: roots
+description: Parent (app-of-apps root) Applications for one Argo CD instance of the argo-cd#27917 repro
+version: 0.1.0

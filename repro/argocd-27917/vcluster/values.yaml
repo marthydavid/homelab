@@ -1,0 +1,39 @@
+# vcluster that hosts the argo-cd#27917 reproduction on metal1 (OKD).
+#
+# Why a vcluster: it has its own API server, etcd, CRDs and RBAC. Nothing created inside it
+# (Argo CD CRDs, Applications, the fake operator CRs) is visible to metal1 or to an
+# OpenShift GitOps / Argo CD operator, and that operator cannot reconcile it. Only pods,
+# services, configmaps and secrets are synced down into the host namespace.
+#
+# OpenShift: the host SCC (restricted-v2) assigns UIDs from the namespace range, so no fixed
+# runAsUser/runAsGroup may be set on anything that gets scheduled in the host namespace.
+controlPlane:
+  distro:
+    k8s:
+      enabled: true
+  statefulSet:
+    resources:
+      limits:
+        ephemeral-storage: 5Gi
+        memory: 2Gi
+      requests:
+        ephemeral-storage: 500Mi
+        cpu: 200m
+        memory: 512Mi
+    security:
+      containerSecurityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop: [ALL]
+        # chart default is runAsUser/runAsGroup: 0, which restricted-v2 rejects
+        runAsUser: null
+        runAsGroup: null
+    persistence:
+      volumeClaim:
+        enabled: true
+        size: 5Gi
+        storageClass: lvms-vg1
+        # delete the PVC together with the StatefulSet when the vcluster is removed
+        retentionPolicy: Delete
+telemetry:
+  enabled: false

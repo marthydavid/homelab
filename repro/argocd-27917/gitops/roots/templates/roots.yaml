@@ -1,0 +1,33 @@
+{{- range .Values.scenarios }}
+---
+# Parent Application of scenario {{ . }}. It renders the child Applications through Helm
+# (gitops/app-of-apps), which is the pattern from the issue.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: root-{{ . }}
+  namespace: argocd-{{ $.Values.instance }}
+  labels:
+    repro.homelab/scenario: {{ . }}
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: {{ $.Values.repoURL }}
+    targetRevision: {{ $.Values.targetRevision }}
+    path: repro/argocd-27917/gitops/app-of-apps
+    helm:
+      valuesObject:
+        instance: {{ $.Values.instance }}
+        scenario: {{ . }}
+        repoURL: {{ $.Values.repoURL }}
+        targetRevision: {{ $.Values.targetRevision }}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd-{{ $.Values.instance }}
+  # Manual sync: scripts/run-scenario.sh triggers it, like "Trigger a sync on the parent" in the issue.
+  syncPolicy:
+    syncOptions:
+      - ServerSideApply=true
+{{- end }}

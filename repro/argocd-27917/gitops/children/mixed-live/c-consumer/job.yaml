@@ -1,0 +1,27 @@
+# Must only run after the operator child is really done. Its start time is the evidence.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: consumer
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: consumer
+          image: docker.io/library/busybox:1.37.0
+          command: [sh, -c, 'echo "consumer started at $(date -u +%FT%TZ), the operator was supposed to be installed"']
+          resources:
+            requests:
+              cpu: 5m
+              memory: 8Mi
+            limits:
+              memory: 64Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault

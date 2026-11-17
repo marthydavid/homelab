@@ -1,0 +1,38 @@
+{{- $ns := printf "argocd-%s" .Values.instance }}
+{{- range (index .Values.scenarios .Values.scenario) }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ $.Values.scenario }}-{{ .name }}
+  namespace: {{ $ns }}
+  labels:
+    repro.homelab/scenario: {{ $.Values.scenario }}
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ .wave | quote }}
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: {{ $.Values.repoURL }}
+    targetRevision: {{ $.Values.targetRevision }}
+    path: {{ $.Values.childrenPath }}/{{ $.Values.scenario }}/{{ .name }}
+  destination:
+    server: https://kubernetes.default.svc
+    # one namespace per instance and scenario, so the instances never fight over objects
+    namespace: repro-{{ $.Values.instance }}-{{ $.Values.scenario }}
+  # Same child policy as the report: selfHeal and a long retry limit.
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    retry:
+      limit: 100
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+    syncOptions:
+      - CreateNamespace=true
+{{- end }}
