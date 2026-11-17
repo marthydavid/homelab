@@ -12,12 +12,20 @@ dex:
 notifications:
   enabled: false
 applicationSet:
-  enabled: false
+  # no `enabled` key in this chart, the controller is switched off by scaling it to zero
+  replicas: 0
 redis-ha:
   enabled: false
 
 controller:
   replicas: 1
+
+redis:
+  # The chart pins runAsUser: 999 on the redis pod. The vcluster syncs it to metal1, where the
+  # restricted-v2 SCC only allows the namespace's UID range, so the pod is rejected. null drops
+  # the key and lets the SCC assign the UID (the other components do not pin one).
+  securityContext:
+    runAsUser: null
 
 configs:
   params:

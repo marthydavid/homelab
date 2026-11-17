@@ -15,7 +15,12 @@ else
   echo $! >"$PIDFILE"
 fi
 
-# vcluster stores the admin kubeconfig of the virtual cluster in the secret vc-<name>
+# vcluster stores the admin kubeconfig of the virtual cluster in the secret vc-<name>; it only
+# appears once the control plane is up, which can be after `helm install --wait` returned
+for _ in $(seq 1 90); do
+  host_kubectl -n "$HOST_NS" get secret "vc-$VC_NAME" >/dev/null 2>&1 && break
+  sleep 2
+done
 host_kubectl -n "$HOST_NS" get secret "vc-$VC_NAME" -o jsonpath='{.data.config}' | base64 -d \
   | sed -E "s#server: .*#server: https://127.0.0.1:${VC_LOCAL_PORT}#" >"$VC_KUBECONFIG"
 chmod 600 "$VC_KUBECONFIG"
