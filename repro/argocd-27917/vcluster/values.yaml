@@ -35,5 +35,13 @@ controlPlane:
         storageClass: lvms-vg1
         # delete the PVC together with the StatefulSet when the vcluster is removed
         retentionPolicy: Delete
+rbac:
+  # The chart creates a ClusterRole (read PersistentVolumes, write VolumeSnapshotContents) when it
+  # is left on auto. Nothing here uses PVs or snapshots, so keep the footprint on the host to the
+  # namespaced Role.
+  clusterRole:
+    enabled: false
+  enableVolumeSnapshotRules:
+    enabled: false
 telemetry:
   enabled: false

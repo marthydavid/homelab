@@ -6,7 +6,9 @@ happens to exist), so "the higher wave was never created" is a result too: it is
 correctly holding gate looks like.
 
 For every child of wave N+1 the question is: when it first showed up, were all children of the
-lower waves already Healthy?
+lower waves already Synced *and* Healthy? The issue states the expectation as "must not start
+until the lower-wave child is Synced". Health alone is not enough: the bug is precisely a child
+that reports Healthy while one of its resources failed to apply (sync stays OutOfSync).
 
 Exit codes: 0 gate held, 3 gate released early (the bug), 2 inconclusive (see the reason printed).
 """
@@ -60,6 +62,11 @@ def snapshot(kubeconfig, namespace, scenario):
             "resource_ns": sorted({r.get("namespace") for r in status.get("resources", []) if r.get("namespace")}),
         }
     return apps
+
+
+def settled(app):
+    """What a wave gate should require of a lower-wave child."""
+    return app is not None and app["health"] == "Healthy" and app["sync"] == "Synced"
 
 
 def state_key(app):
@@ -157,19 +164,19 @@ def main():
         lower = [n for n, w in expected if w < wave]
         if name in first_seen:
             offset, sample = first_seen[name]
-            bad = [(n, sample.get(n)) for n in lower if sample.get(n) is None or sample[n]["health"] != "Healthy"]
+            bad = [(n, sample.get(n)) for n in lower if not settled(sample.get(n))]
             print(f"{name} (wave {wave}) first seen at t+{offset:.0f}s")
             for n, a in bad:
                 state = "did not exist yet" if a is None else f"sync={a['sync']} health={a['health']} op={a['op']}"
                 print(f"  EARLY RELEASE: {n} (wave {wave_of[n]}) {state}")
                 early.append(name)
         else:
-            unhealthy = [n for n in lower if n not in final or final[n]["health"] != "Healthy"]
+            unhealthy = [n for n in lower if not settled(final.get(n))]
             if unhealthy:
-                print(f"{name} (wave {wave}) was never created, {', '.join(unhealthy)} not Healthy: the gate held")
+                print(f"{name} (wave {wave}) was never created, {', '.join(unhealthy)} not Synced and Healthy: the gate held")
                 held.append(name)
             else:
-                print(f"{name} (wave {wave}) was never created although every lower wave is Healthy")
+                print(f"{name} (wave {wave}) was never created although every lower wave is Synced and Healthy")
                 print("RESULT: inconclusive (the gate is stuck for another reason)")
                 return 2
 

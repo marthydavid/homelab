@@ -13,8 +13,9 @@ for _ in $(seq 1 30); do
   sleep 2
 done
 for app in $(vc_kubectl -n "$ns" get applications -l "repro.homelab/scenario=$scen" -o name 2>/dev/null); do
-  vc_kubectl -n "$ns" patch "$app" --type merge -p '{"metadata":{"finalizers":null}}' >/dev/null || true
-  vc_kubectl -n "$ns" delete "$app" --ignore-not-found --wait=false >/dev/null || true
+  # the app may vanish between the list and these calls (cascade finished), that is fine
+  vc_kubectl -n "$ns" patch "$app" --type merge -p '{"metadata":{"finalizers":null}}' >/dev/null 2>&1 || true
+  vc_kubectl -n "$ns" delete "$app" --ignore-not-found --wait=false >/dev/null 2>&1 || true
 done
 vc_kubectl delete ns "repro-$inst-$scen" --ignore-not-found --wait=true >/dev/null
 echo "reset $inst/$scen"
