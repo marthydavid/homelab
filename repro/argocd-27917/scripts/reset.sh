@@ -5,7 +5,7 @@ source "$(dirname "$0")/lib.sh"
 inst="${1:?instance}" scen="${2:?scenario}"
 ns="argocd-$inst"
 
-vc_kubectl -n "$ns" delete application "root-$scen" --ignore-not-found --wait=false >/dev/null
+vc_kubectl -n "$ns" delete application "root-$inst-$scen" --ignore-not-found --wait=false >/dev/null
 # children carry the resources finalizer, give the cascade a moment, then force whatever is left
 for _ in $(seq 1 30); do
   left=$(vc_kubectl -n "$ns" get applications -l "repro.homelab/scenario=$scen" -o name 2>/dev/null | wc -l)

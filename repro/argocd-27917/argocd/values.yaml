@@ -31,6 +31,24 @@ configs:
   params:
     server.insecure: true
   cm:
+    # Required for sync waves in app-of-apps: Argo CD does not assess the health of child
+    # Applications by default (removed in 1.8, #3781). Without this neither v3.3.9 nor v3.6.1
+    # waits for a child, so the scenarios cannot tell the versions apart. Verbatim from
+    # docs/operator-manual/health.md ("Argocd App"). The wave ordering described in #27917 only
+    # exists with this check, and the root-cause comment there mentions the parent's Lua override.
+    resource.customizations.health.argoproj.io_Application: |
+      hs = {}
+      hs.status = "Progressing"
+      hs.message = ""
+      if obj.status ~= nil then
+        if obj.status.health ~= nil then
+          hs.status = obj.status.health.status
+          if obj.status.health.message ~= nil then
+            hs.message = obj.status.health.message
+          end
+        end
+      end
+      return hs
     # Registered health override for a CR whose CRD is missing in the vcluster. This is the third
     # ingredient of the "mixed-live" scenario: argo-cd v3.3.9 only skipped a Missing resource
     # when its kind had neither an override nor a built-in health check, v3.4+ skips it always.

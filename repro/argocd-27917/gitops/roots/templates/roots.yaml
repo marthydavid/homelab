@@ -5,7 +5,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: root-{{ . }}
+  name: root-{{ $.Values.instance }}-{{ . }}
   namespace: argocd-{{ $.Values.instance }}
   labels:
     repro.homelab/scenario: {{ . }}

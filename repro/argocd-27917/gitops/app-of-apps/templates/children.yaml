@@ -4,7 +4,9 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: {{ $.Values.scenario }}-{{ .name }}
+  # instance-unique: two Argo CDs in one cluster track resources by app *name*, equal names make
+  # them claim and prune each other's resources
+  name: {{ $.Values.instance }}-{{ $.Values.scenario }}-{{ .name }}
   namespace: {{ $ns }}
   labels:
     repro.homelab/scenario: {{ $.Values.scenario }}

@@ -13,9 +13,9 @@ helm template roots "$REPRO_DIR/gitops/roots" --set instance="$inst" --set "scen
   --set repoURL="$GIT_REPO_URL" --set targetRevision="$GIT_REVISION" | vc_kubectl apply -f - >/dev/null
 
 # wait until the controller has picked the Application up, then start the sync
-vc_kubectl -n "$ns" wait --for=jsonpath='{.status.sync.status}' "application/root-$scen" --timeout=120s >/dev/null
-vc_kubectl -n "$ns" patch application "root-$scen" --type merge \
+vc_kubectl -n "$ns" wait --for=jsonpath='{.status.sync.status}' "application/root-$inst-$scen" --timeout=120s >/dev/null
+vc_kubectl -n "$ns" patch application "root-$inst-$scen" --type merge \
   -p '{"operation":{"initiatedBy":{"username":"repro"},"sync":{"syncOptions":["ServerSideApply=true"]}}}' >/dev/null
 
 exec python3 "$(dirname "$0")/observe.py" --kubeconfig "$VC_KUBECONFIG" --namespace "$ns" \
-  --scenario "$scen" --timeout "$timeout"
+  --scenario "$scen" --timeout "$timeout" --chart "$REPRO_DIR/gitops/app-of-apps"
