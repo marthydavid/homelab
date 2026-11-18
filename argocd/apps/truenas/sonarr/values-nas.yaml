@@ -7,7 +7,7 @@ controllers:
       main:
         image:
           repository: ghcr.io/home-operations/sonarr
-          tag: 5.0.0.2941
+          tag: 5.0.0.2997
         env:
           SONARR__INSTANCE_NAME: Sonarr
           SONARR__PORT: 8989
