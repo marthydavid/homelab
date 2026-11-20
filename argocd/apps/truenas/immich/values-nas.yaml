@@ -4,6 +4,9 @@ controllers:
     containers:
       main:
         image:
+          # repository is the chart default, repeated on purpose: Renovate's helm-values manager only
+          # sees an image block that has both repository and tag, so without it the tag is never bumped
+          repository: ghcr.io/immich-app/immich-server
           tag: v3.4.0
         env:
           DB_HOSTNAME:
@@ -82,6 +85,8 @@ machine-learning:
       containers:
         main:
           image:
+            # chart default, repeated so Renovate can see it (see the server image above)
+            repository: ghcr.io/immich-app/immich-machine-learning
             tag: v3.4.0-cuda
           resources:
             requests:
