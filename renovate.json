@@ -73,6 +73,16 @@
       ]
     },
     {
+      "description": "Bump immich server and machine-learning together in one PR: they are released in lockstep and run as one app",
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "/^ghcr\\.io\\/immich-app\\/immich-(server|machine-learning)$/"
+      ],
+      "groupName": "immich"
+    },
+    {
       "description": "Never automerge Vault (image or chart): with nas auto-sync a merge restarts the secrets root for both clusters, so bumps get a PR and a human (issue #2018)",
       "matchDepNames": [
         "hashicorp/vault",
