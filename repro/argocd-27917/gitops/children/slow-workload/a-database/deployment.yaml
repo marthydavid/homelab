@@ -1,0 +1,49 @@
+# Stand-in for the "workload that takes ~30-60s to become Healthy" from the issue: it only
+# starts listening after 45s, so the Deployment is Progressing for that long.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: slow-db
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: slow-db
+  template:
+    metadata:
+      labels:
+        app: slow-db
+    spec:
+      containers:
+        - name: db
+          image: docker.io/library/busybox:1.37.0
+          command:
+            - sh
+            - -c
+            - |
+              echo "slow-db starting at $(date -u +%FT%TZ), listening in 45s"
+              sleep 45
+              mkdir -p /tmp/www && echo ok > /tmp/www/index.html
+              echo "slow-db listening at $(date -u +%FT%TZ)"
+              exec httpd -f -p 8080 -h /tmp/www
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            periodSeconds: 2
+          resources:
+            requests:
+              cpu: 5m
+              memory: 8Mi
+            limits:
+              memory: 64Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault

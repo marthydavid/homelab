@@ -1,0 +1,8 @@
+# Host namespace on metal1 for the vcluster. The label is what scripts/down.sh checks
+# before it deletes anything.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: vcluster-argocd-27917
+  labels:
+    homelab/repro: argocd-27917

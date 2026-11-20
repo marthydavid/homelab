@@ -1,0 +1,12 @@
+# Extra values for the `fixed` instance: chart 10.18.0 (Argo CD v3.6.1) with ONLY the
+# application-controller swapped for the build of v3.6.1 + argoproj/argo-cd#28066
+# (build/buildconfig.yaml, scripts/build-image.sh). Server, repo-server and redis stay stock.
+#
+# The setApplicationHealth predicate lives in the controller, that is the only component the
+# patch changes. The image is controller-only: its embedded UI is a stub.
+controller:
+  image:
+    repository: image-registry.openshift-image-registry.svc:5000/vcluster-argocd-27917/argocd-27917-test
+    tag: v3.6.1-pr28066
+    # the tag is rebuilt in place while iterating
+    imagePullPolicy: Always

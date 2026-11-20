@@ -1,0 +1,64 @@
+# Values shared by every Argo CD instance in the vcluster. Kept close to chart defaults on
+# purpose: the reported setup is a plain argo-helm install with one application-controller
+# replica, no sharding and no HA.
+#
+# Only trimmed down: dex, notifications and the ApplicationSet controller are not needed for
+# an app-of-apps repro and just cost memory on a shared cluster.
+global:
+  domain: argocd-27917.invalid
+
+dex:
+  enabled: false
+notifications:
+  enabled: false
+applicationSet:
+  # no `enabled` key in this chart, the controller is switched off by scaling it to zero
+  replicas: 0
+redis-ha:
+  enabled: false
+
+controller:
+  replicas: 1
+
+redis:
+  # The chart pins runAsUser: 999 on the redis pod. The vcluster syncs it to metal1, where the
+  # restricted-v2 SCC only allows the namespace's UID range, so the pod is rejected. null drops
+  # the key and lets the SCC assign the UID (the other components do not pin one).
+  securityContext:
+    runAsUser: null
+
+configs:
+  params:
+    server.insecure: true
+  cm:
+    # Required for sync waves in app-of-apps: Argo CD does not assess the health of child
+    # Applications by default (removed in 1.8, #3781). Without this neither v3.3.9 nor v3.6.1
+    # waits for a child, so the scenarios cannot tell the versions apart. Verbatim from
+    # docs/operator-manual/health.md ("Argocd App"). The wave ordering described in #27917 only
+    # exists with this check, and the root-cause comment there mentions the parent's Lua override.
+    resource.customizations.health.argoproj.io_Application: |
+      hs = {}
+      hs.status = "Progressing"
+      hs.message = ""
+      if obj.status ~= nil then
+        if obj.status.health ~= nil then
+          hs.status = obj.status.health.status
+          if obj.status.health.message ~= nil then
+            hs.message = obj.status.health.message
+          end
+        end
+      end
+      return hs
+    # Registered health override for a CR whose CRD is missing in the vcluster. This is the third
+    # ingredient of the "mixed-live" scenario: argo-cd v3.3.9 only skipped a Missing resource
+    # when its kind had neither an override nor a built-in health check, v3.4+ skips it always.
+    resource.customizations.health.operators.coreos.com_Subscription: |
+      hs = {}
+      if obj.status ~= nil and obj.status.state == "AtLatestKnown" then
+        hs.status = "Healthy"
+        hs.message = "subscription is at the latest known version"
+      else
+        hs.status = "Progressing"
+        hs.message = "waiting for the subscription to resolve"
+      end
+      return hs

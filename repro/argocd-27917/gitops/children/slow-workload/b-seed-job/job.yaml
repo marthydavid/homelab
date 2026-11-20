@@ -1,0 +1,40 @@
+# The "DB seeding Job" from the issue. It fails when it runs before slow-db is serving, so a
+# gate that opens too early shows up as a failed Job, not only as a timestamp.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: seed-db
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: seed
+          image: docker.io/library/busybox:1.37.0
+          command:
+            - sh
+            - -c
+            - |
+              echo "seed job started at $(date -u +%FT%TZ)"
+              if wget -q -T 3 -O /dev/null http://slow-db:8080/; then
+                echo "seeded the database at $(date -u +%FT%TZ)"
+              else
+                echo "FAILED: slow-db is not serving, the seed job ran before its dependency was ready"
+                exit 1
+              fi
+          resources:
+            requests:
+              cpu: 5m
+              memory: 8Mi
+            limits:
+              memory: 64Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault

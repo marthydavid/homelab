@@ -1,0 +1,15 @@
+# The "broken half": an OLM Subscription in a cluster (the vcluster) that has no OLM CRDs.
+# SkipDryRunOnMissingResource lets the sync get to the Job first, the apply itself then fails
+# and the resource stays Live == nil. argocd-cm registers a health override for this kind.
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: fake-operator
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  channel: stable
+  name: fake-operator
+  source: community-operators
+  sourceNamespace: openshift-marketplace
