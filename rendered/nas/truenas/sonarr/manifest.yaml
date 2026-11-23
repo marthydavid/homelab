@@ -78,7 +78,7 @@ spec:
               value: info
             - name: SONARR__PORT
               value: "8989"
-          image: ghcr.io/home-operations/sonarr:5.0.0.2997
+          image: ghcr.io/home-operations/sonarr:5.0.0.3041
           livenessProbe:
             failureThreshold: 3
             initialDelaySeconds: 0

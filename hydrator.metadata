@@ -1,8 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "400cca404e95759617a549c4201f7b38ee884d12",
+  "drySha": "efe06249e339c96f502f6967df79993dca13faab",
   "author": "renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>",
-  "date": "2026-11-20T06:41:23Z",
-  "subject": "chore(deps): update immich to v3.4.2 (#2054)",
+  "date": "2026-11-23T00:43:44Z",
+  "subject": "chore(deps): update ghcr.io/home-operations/sonarr docker tag to v5.0.0.3041 (#2057)",
   "body": "Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>\n"
 }
