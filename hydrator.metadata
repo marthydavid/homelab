@@ -1,8 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "efe06249e339c96f502f6967df79993dca13faab",
+  "drySha": "f0a35d80d31522a08ccb396eda22ca92d4bd017a",
   "author": "renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>",
-  "date": "2026-11-23T00:43:44Z",
-  "subject": "chore(deps): update ghcr.io/home-operations/sonarr docker tag to v5.0.0.3041 (#2057)",
+  "date": "2026-11-23T04:43:50Z",
+  "subject": "chore(deps): update helm release reloader to 2.2.21 (#2058)",
   "body": "Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>\n"
 }
