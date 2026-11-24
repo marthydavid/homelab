@@ -9,8 +9,11 @@ This is the repo for my homelab
 |----|----|----|
 | Mikrotik [hAP AX^3](https://mikrotik.com/product/hap_ax3) | Router, BGP, VLAN | Main router for BP |
 | Mikrotik [hAP AC^2](https://mikrotik.com/product/hap_ac2) | Router, BGP, VLAN | Main router for Family |
-| Mikrotik [cAP AC](https://mikrotik.com/product/cap_ac) | Wifi CAP | AP |
+| Mikrotik [wAP ax](https://mikrotik.com/product/wap_ax) x2 | Wifi CAP | AP (living room, corridor) |
+| Mikrotik [hAP AC^3](https://mikrotik.com/product/hap_ac3) | Wifi | AP (garage) |
 | Mikrotik [CRS354-48G-4S+2Q+RM](https://mikrotik.com/product/crs354_48g_4splus2qplusrm) | VLAN, LACP, Routing | Main switch for servers, routing for homelab |
+| TP-Link JetStream switch | Switch | Rack |
+| TP-Link switch | PoE | PoE switch |
 | TP-Link [T1600G-28TS](https://www.tp-link.com/business-networking/smart-switch/t1600g-28ts) | Spare| Spare|
 
 ## Compute
@@ -49,7 +52,6 @@ This is the repo for my homelab
 
 | Type | Functions | Usage |
 |----|----|----|
-| Mikrotik [hAP AC^3](https://mikrotik.com/product/hap_ac3) | Router, BGP, VLAN | - |
 | Mikrotik [hAP AC^2](https://mikrotik.com/product/hap_ac2) | Router, BGP, VLAN | - |
 | TP-Link [SG-108PE](https://www.tp-link.com/hu/business-networking/easy-smart-switch/tl-sg108pe/) | PoE for RPis | Switch for RPis |
 | TP-Link [SG-108E](https://www.tp-link.com/hu/business-networking/easy-smart-switch/tl-sg108pe/) | - | - |
@@ -129,3 +131,5 @@ Everything is deployed with [ArgoCD](https://argo-cd.readthedocs.io) from `argoc
 | 11 | PCS | HomeLab Servers | 192.168.13.0/24 |
 | - | PCS | Primary Metallb Pool | 192.168.21.0/24 |
 | - | ZT | ZT Net | 192.168.192.0/24 |
+
+The servers (SM1-SM5) connect to the CRS354 through 802.3ad (LACP) bonds. The CRS354 also serves a separate VLAN for the okd-pve Proxmox host.
