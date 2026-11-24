@@ -12,9 +12,8 @@ This is the repo for my homelab
 | Mikrotik [wAP ax](https://mikrotik.com/product/wap_ax) x2 | Wifi CAP | AP (living room, corridor) |
 | Mikrotik [hAP AC^3](https://mikrotik.com/product/hap_ac3) | Wifi | AP (garage) |
 | Mikrotik [CRS354-48G-4S+2Q+RM](https://mikrotik.com/product/crs354_48g_4splus2qplusrm) | VLAN, LACP, Routing | Main switch for servers, routing for homelab |
-| TP-Link JetStream switch | Switch | Rack |
-| TP-Link switch | PoE | PoE switch |
-| TP-Link [T1600G-28TS](https://www.tp-link.com/business-networking/smart-switch/t1600g-28ts) | Spare| Spare|
+| TP-Link [T1600G-28TS](https://www.tp-link.com/business-networking/smart-switch/t1600g-28ts) | JetStream switch | Rack |
+| TP-Link [SG-108PE](https://www.tp-link.com/hu/business-networking/easy-smart-switch/tl-sg108pe/) | PoE | PoE switch |
 
 ## Compute
 
@@ -53,7 +52,6 @@ This is the repo for my homelab
 | Type | Functions | Usage |
 |----|----|----|
 | Mikrotik [hAP AC^2](https://mikrotik.com/product/hap_ac2) | Router, BGP, VLAN | - |
-| TP-Link [SG-108PE](https://www.tp-link.com/hu/business-networking/easy-smart-switch/tl-sg108pe/) | PoE for RPis | Switch for RPis |
 | TP-Link [SG-108E](https://www.tp-link.com/hu/business-networking/easy-smart-switch/tl-sg108pe/) | - | - |
 
 ## UPS
