@@ -1,8 +1,7 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "607d9785ba9d67a69a0f48d3ac9aa23d0ca7d668",
+  "drySha": "10124cafe8ac5371ce30454f637b8336a907c174",
   "author": "renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>",
-  "date": "2026-11-24T03:41:20Z",
-  "subject": "chore(deps): update ghcr.io/home-operations/radarr docker tag to v7.1.0.10948 (#2061)",
-  "body": "Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>\n"
+  "date": "2026-11-21T22:34:20Z",
+  "subject": "chore(deps): update helm release prometheus-blackbox-exporter to 11.22.0"
 }
