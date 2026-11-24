@@ -1,8 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "f0a35d80d31522a08ccb396eda22ca92d4bd017a",
+  "drySha": "607d9785ba9d67a69a0f48d3ac9aa23d0ca7d668",
   "author": "renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>",
-  "date": "2026-11-23T04:43:50Z",
-  "subject": "chore(deps): update helm release reloader to 2.2.21 (#2058)",
+  "date": "2026-11-24T03:41:20Z",
+  "subject": "chore(deps): update ghcr.io/home-operations/radarr docker tag to v7.1.0.10948 (#2061)",
   "body": "Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>\n"
 }
