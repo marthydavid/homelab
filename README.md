@@ -125,9 +125,6 @@ Everything is deployed with [ArgoCD](https://argo-cd.readthedocs.io) from `argoc
 | 11 | GDL | HomeLab Servers | 192.168.11.0/24 |
 | - | GDL | Primary Metallb Pool | 192.168.20.0/24 |
 | 0 | PCS | Everyday use | 192.168.1.0/24 |
-| 10 | PCS | HomeLab ILO | 192.168.11.0/24 |
-| 11 | PCS | HomeLab Servers | 192.168.13.0/24 |
-| - | PCS | Primary Metallb Pool | 192.168.21.0/24 |
 | - | ZT | ZT Net | 192.168.192.0/24 |
 
 The servers (SM1-SM5) connect to the CRS354 through 802.3ad (LACP) bonds. The CRS354 also serves a separate VLAN for the okd-pve Proxmox host.
