@@ -1,7 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "10124cafe8ac5371ce30454f637b8336a907c174",
+  "drySha": "6e4b488152de6fcb51a91bf34ab4126535aecac3",
   "author": "renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>",
-  "date": "2026-11-21T22:34:20Z",
-  "subject": "chore(deps): update helm release prometheus-blackbox-exporter to 11.22.0"
+  "date": "2026-11-24T22:06:27Z",
+  "subject": "chore(deps): update ghcr.io/home-operations/qbittorrent docker tag to v5.3.1 (#2063)",
+  "body": "Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>\n"
 }
