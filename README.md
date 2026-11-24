@@ -124,7 +124,7 @@ Everything is deployed with [ArgoCD](https://argo-cd.readthedocs.io) from `argoc
 |--------|------|----------|--------|
 | 0 | GDL | Everyday use | 192.168.0.0/24 |
 | 10 | GDL | HomeLab ILO | 192.168.10.0/24 |
-| 11 | GDL | HomeLab Servers | 192.168.12.0/24 |
+| 11 | GDL | HomeLab Servers | 192.168.11.0/24 |
 | - | GDL | Primary Metallb Pool | 192.168.20.0/24 |
 | 0 | PCS | Everyday use | 192.168.1.0/24 |
 | 10 | PCS | HomeLab ILO | 192.168.11.0/24 |
