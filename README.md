@@ -7,7 +7,7 @@ This is the repo for my homelab
 
 | Type | Functions | Usage |
 |----|----|----|
-| Mikrotik [hAP AX^3](https://mikrotik.com/product/hap_ax3) | Router, BGP, VLAN | Main router for BP |
+| Mikrotik [hAP AX^3](https://mikrotik.com/product/hap_ax3) | Router, BGP, VLAN | Main router for GDL |
 | Mikrotik [hAP AC^2](https://mikrotik.com/product/hap_ac2) | Router, BGP, VLAN | Main router for Family |
 | Mikrotik [wAP ax](https://mikrotik.com/product/wap_ax) x2 | Wifi CAP | AP (living room, corridor) |
 | Mikrotik [hAP AC^3](https://mikrotik.com/product/hap_ac3) | Wifi | AP (garage) |
