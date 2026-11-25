@@ -5,6 +5,6 @@ To hydrate the manifests in this repository, run the following commands:
 ```shell
 git clone https://github.com/marthydavid/homelab
 # cd into the cloned directory
-git checkout 801e78b610ca057b008741fa57cd5bb901dcf4c9
+git checkout aebc6f3a862373b781fa85b0171ff388e6fe279d
 kustomize build ./argocd/apps/truenas/plex/overlays/nas --enable-helm --load-restrictor LoadRestrictionsNone
 ```

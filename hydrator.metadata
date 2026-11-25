@@ -1,8 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "6e4b488152de6fcb51a91bf34ab4126535aecac3",
+  "drySha": "aebc6f3a862373b781fa85b0171ff388e6fe279d",
   "author": "renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>",
-  "date": "2026-11-24T22:06:27Z",
-  "subject": "chore(deps): update ghcr.io/home-operations/qbittorrent docker tag to v5.3.1 (#2063)",
-  "body": "Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>\n"
+  "date": "2026-11-25T09:14:12Z",
+  "subject": "fix(truenas): drop NVIDIA GPU dependency from plex and immich",
+  "body": "The Quadro P2000 was removed from sm4. Remove nvidia.com/gpu requests,\nthe nvidia runtimeClass and the GPU node selector, and switch immich\nmachine-learning to the CPU image.\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
 }

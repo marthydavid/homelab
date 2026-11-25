@@ -104,11 +104,9 @@ spec:
           resources:
             limits:
               memory: 10000Mi
-              nvidia.com/gpu: 1
             requests:
               cpu: 100m
               memory: 2000Mi
-              nvidia.com/gpu: 1
           startupProbe:
             failureThreshold: 30
             initialDelaySeconds: 0
@@ -132,9 +130,6 @@ spec:
       hostIPC: false
       hostNetwork: true
       hostPID: false
-      nodeSelector:
-        nvidia.com/gpu.count: "1"
-      runtimeClassName: nvidia
       securityContext:
         fsGroup: 568
         fsGroupChangePolicy: OnRootMismatch

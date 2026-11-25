@@ -174,7 +174,7 @@ spec:
               value: immich-valkey
             - name: TRANSFORMERS_CACHE
               value: /cache
-          image: ghcr.io/immich-app/immich-machine-learning:v3.4.2-cuda
+          image: ghcr.io/immich-app/immich-machine-learning:v3.4.2
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 3
@@ -197,11 +197,6 @@ spec:
             initialDelaySeconds: 0
             periodSeconds: 10
             timeoutSeconds: 1
-          resources:
-            limits:
-              nvidia.com/gpu: 1
-            requests:
-              nvidia.com/gpu: 1
           startupProbe:
             failureThreshold: 60
             httpGet:
@@ -218,7 +213,6 @@ spec:
       hostIPC: false
       hostNetwork: false
       hostPID: false
-      runtimeClassName: nvidia
       serviceAccountName: immich-machine-learning
       volumes:
         - emptyDir: {}
@@ -308,11 +302,6 @@ spec:
             initialDelaySeconds: 0
             periodSeconds: 10
             timeoutSeconds: 1
-          resources:
-            limits:
-              nvidia.com/gpu: 1
-            requests:
-              nvidia.com/gpu: 1
           startupProbe:
             failureThreshold: 30
             httpGet:
@@ -329,7 +318,6 @@ spec:
       hostIPC: false
       hostNetwork: false
       hostPID: false
-      runtimeClassName: nvidia
       serviceAccountName: immich-server
       volumes:
         - name: data
