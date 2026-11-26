@@ -1,0 +1,53 @@
+extraEnvVars:
+# upstream default key for the bundled pipelines service, not a real secret
+- name: OPENAI_API_KEY
+  value: 0p3n-w3bu!
+- name: ENABLE_FORWARD_USER_INFO_HEADERS
+  value: "True"
+ingress:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    external-dns.alpha.kubernetes.io/alias: "true"
+    external-dns.alpha.kubernetes.io/target: pecs.marthy.xyz
+  class: nginx
+  enabled: true
+  host: openwebui.pecs.marthy.xyz
+  tls: true
+ollama:
+  # Scaled to zero while the Quadro P2000 is out of sm4.
+  # Set back to 1 (or remove) when the card is reinstalled.
+  replicaCount: 0
+  ingress:
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      external-dns.alpha.kubernetes.io/alias: "true"
+      external-dns.alpha.kubernetes.io/target: pecs.marthy.xyz
+    className: nginx
+    enabled: true
+    hosts:
+    - host: ollama.pecs.marthy.xyz
+      paths:
+      - path: /
+        pathType: Prefix
+    tls:
+    - hosts:
+      - ollama.pecs.marthy.xyz
+      secretName: ollama-tls
+  ollama:
+    gpu:
+      enabled: true
+      number: 1
+      type: nvidia
+    models:
+      pull:
+      - codegemma:2b
+      - codegemma:7b
+      - codellama:7b
+      - deepseek-coder:6.7b
+  persistentVolume:
+    enabled: true
+    size: 200Gi
+    storageClass: openebs-zfspv
+  runtimeClassName: nvidia
+workload:
+  kind: StatefulSet
