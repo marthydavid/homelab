@@ -1,7 +1,7 @@
 helmCharts:
 - name: open-webui
   repo: https://helm.openwebui.com
-  version: 16.1.0
+  version: 16.6.0
   releaseName: open-webui
   namespace: ollama
   includeCRDs: true
