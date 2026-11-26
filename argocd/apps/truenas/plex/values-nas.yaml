@@ -33,9 +33,11 @@ controllers:
               failureThreshold: 30
         resources:
           requests:
+            nvidia.com/gpu: 1
             cpu: 100m
             memory: 2000Mi
           limits:
+            nvidia.com/gpu: 1
             memory: 10000Mi
       auto-languages:
         image:
@@ -53,8 +55,11 @@ controllers:
 defaultPodOptions:
   annotations:
     kubectl.kubernetes.io/default-container: main
+  runtimeClassName: nvidia
   hostNetwork: true
   dnsPolicy: ClusterFirstWithHostNet
+  nodeSelector:
+    nvidia.com/gpu.count: "1"
   securityContext:
     runAsUser: 568
     runAsGroup: 568
