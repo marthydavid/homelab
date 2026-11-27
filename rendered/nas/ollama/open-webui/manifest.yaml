@@ -1,0 +1,523 @@
+apiVersion: v1
+automountServiceAccountToken: true
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/component: open-webui-ollama
+    app.kubernetes.io/instance: open-webui
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ollama
+    app.kubernetes.io/version: 0.33.2
+    helm.sh/chart: ollama-1.79.0
+  name: open-webui-ollama
+  namespace: ollama
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/component: pipelines
+    app.kubernetes.io/instance: open-webui
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: pipelines
+    app.kubernetes.io/version: alpha
+    helm.sh/chart: pipelines-0.12.2
+  name: open-webui-pipelines
+  namespace: ollama
+---
+apiVersion: v1
+automountServiceAccountToken: false
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/component: open-webui
+    app.kubernetes.io/instance: open-webui
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: open-webui
+    app.kubernetes.io/version: 0.13.5
+    helm.sh/chart: open-webui-18.5.0
+  name: open-webui-sa
+  namespace: ollama
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: open-webui
+    app.kubernetes.io/instance: open-webui
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: open-webui
+    app.kubernetes.io/version: 0.13.5
+    helm.sh/chart: open-webui-18.5.0
+  name: open-webui
+  namespace: ollama
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: http
+  selector:
+    app.kubernetes.io/component: open-webui
+    app.kubernetes.io/instance: open-webui
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: open-webui-ollama
+    app.kubernetes.io/instance: open-webui
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ollama
+    app.kubernetes.io/version: 0.33.2
+    helm.sh/chart: ollama-1.79.0
+  name: open-webui-ollama
+  namespace: ollama
+spec:
+  ports:
+    - name: http
+      port: 11434
+      protocol: TCP
+      targetPort: http
+  selector:
+    app.kubernetes.io/component: open-webui-ollama
+    app.kubernetes.io/instance: open-webui
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: pipelines
+    app.kubernetes.io/instance: open-webui
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: pipelines
+    app.kubernetes.io/version: alpha
+    helm.sh/chart: pipelines-0.12.2
+  name: open-webui-pipelines
+  namespace: ollama
+spec:
+  ports:
+    - name: http
+      port: 9099
+      protocol: TCP
+      targetPort: http
+  selector:
+    app.kubernetes.io/component: pipelines
+    app.kubernetes.io/instance: open-webui
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: open-webui-redis
+    app.kubernetes.io/instance: open-webui
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: open-webui
+    app.kubernetes.io/version: 0.13.5
+    helm.sh/chart: open-webui-18.5.0
+  name: open-webui-redis
+  namespace: ollama
+spec:
+  ports:
+    - name: http
+      port: 6379
+      protocol: TCP
+      targetPort: http
+  selector:
+    app.kubernetes.io/component: open-webui-redis
+    app.kubernetes.io/instance: open-webui
+  type: ClusterIP
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app.kubernetes.io/component: open-webui
+    app.kubernetes.io/instance: open-webui
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: open-webui
+    app.kubernetes.io/version: 0.13.5
+    helm.sh/chart: open-webui-18.5.0
+  name: open-webui
+  namespace: ollama
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app.kubernetes.io/component: open-webui-ollama
+    app.kubernetes.io/instance: open-webui
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ollama
+    app.kubernetes.io/version: 0.33.2
+    helm.sh/chart: ollama-1.79.0
+  name: open-webui-ollama
+  namespace: ollama
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 200Gi
+  storageClassName: openebs-zfspv
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app.kubernetes.io/component: pipelines
+    app.kubernetes.io/instance: open-webui
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: pipelines
+    app.kubernetes.io/version: alpha
+    helm.sh/chart: pipelines-0.12.2
+  name: open-webui-pipelines
+  namespace: ollama
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: open-webui-ollama
+    app.kubernetes.io/instance: open-webui
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ollama
+    app.kubernetes.io/version: 0.33.2
+    helm.sh/chart: ollama-1.79.0
+  name: open-webui-ollama
+  namespace: ollama
+spec:
+  replicas: 0
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: open-webui-ollama
+      app.kubernetes.io/instance: open-webui
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: open-webui-ollama
+        app.kubernetes.io/instance: open-webui
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: ollama
+        app.kubernetes.io/version: 0.33.2
+        helm.sh/chart: ollama-1.79.0
+    spec:
+      containers:
+        - args: null
+          env:
+            - name: OLLAMA_HOST
+              value: 0.0.0.0:11434
+            - name: PATH
+              value: /usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          envFrom: null
+          image: ollama/ollama:0.33.2
+          imagePullPolicy: IfNotPresent
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - |
+                    while ! /bin/ollama ps > /dev/null 2>&1; do
+                      sleep 5
+                    done
+
+                    /bin/ollama pull  codegemma:2b
+
+                    /bin/ollama pull  codegemma:7b
+
+                    /bin/ollama pull  codellama:7b
+
+                    /bin/ollama pull  deepseek-coder:6.7b
+          livenessProbe:
+            failureThreshold: 6
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: ollama
+          ports:
+            - containerPort: 11434
+              name: http
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 6
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 3
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+            requests: {}
+          securityContext: {}
+          volumeMounts:
+            - mountPath: /root/.ollama
+              name: ollama-data
+      runtimeClassName: nvidia
+      securityContext: {}
+      serviceAccountName: open-webui-ollama
+      terminationGracePeriodSeconds: 120
+      tolerations:
+        - effect: NoSchedule
+          key: nvidia.com/gpu
+          operator: Exists
+      volumes:
+        - name: ollama-data
+          persistentVolumeClaim:
+            claimName: open-webui-ollama
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: pipelines
+    app.kubernetes.io/instance: open-webui
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: pipelines
+    app.kubernetes.io/version: alpha
+    helm.sh/chart: pipelines-0.12.2
+  name: open-webui-pipelines
+  namespace: ollama
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: pipelines
+      app.kubernetes.io/instance: open-webui
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: pipelines
+        app.kubernetes.io/instance: open-webui
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: pipelines
+        app.kubernetes.io/version: alpha
+        helm.sh/chart: pipelines-0.12.2
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - env: null
+          image: ghcr.io/open-webui/pipelines:main
+          imagePullPolicy: Always
+          name: pipelines
+          ports:
+            - containerPort: 9099
+              name: http
+          tty: true
+          volumeMounts:
+            - mountPath: /app/pipelines
+              name: data
+      enableServiceLinks: false
+      serviceAccountName: open-webui-pipelines
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: open-webui-pipelines
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: open-webui-redis
+    app.kubernetes.io/instance: open-webui
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: open-webui
+    app.kubernetes.io/version: 0.13.5
+    helm.sh/chart: open-webui-18.5.0
+  name: open-webui-redis
+  namespace: ollama
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: open-webui-redis
+      app.kubernetes.io/instance: open-webui
+  template:
+    metadata:
+      annotations: null
+      labels:
+        app.kubernetes.io/component: open-webui-redis
+        app.kubernetes.io/instance: open-webui
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: open-webui
+        app.kubernetes.io/version: 0.13.5
+        helm.sh/chart: open-webui-18.5.0
+    spec:
+      containers:
+        - image: redis:7.4.2-alpine3.21
+          imagePullPolicy: IfNotPresent
+          name: open-webui-redis
+          ports:
+            - containerPort: 6379
+              name: http
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app.kubernetes.io/component: open-webui
+    app.kubernetes.io/instance: open-webui
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: open-webui
+    app.kubernetes.io/version: 0.13.5
+    helm.sh/chart: open-webui-18.5.0
+  name: open-webui
+  namespace: ollama
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: open-webui
+      app.kubernetes.io/instance: open-webui
+  serviceName: open-webui
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: open-webui
+        app.kubernetes.io/instance: open-webui
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: open-webui
+        app.kubernetes.io/version: 0.13.5
+        helm.sh/chart: open-webui-18.5.0
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - env:
+            - name: WEBUI_URL
+              value: https://openwebui.pecs.marthy.xyz
+            - name: OLLAMA_BASE_URLS
+              value: http://open-webui-ollama.ollama.svc.cluster.local:11434
+            - name: OPENAI_API_BASE_URLS
+              value: http://open-webui-pipelines.ollama.svc.cluster.local:9099;https://api.openai.com/v1
+            - name: ENABLE_WEBSOCKET_SUPPORT
+              value: "True"
+            - name: WEBSOCKET_MANAGER
+              value: redis
+            - name: REDIS_URL
+              value: redis://open-webui-redis.ollama.svc.cluster.local:6379/0
+            - name: WEBSOCKET_REDIS_URL
+              value: redis://open-webui-redis.ollama.svc.cluster.local:6379/0
+            - name: OPENAI_API_KEY
+              value: 0p3n-w3bu!
+            - name: ENABLE_FORWARD_USER_INFO_HEADERS
+              value: "True"
+          image: ghcr.io/open-webui/open-webui:0.13.5
+          imagePullPolicy: IfNotPresent
+          name: open-webui
+          ports:
+            - containerPort: 8080
+              name: http
+          tty: true
+          volumeMounts:
+            - mountPath: /app/backend/data
+              name: data
+      enableServiceLinks: false
+      initContainers:
+        - command:
+            - sh
+            - -c
+            - cp -R -n /app/backend/data/* /tmp/app-data/
+          image: ghcr.io/open-webui/open-webui:0.13.5
+          imagePullPolicy: IfNotPresent
+          name: copy-app-data
+          volumeMounts:
+            - mountPath: /tmp/app-data
+              name: data
+      serviceAccountName: open-webui-sa
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: open-webui
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    external-dns.alpha.kubernetes.io/alias: "true"
+    external-dns.alpha.kubernetes.io/target: pecs.marthy.xyz
+  labels:
+    app.kubernetes.io/component: open-webui
+    app.kubernetes.io/instance: open-webui
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: open-webui
+    app.kubernetes.io/version: 0.13.5
+    helm.sh/chart: open-webui-18.5.0
+  name: open-webui
+  namespace: ollama
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: openwebui.pecs.marthy.xyz
+      http:
+        paths:
+          - backend:
+              service:
+                name: open-webui
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - openwebui.pecs.marthy.xyz
+      secretName: open-webui-tls
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    external-dns.alpha.kubernetes.io/alias: "true"
+    external-dns.alpha.kubernetes.io/target: pecs.marthy.xyz
+  labels:
+    app.kubernetes.io/component: open-webui-ollama
+    app.kubernetes.io/instance: open-webui
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ollama
+    app.kubernetes.io/version: 0.33.2
+    helm.sh/chart: ollama-1.79.0
+  name: open-webui-ollama
+  namespace: ollama
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: ollama.pecs.marthy.xyz
+      http:
+        paths:
+          - backend:
+              service:
+                name: open-webui-ollama
+                port:
+                  number: 11434
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - ollama.pecs.marthy.xyz
+      secretName: ollama-tls

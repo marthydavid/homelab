@@ -1,8 +1,7 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "aebc6f3a862373b781fa85b0171ff388e6fe279d",
+  "drySha": "4919c52833a3c104b8dd8b41374a3e4ab42caad4",
   "author": "renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>",
-  "date": "2026-11-25T09:14:12Z",
-  "subject": "fix(truenas): drop NVIDIA GPU dependency from plex and immich",
-  "body": "The Quadro P2000 was removed from sm4. Remove nvidia.com/gpu requests,\nthe nvidia runtimeClass and the GPU node selector, and switch immich\nmachine-learning to the CPU image.\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
+  "date": "2026-11-25T11:22:48Z",
+  "subject": "chore(deps): update helm release argo-cd to 10.20.0"
 }
