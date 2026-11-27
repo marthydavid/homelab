@@ -1,7 +1,7 @@
 helmCharts:
 - name: nexus3
   repo: https://stevehipwell.github.io/helm-charts/
-  version: 5.19.0
+  version: 5.27.0
   releaseName: nexus3
   namespace: nexus
   valuesFile: ../../values.yaml
