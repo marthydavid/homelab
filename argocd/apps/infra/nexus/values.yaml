@@ -1,0 +1,184 @@
+# Nexus (ns nexus, cluster nas/sm4), deployed by ArgoCD through overlays/nas (Source Hydrator).
+# Chart: stevehipwell/nexus3 (https://stevehipwell.github.io/helm-charts/), version in the overlay.
+# Admin password: Secret nexus3-root (key password). Source of truth should be Vault secret/nexus
+# property admin-password; see nexus-root-externalsecret.yaml (not rendered until Vault is seeded).
+persistence:
+  enabled: true
+  storageClass: openebs-zfspv
+  size: 100Gi
+
+rootPassword:
+  secret: nexus3-root
+  key: password
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 3Gi
+  limits:
+    memory: 4Gi
+
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    external-dns.alpha.kubernetes.io/alias: "true"
+    external-dns.alpha.kubernetes.io/target: internal-ing.marthy.xyz
+    # image layers are large and streamed from upstream: no body limit, no buffering, long timeouts
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-buffering: "off"
+    nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "900"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "900"
+  hosts:
+  - nexus.marthy.xyz
+  tls:
+  - hosts:
+    - nexus.marthy.xyz
+    - group.nexus.marthy.xyz
+    - quay-io.nexus.marthy.xyz
+    - docker-io.nexus.marthy.xyz
+    secretName: nexus-tls
+
+service:
+  additionalPorts:
+  - containerPort: 8082
+    hosts:
+    - docker-io.nexus.marthy.xyz
+    name: docker-io
+    port: 8082
+  - containerPort: 8083
+    hosts:
+    - quay-io.nexus.marthy.xyz
+    name: quay-io
+    port: 8083
+  - containerPort: 8084
+    hosts:
+    - group.nexus.marthy.xyz
+    name: group
+    port: 8084
+
+config:
+  enabled: true
+  job:
+    annotations:
+      argocd.argoproj.io/hook: PostSync
+      argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+  anonymous:
+    enabled: true
+  realms:
+    enabled: true
+    values:
+    - NexusAuthenticatingRealm
+    - DockerToken
+  cleanup:
+  - name: docker-stale-30d
+    notes: Remove cached image content not downloaded in 30 days.
+    format: docker
+    mode: delete
+    criteria:
+      lastDownloaded: "2592000"
+  repos:
+  - name: quay-io
+    format: docker
+    type: proxy
+    online: true
+    storage:
+      blobStoreName: default
+      strictContentTypeValidation: true
+    cleanup:
+      policyNames:
+      - docker-stale-30d
+    proxy:
+      remoteUrl: https://quay.io
+      contentMaxAge: 1440
+      metadataMaxAge: 1440
+    negativeCache:
+      enabled: true
+      timeToLive: 1440
+    httpClient:
+      blocked: false
+      autoBlock: true
+    docker:
+      v1Enabled: false
+      forceBasicAuth: false
+      httpPort: 8083
+    dockerProxy:
+      indexType: REGISTRY
+  - name: docker-io
+    format: docker
+    type: proxy
+    online: true
+    storage:
+      blobStoreName: default
+      strictContentTypeValidation: true
+    cleanup:
+      policyNames:
+      - docker-stale-30d
+    proxy:
+      remoteUrl: https://registry-1.docker.io
+      contentMaxAge: 1440
+      metadataMaxAge: 1440
+    negativeCache:
+      enabled: true
+      timeToLive: 1440
+    httpClient:
+      blocked: false
+      autoBlock: true
+    docker:
+      v1Enabled: false
+      forceBasicAuth: false
+      httpPort: 8082
+    dockerProxy:
+      indexType: HUB
+  - name: ghcr-io
+    format: docker
+    type: proxy
+    online: true
+    storage:
+      blobStoreName: default
+      strictContentTypeValidation: true
+    cleanup:
+      policyNames:
+      - docker-stale-30d
+    proxy:
+      remoteUrl: https://ghcr.io
+      contentMaxAge: 1440
+      metadataMaxAge: 1440
+    negativeCache:
+      enabled: true
+      timeToLive: 1440
+    httpClient:
+      blocked: false
+      autoBlock: true
+    docker:
+      v1Enabled: false
+      forceBasicAuth: false
+    dockerProxy:
+      indexType: REGISTRY
+  - name: group
+    format: docker
+    type: group
+    online: true
+    storage:
+      blobStoreName: default
+      strictContentTypeValidation: true
+    group:
+      memberNames:
+      - quay-io
+      - ghcr-io
+      - docker-io
+    docker:
+      v1Enabled: false
+      forceBasicAuth: false
+      httpPort: 8084
+  tasks:
+  - name: Cleanup service
+    typeId: repository.cleanup
+    crontab: "0 0 3 * * ?"
+  - name: Docker cleanup uploads
+    typeId: repository.docker.upload-purge
+    crontab: "0 30 3 * * ?"
+    attributes:
+      age: "24"
