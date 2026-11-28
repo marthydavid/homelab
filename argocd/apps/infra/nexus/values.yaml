@@ -39,6 +39,9 @@ ingress:
     - group.nexus.marthy.xyz
     - quay-io.nexus.marthy.xyz
     - docker-io.nexus.marthy.xyz
+    - ghcr-io.nexus.marthy.xyz
+    - mirror-gcr-io.nexus.marthy.xyz
+    - access-redhat-com.nexus.marthy.xyz
     secretName: nexus-tls
 
 service:
@@ -58,6 +61,21 @@ service:
     - group.nexus.marthy.xyz
     name: group
     port: 8084
+  - containerPort: 8085
+    hosts:
+    - ghcr-io.nexus.marthy.xyz
+    name: ghcr-io
+    port: 8085
+  - containerPort: 8086
+    hosts:
+    - mirror-gcr-io.nexus.marthy.xyz
+    name: mirror-gcr-io
+    port: 8086
+  - containerPort: 8087
+    hosts:
+    - access-redhat-com.nexus.marthy.xyz
+    name: access-redhat-com
+    port: 8087
 
 config:
   enabled: true
@@ -155,6 +173,59 @@ config:
     docker:
       v1Enabled: false
       forceBasicAuth: false
+      httpPort: 8085
+    dockerProxy:
+      indexType: REGISTRY
+  - name: mirror-gcr-io
+    format: docker
+    type: proxy
+    online: true
+    storage:
+      blobStoreName: default
+      strictContentTypeValidation: true
+    cleanup:
+      policyNames:
+      - docker-stale-30d
+    proxy:
+      remoteUrl: https://mirror.gcr.io
+      contentMaxAge: 1440
+      metadataMaxAge: 1440
+    negativeCache:
+      enabled: true
+      timeToLive: 1440
+    httpClient:
+      blocked: false
+      autoBlock: true
+    docker:
+      v1Enabled: false
+      forceBasicAuth: false
+      httpPort: 8086
+    dockerProxy:
+      indexType: REGISTRY
+  - name: access-redhat-com
+    format: docker
+    type: proxy
+    online: true
+    storage:
+      blobStoreName: default
+      strictContentTypeValidation: true
+    cleanup:
+      policyNames:
+      - docker-stale-30d
+    proxy:
+      remoteUrl: https://registry.access.redhat.com
+      contentMaxAge: 1440
+      metadataMaxAge: 1440
+    negativeCache:
+      enabled: true
+      timeToLive: 1440
+    httpClient:
+      blocked: false
+      autoBlock: true
+    docker:
+      v1Enabled: false
+      forceBasicAuth: false
+      httpPort: 8087
     dockerProxy:
       indexType: REGISTRY
   - name: group
