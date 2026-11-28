@@ -1,5 +1,6 @@
 resources:
 - ../../nexus-root-externalsecret.yaml
+- ../../nexus-redhat-proxy.yaml
 helmCharts:
 - name: nexus3
   repo: https://stevehipwell.github.io/helm-charts/
