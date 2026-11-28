@@ -1,7 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "4919c52833a3c104b8dd8b41374a3e4ab42caad4",
-  "author": "renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>",
-  "date": "2026-11-25T11:22:48Z",
-  "subject": "chore(deps): update helm release argo-cd to 10.20.0"
+  "drySha": "6cc844894ce861d6cec8f21b23e0dd1010e5e14f",
+  "author": "David Marthy <marthy.david@gmail.com>",
+  "date": "2026-11-28T16:29:54Z",
+  "subject": "feat(nexus): per-registry docker proxies for the metal1 restricted network",
+  "body": "metal1 pulled ~82 GB from cdn01.quay.io through squid in 26h and also reaches\ndocker.io, ghcr.io, mirror.gcr.io and registry.access.redhat.com directly. Add a\nNexus proxy, connector and ingress host for each of the missing ones\n(ghcr-io gets its own connector, plus mirror-gcr-io and access-redhat-com) so\neach source can be mirrored to its own host: tag pulls cannot be resolved\nunambiguously through a shared group repo.\n\nAdd docs/metal1-restricted-network.md with the mirror sets, squid allowlist and\nthe cutover order.\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
 }

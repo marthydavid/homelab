@@ -25,8 +25,12 @@ data:
   001-task.json: |
     {"attributes":{"age":"24"},"crontab":"0 30 3 * * ?","name":"Docker cleanup uploads","typeId":"repository.docker.upload-purge"}
   002-repo.json: |
-    {"cleanup":{"policyNames":["docker-stale-30d"]},"docker":{"forceBasicAuth":false,"v1Enabled":false},"dockerProxy":{"indexType":"REGISTRY"},"format":"docker","httpClient":{"autoBlock":true,"blocked":false},"name":"ghcr-io","negativeCache":{"enabled":true,"timeToLive":1440},"online":true,"proxy":{"contentMaxAge":1440,"metadataMaxAge":1440,"remoteUrl":"https://ghcr.io"},"storage":{"blobStoreName":"default","strictContentTypeValidation":true},"type":"proxy"}
+    {"cleanup":{"policyNames":["docker-stale-30d"]},"docker":{"forceBasicAuth":false,"httpPort":8085,"v1Enabled":false},"dockerProxy":{"indexType":"REGISTRY"},"format":"docker","httpClient":{"autoBlock":true,"blocked":false},"name":"ghcr-io","negativeCache":{"enabled":true,"timeToLive":1440},"online":true,"proxy":{"contentMaxAge":1440,"metadataMaxAge":1440,"remoteUrl":"https://ghcr.io"},"storage":{"blobStoreName":"default","strictContentTypeValidation":true},"type":"proxy"}
   003-repo.json: |
+    {"cleanup":{"policyNames":["docker-stale-30d"]},"docker":{"forceBasicAuth":false,"httpPort":8086,"v1Enabled":false},"dockerProxy":{"indexType":"REGISTRY"},"format":"docker","httpClient":{"autoBlock":true,"blocked":false},"name":"mirror-gcr-io","negativeCache":{"enabled":true,"timeToLive":1440},"online":true,"proxy":{"contentMaxAge":1440,"metadataMaxAge":1440,"remoteUrl":"https://mirror.gcr.io"},"storage":{"blobStoreName":"default","strictContentTypeValidation":true},"type":"proxy"}
+  004-repo.json: |
+    {"cleanup":{"policyNames":["docker-stale-30d"]},"docker":{"forceBasicAuth":false,"httpPort":8087,"v1Enabled":false},"dockerProxy":{"indexType":"REGISTRY"},"format":"docker","httpClient":{"autoBlock":true,"blocked":false},"name":"access-redhat-com","negativeCache":{"enabled":true,"timeToLive":1440},"online":true,"proxy":{"contentMaxAge":1440,"metadataMaxAge":1440,"remoteUrl":"https://registry.access.redhat.com"},"storage":{"blobStoreName":"default","strictContentTypeValidation":true},"type":"proxy"}
+  005-repo.json: |
     {"docker":{"forceBasicAuth":false,"httpPort":8084,"v1Enabled":false},"format":"docker","group":{"memberNames":["quay-io","ghcr-io","docker-io"]},"name":"group","online":true,"storage":{"blobStoreName":"default","strictContentTypeValidation":true},"type":"group"}
   anonymous-user.json: |
     {"userId":"anonymous","firstName":"Anonymous","lastName":"User","emailAddress":"anonymous@example.org","source":"default","status":"active","roles":["nx-anonymous","nx-metrics"],"externalRoles":[]}
@@ -730,6 +734,18 @@ spec:
       port: 8084
       protocol: TCP
       targetPort: group
+    - name: ghcr-io
+      port: 8085
+      protocol: TCP
+      targetPort: ghcr-io
+    - name: mirror-gcr-io
+      port: 8086
+      protocol: TCP
+      targetPort: mirror-gcr-io
+    - name: access-redhat-com
+      port: 8087
+      protocol: TCP
+      targetPort: access-redhat-com
   selector:
     app.kubernetes.io/component: repository
     app.kubernetes.io/instance: nexus3
@@ -832,6 +848,15 @@ spec:
               protocol: TCP
             - containerPort: 8084
               name: group
+              protocol: TCP
+            - containerPort: 8085
+              name: ghcr-io
+              protocol: TCP
+            - containerPort: 8086
+              name: mirror-gcr-io
+              protocol: TCP
+            - containerPort: 8087
+              name: access-redhat-com
               protocol: TCP
           readinessProbe:
             failureThreshold: 6
@@ -1032,7 +1057,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 77e8106e7379726fd40831cbbb29f9591e8b990e91c82591b4e59124f2687ad1
+        checksum/config: 8391234eaf737b3b73284b07a31bb38caa804993657b71000f2ce1a71eb86be5
         checksum/scripts: 704da2082430e9e69dc46d3e1edf8a82f4347bba481c35c316a2ece09ae5fa7d
       labels:
         app.kubernetes.io/component: config-job
@@ -1158,10 +1183,43 @@ spec:
                   name: group
             path: /
             pathType: Prefix
+    - host: ghcr-io.nexus.marthy.xyz
+      http:
+        paths:
+          - backend:
+              service:
+                name: nexus3
+                port:
+                  name: ghcr-io
+            path: /
+            pathType: Prefix
+    - host: mirror-gcr-io.nexus.marthy.xyz
+      http:
+        paths:
+          - backend:
+              service:
+                name: nexus3
+                port:
+                  name: mirror-gcr-io
+            path: /
+            pathType: Prefix
+    - host: access-redhat-com.nexus.marthy.xyz
+      http:
+        paths:
+          - backend:
+              service:
+                name: nexus3
+                port:
+                  name: access-redhat-com
+            path: /
+            pathType: Prefix
   tls:
     - hosts:
         - nexus.marthy.xyz
         - group.nexus.marthy.xyz
         - quay-io.nexus.marthy.xyz
         - docker-io.nexus.marthy.xyz
+        - ghcr-io.nexus.marthy.xyz
+        - mirror-gcr-io.nexus.marthy.xyz
+        - access-redhat-com.nexus.marthy.xyz
       secretName: nexus-tls
