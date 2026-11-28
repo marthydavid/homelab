@@ -45,6 +45,17 @@ immich:
 
 server:
   enabled: true
+  controllers:
+    main:
+      pod:
+        runtimeClassName: nvidia
+      containers:
+        main:
+          resources:
+            requests:
+              nvidia.com/gpu: 1
+            limits:
+              nvidia.com/gpu: 1
   ingress:
     main:
       enabled: true
@@ -69,9 +80,16 @@ machine-learning:
   enabled: true
   controllers:
     main:
+      pod:
+        runtimeClassName: nvidia
       containers:
         main:
           image:
             # chart default, repeated so Renovate can see it (see the server image above)
             repository: ghcr.io/immich-app/immich-machine-learning
-            tag: v3.4.2
+            tag: v3.4.2-cuda
+          resources:
+            requests:
+              nvidia.com/gpu: 1
+            limits:
+              nvidia.com/gpu: 1
