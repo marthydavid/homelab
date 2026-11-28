@@ -5,6 +5,6 @@ To hydrate the manifests in this repository, run the following commands:
 ```shell
 git clone https://github.com/marthydavid/homelab
 # cd into the cloned directory
-git checkout 6cc844894ce861d6cec8f21b23e0dd1010e5e14f
+git checkout 72fc3b4a651b2f34cc28526489cd307486c7cbff
 kustomize build ./argocd/apps/infra/nexus/overlays/nas --enable-helm --load-restrictor LoadRestrictionsNone
 ```

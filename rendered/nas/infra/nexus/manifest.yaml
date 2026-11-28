@@ -742,10 +742,10 @@ spec:
       port: 8086
       protocol: TCP
       targetPort: mirror-gcr-io
-    - name: access-redhat-com
+    - name: access-rh
       port: 8087
       protocol: TCP
-      targetPort: access-redhat-com
+      targetPort: access-rh
   selector:
     app.kubernetes.io/component: repository
     app.kubernetes.io/instance: nexus3
@@ -856,7 +856,7 @@ spec:
               name: mirror-gcr-io
               protocol: TCP
             - containerPort: 8087
-              name: access-redhat-com
+              name: access-rh
               protocol: TCP
           readinessProbe:
             failureThreshold: 6
@@ -1119,6 +1119,26 @@ spec:
           name: config
   ttlSecondsAfterFinished: 600
 ---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+  name: nexus3-root
+  namespace: nexus
+spec:
+  data:
+    - remoteRef:
+        key: secret/nexus
+        property: admin-password
+      secretKey: password
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: vault-backend
+  target:
+    creationPolicy: Owner
+    name: nexus3-root
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -1210,7 +1230,7 @@ spec:
               service:
                 name: nexus3
                 port:
-                  name: access-redhat-com
+                  name: access-rh
             path: /
             pathType: Prefix
   tls:
