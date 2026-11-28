@@ -1,6 +1,6 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "72fc3b4a651b2f34cc28526489cd307486c7cbff",
+  "drySha": "f8e733b2b13395fbcee7e7dc0a8e70f6b43cc15a",
   "commands": [
     "kustomize build ./argocd/apps/infra/nexus/overlays/nas --enable-helm --load-restrictor LoadRestrictionsNone"
   ]

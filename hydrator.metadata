@@ -1,8 +1,8 @@
 {
   "repoURL": "https://github.com/marthydavid/homelab",
-  "drySha": "72fc3b4a651b2f34cc28526489cd307486c7cbff",
+  "drySha": "f8e733b2b13395fbcee7e7dc0a8e70f6b43cc15a",
   "author": "David Marthy <marthy.david@gmail.com>",
-  "date": "2026-11-28T16:44:37Z",
-  "subject": "fix(nexus): unblock sync (port name length) and render the Vault-backed admin password (#2077)",
-  "body": "* docs(nexus): PushSecret and Vault policy to seed secret/nexus\n\nThe External Secrets AppRole can read secret/* but not write it (403), so the\nNexus admin password cannot be seeded from the cluster. Add a one-time\nPushSecret (IfNotExists, deletionPolicy None) and a policy that grants write on\nexactly secret/data/nexus and secret/metadata/nexus, with the steps to attach it\nto the AppRole and then hand the Secret over to the ExternalSecret.\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\n\n* feat(nexus): render the Vault-backed admin password ExternalSecret\n\nsecret/nexus is now seeded in Vault (PushSecret + nexus-push policy) and the live\nSecret nexus3-root is owned by this ExternalSecret, so render it through the\noverlay and drop the \"not applied yet\" note.\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\n\n* fix(nexus): shorten the access-redhat-com port name to 15 characters\n\nKubernetes rejects container and service port names over 15 characters, so the\nStatefulSet and Ingress from the per-registry proxy change failed the\nserver-side diff and infra-nexus-nas could not sync. Keep the hostname and the\nNexus repo name, rename only the port to access-rh.\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\n\n---------\n\nCo-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
+  "date": "2026-11-28T17:06:44Z",
+  "subject": "feat(okd): manage the metal1 image mirror sets with ArgoCD",
+  "body": "The ImageDigestMirrorSet and the new ImageTagMirrorSet were applied by hand, so\nArgoCD did not show them. Add them as app okd-image-mirrors-metal1 (picked up by\nthe okd-operators ApplicationSet). Content is identical to what is live: each of\nquay.io, docker.io, ghcr.io, mirror.gcr.io and registry.access.redhat.com maps to\nits own Nexus host. Adopting them does not change the cluster, so no MachineConfig\nrollout.\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\n"
 }

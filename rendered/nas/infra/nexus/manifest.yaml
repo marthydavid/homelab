@@ -746,6 +746,10 @@ spec:
       port: 8087
       protocol: TCP
       targetPort: access-rh
+    - name: redhat-io
+      port: 8088
+      protocol: TCP
+      targetPort: redhat-io
   selector:
     app.kubernetes.io/component: repository
     app.kubernetes.io/instance: nexus3
@@ -857,6 +861,9 @@ spec:
               protocol: TCP
             - containerPort: 8087
               name: access-rh
+              protocol: TCP
+            - containerPort: 8088
+              name: redhat-io
               protocol: TCP
           readinessProbe:
             failureThreshold: 6
@@ -1043,6 +1050,89 @@ metadata:
   annotations:
     argocd.argoproj.io/hook: PostSync
     argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+  name: nexus-redhat-proxy
+  namespace: nexus
+spec:
+  backoffLimit: 4
+  template:
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - args:
+            - |
+              echo "waiting for Nexus"
+              until [ "$(curl -s -o /dev/null -w '%{http_code}' "${NEXUS_HOST}/service/rest/v1/status")" = 200 ]; do sleep 5; done
+              jq -n --arg u "${RH_USER}" --arg p "${RH_PASS}" '{
+                name: "registry-redhat-io", online: true,
+                storage: {blobStoreName: "default", strictContentTypeValidation: true},
+                cleanup: {policyNames: ["docker-stale-30d"]},
+                proxy: {remoteUrl: "https://registry.redhat.io", contentMaxAge: 1440, metadataMaxAge: 1440},
+                negativeCache: {enabled: true, timeToLive: 1440},
+                httpClient: {blocked: false, autoBlock: true, authentication: {type: "username", username: $u, password: $p}},
+                docker: {v1Enabled: false, forceBasicAuth: false, httpPort: 8088},
+                dockerProxy: {indexType: "REGISTRY"}}' > /tmp/repo.json
+              # the chart's config job creates the cleanup policy concurrently, retry until it exists
+              for attempt in $(seq 1 20); do
+                code=$(curl -s -o /dev/null -w '%{http_code}' -u "${NEXUS_USER}:${NEXUS_PASSWORD}" "${NEXUS_HOST}/service/rest/v1/repositories/docker/proxy/registry-redhat-io")
+                if [ "${code}" = 200 ]; then method=PUT; url="${NEXUS_HOST}/service/rest/v1/repositories/docker/proxy/registry-redhat-io"; else method=POST; url="${NEXUS_HOST}/service/rest/v1/repositories/docker/proxy"; fi
+                status=$(curl -s -o /tmp/out -w '%{http_code}' -u "${NEXUS_USER}:${NEXUS_PASSWORD}" -X "${method}" -H 'Content-Type: application/json' -d @/tmp/repo.json "${url}")
+                echo "attempt ${attempt}: ${method} -> ${status}"
+                case "${status}" in 200|201|204) echo "registry-redhat-io configured"; exit 0;; esac
+                sleep 15
+              done
+              echo "failed to configure registry-redhat-io"; cat /tmp/out | head -c 400; exit 1
+          command:
+            - /bin/bash
+            - -ec
+          env:
+            - name: NEXUS_HOST
+              value: http://nexus3:8081
+            - name: NEXUS_USER
+              value: admin
+            - name: NEXUS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: nexus3-root
+            - name: RH_USER
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: nexus-redhat-registry
+            - name: RH_PASS
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: nexus-redhat-registry
+          image: docker.io/alpine/k8s:1.31.2
+          name: configure
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /tmp
+              name: tmp
+      restartPolicy: OnFailure
+      securityContext:
+        runAsGroup: 65532
+        runAsNonRoot: true
+        runAsUser: 65532
+        seccompProfile:
+          type: RuntimeDefault
+      volumes:
+        - emptyDir: {}
+          name: tmp
+  ttlSecondsAfterFinished: 600
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
   labels:
     app.kubernetes.io/component: repository
     app.kubernetes.io/instance: nexus3
@@ -1118,6 +1208,30 @@ spec:
             name: nexus3-conf
           name: config
   ttlSecondsAfterFinished: 600
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+  name: nexus-redhat-registry
+  namespace: nexus
+spec:
+  data:
+    - remoteRef:
+        key: secret/nexus-redhat
+        property: username
+      secretKey: username
+    - remoteRef:
+        key: secret/nexus-redhat
+        property: password
+      secretKey: password
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: vault-backend
+  target:
+    creationPolicy: Owner
+    name: nexus-redhat-registry
 ---
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
@@ -1233,6 +1347,16 @@ spec:
                   name: access-rh
             path: /
             pathType: Prefix
+    - host: registry-redhat-io.nexus.marthy.xyz
+      http:
+        paths:
+          - backend:
+              service:
+                name: nexus3
+                port:
+                  name: redhat-io
+            path: /
+            pathType: Prefix
   tls:
     - hosts:
         - nexus.marthy.xyz
@@ -1242,4 +1366,5 @@ spec:
         - ghcr-io.nexus.marthy.xyz
         - mirror-gcr-io.nexus.marthy.xyz
         - access-redhat-com.nexus.marthy.xyz
+        - registry-redhat-io.nexus.marthy.xyz
       secretName: nexus-tls
