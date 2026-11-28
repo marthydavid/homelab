@@ -1,0 +1,108 @@
+# registry.redhat.io pull-through proxy for the metal1 restricted network.
+# The upstream credential comes from Vault (secret/nexus-redhat: username, password), copied there from the
+# OKD pull secret. The chart cannot take a proxy username from a Secret (it would have to live in values.yaml,
+# and this repo is public), so a PostSync Job creates/updates the repo through the Nexus REST API with both
+# values read from the Secret at run time. Nothing secret is logged.
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+  name: nexus-redhat-registry
+  namespace: nexus
+spec:
+  secretStoreRef:
+    name: vault-backend
+    kind: ClusterSecretStore
+  target:
+    name: nexus-redhat-registry
+    creationPolicy: Owner
+  data:
+    - secretKey: username
+      remoteRef:
+        key: secret/nexus-redhat
+        property: username
+    - secretKey: password
+      remoteRef:
+        key: secret/nexus-redhat
+        property: password
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: nexus-redhat-proxy
+  namespace: nexus
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+spec:
+  backoffLimit: 4
+  ttlSecondsAfterFinished: 600
+  template:
+    spec:
+      restartPolicy: OnFailure
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: configure
+          image: docker.io/alpine/k8s:1.31.2
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
+          env:
+            - name: NEXUS_HOST
+              value: http://nexus3:8081
+            - name: NEXUS_USER
+              value: admin
+            - name: NEXUS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: nexus3-root
+                  key: password
+            - name: RH_USER
+              valueFrom:
+                secretKeyRef:
+                  name: nexus-redhat-registry
+                  key: username
+            - name: RH_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: nexus-redhat-registry
+                  key: password
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+          command: ["/bin/bash", "-ec"]
+          args:
+            - |
+              echo "waiting for Nexus"
+              until [ "$(curl -s -o /dev/null -w '%{http_code}' "${NEXUS_HOST}/service/rest/v1/status")" = 200 ]; do sleep 5; done
+              jq -n --arg u "${RH_USER}" --arg p "${RH_PASS}" '{
+                name: "registry-redhat-io", online: true,
+                storage: {blobStoreName: "default", strictContentTypeValidation: true},
+                cleanup: {policyNames: ["docker-stale-30d"]},
+                proxy: {remoteUrl: "https://registry.redhat.io", contentMaxAge: 1440, metadataMaxAge: 1440},
+                negativeCache: {enabled: true, timeToLive: 1440},
+                httpClient: {blocked: false, autoBlock: true, authentication: {type: "username", username: $u, password: $p}},
+                docker: {v1Enabled: false, forceBasicAuth: false, httpPort: 8088},
+                dockerProxy: {indexType: "REGISTRY"}}' > /tmp/repo.json
+              # the chart's config job creates the cleanup policy concurrently, retry until it exists
+              for attempt in $(seq 1 20); do
+                code=$(curl -s -o /dev/null -w '%{http_code}' -u "${NEXUS_USER}:${NEXUS_PASSWORD}" "${NEXUS_HOST}/service/rest/v1/repositories/docker/proxy/registry-redhat-io")
+                if [ "${code}" = 200 ]; then method=PUT; url="${NEXUS_HOST}/service/rest/v1/repositories/docker/proxy/registry-redhat-io"; else method=POST; url="${NEXUS_HOST}/service/rest/v1/repositories/docker/proxy"; fi
+                status=$(curl -s -o /tmp/out -w '%{http_code}' -u "${NEXUS_USER}:${NEXUS_PASSWORD}" -X "${method}" -H 'Content-Type: application/json' -d @/tmp/repo.json "${url}")
+                echo "attempt ${attempt}: ${method} -> ${status}"
+                case "${status}" in 200|201|204) echo "registry-redhat-io configured"; exit 0;; esac
+                sleep 15
+              done
+              echo "failed to configure registry-redhat-io"; cat /tmp/out | head -c 400; exit 1
+      volumes:
+        - name: tmp
+          emptyDir: {}
