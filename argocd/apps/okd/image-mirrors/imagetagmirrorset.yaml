@@ -15,3 +15,5 @@ spec:
     mirrors: [mirror-gcr-io.nexus.marthy.xyz]
   - source: registry.access.redhat.com
     mirrors: [access-redhat-com.nexus.marthy.xyz]
+  - source: registry.redhat.io
+    mirrors: [registry-redhat-io.nexus.marthy.xyz]
