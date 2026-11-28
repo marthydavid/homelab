@@ -1,0 +1,7 @@
+# Name of the Argo CD instance ("latest", "v339"); its namespace is argocd-<instance>.
+instance: latest
+repoURL: https://github.com/marthydavid/homelab
+targetRevision: repro/argocd-27917-appofapps-syncwave
+scenarios:
+  - slow-workload
+  - mixed-live
