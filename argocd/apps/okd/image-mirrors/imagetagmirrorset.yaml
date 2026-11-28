@@ -1,0 +1,17 @@
+# Same sources as the digest mirror set, for pulls by tag (catalog index images, :latest, vcluster images).
+apiVersion: config.openshift.io/v1
+kind: ImageTagMirrorSet
+metadata:
+  name: image-tag-mirror
+spec:
+  imageTagMirrors:
+  - source: quay.io
+    mirrors: [quay-io.nexus.marthy.xyz]
+  - source: docker.io
+    mirrors: [docker-io.nexus.marthy.xyz]
+  - source: ghcr.io
+    mirrors: [ghcr-io.nexus.marthy.xyz]
+  - source: mirror.gcr.io
+    mirrors: [mirror-gcr-io.nexus.marthy.xyz]
+  - source: registry.access.redhat.com
+    mirrors: [access-redhat-com.nexus.marthy.xyz]
