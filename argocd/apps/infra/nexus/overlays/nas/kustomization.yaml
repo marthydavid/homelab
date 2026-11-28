@@ -1,3 +1,5 @@
+resources:
+- ../../nexus-root-externalsecret.yaml
 helmCharts:
 - name: nexus3
   repo: https://stevehipwell.github.io/helm-charts/
