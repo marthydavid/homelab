@@ -74,7 +74,8 @@ service:
   - containerPort: 8087
     hosts:
     - access-redhat-com.nexus.marthy.xyz
-    name: access-redhat-com
+    # port names are limited to 15 characters, the host and the Nexus repo keep the full name
+    name: access-rh
     port: 8087
 
 config:
