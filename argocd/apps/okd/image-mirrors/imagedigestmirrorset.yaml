@@ -1,0 +1,19 @@
+# metal1 restricted network: pulls by digest go to the per-registry Nexus mirrors (docs/metal1-restricted-network.md).
+# The default mirrorSourcePolicy (AllowContactingSource) stays: the source is only reachable through the
+# squid allowlist on sm4 anyway. registry.redhat.io is not mirrored yet (needs credentials in Nexus).
+apiVersion: config.openshift.io/v1
+kind: ImageDigestMirrorSet
+metadata:
+  name: image-digest-mirror
+spec:
+  imageDigestMirrors:
+  - source: quay.io
+    mirrors: [quay-io.nexus.marthy.xyz]
+  - source: docker.io
+    mirrors: [docker-io.nexus.marthy.xyz]
+  - source: ghcr.io
+    mirrors: [ghcr-io.nexus.marthy.xyz]
+  - source: mirror.gcr.io
+    mirrors: [mirror-gcr-io.nexus.marthy.xyz]
+  - source: registry.access.redhat.com
+    mirrors: [access-redhat-com.nexus.marthy.xyz]
